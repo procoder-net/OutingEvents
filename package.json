@@ -4,6 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "cli": "cd client && npm install",
+        "sei": "cd server && npm install",
         "client": "cd client && npm start",
         "server": "cd server && npm start",
         "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
