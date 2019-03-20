@@ -1,6 +1,6 @@
 -\> npm run cli (client npm install)
 
--\> npm run sli (server npm install)
+-\> npm run sei (server npm install)
 
 -\> npm run start
 
