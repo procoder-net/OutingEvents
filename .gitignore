@@ -5,3 +5,5 @@ server/node_modules
 server/build
 node_modules
 .cache
+client/package-lock.json
+server/package-lock.json
