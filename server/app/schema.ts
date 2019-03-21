@@ -10,7 +10,7 @@ type User {
 type Event{
     name: String!
     eventType: String!
-    description: String!
+    description: String
     eventDate: String!
     location: String!
     invited: [String]
@@ -20,5 +20,10 @@ type Event{
 
 type Query {
     getAllEvents: [Event]
+}
+
+type Mutation {
+    addEvent(name: String!, eventType: String!, description: String, eventDate: String!,
+        location: String!, invited: [String]): Event
 }
 `;
