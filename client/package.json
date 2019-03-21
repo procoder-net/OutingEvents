@@ -1,5 +1,5 @@
 {
-  "name": "OutingEvents",
+  "name": "client1",
   "version": "0.1.0",
   "description": "",
   "scripts": {
@@ -8,7 +8,10 @@
   },
   "license": "MIT",
   "dependencies": {
+    "apollo-boost": "^0.3.1",
+    "graphql": "^14.1.1",
     "react": "^16.8.1",
+    "react-apollo": "^2.5.2",
     "react-dom": "^16.8.1"
   },
   "devDependencies": {
