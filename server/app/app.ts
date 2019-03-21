@@ -1,31 +1,24 @@
-import express = require('express');
-var graphqlHTTP = require('express-graphql');
-var { buildSchema } = require('graphql');
+const express = require("express");
+require("dotenv").config({ path: "../variables.env" });
+const bodyParser = require("body-parser");
 var pg = require('pg');
 var client = new pg.Client();
 
-// Create a new express application instance
-const app: express.Application = express();
+// Bring in graphql express middleware
+const { ApolloServer } = require("apollo-server-express");
+const { typeDefs } = require("./schema");
+const { resolvers } = require("./resolvers");
 
-// Construct a schema, using GraphQL schema language
-var schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`);
+const server = new ApolloServer({
+  typeDefs,
+  resolvers
+});
 
-// The root provides a resolver function for each API endpoint
-var root = {
-    hello: () => {
-        return 'Hello world!';
-    },
-};
-
-app.use('/graphql', graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql: true,
-}));
+// Initialize application
+const app = express();
+server.applyMiddleware({ app });
+const PORT = process.env.PORT || 3000;
+server.applyMiddleware({ app });
 
 app.get('/api', (req, res) => {
     client.connect()
@@ -57,6 +50,8 @@ app.post('/api', (req, res) => {
         })
 });
 
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
-});
+app.listen({ port: PORT }, () =>
+  console.log(
+    `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+  )
+);
