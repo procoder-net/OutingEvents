@@ -2,5 +2,6 @@ client/node_modules
 client/dist
 client/.cache
 server/node_modules
+server/build
 node_modules
 .cache
