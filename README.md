@@ -1,3 +1,5 @@
+-\> npm install
+
 -\> npm run cli (client npm install)
 
 -\> npm run sei (server npm install)
@@ -9,7 +11,6 @@
 -\> http://localhost:3000 (server)
 
 Server is running on Express with Typescript in node.
-
 
 -\> GraphIQL Playground http://localhost:3000/graphql
 
