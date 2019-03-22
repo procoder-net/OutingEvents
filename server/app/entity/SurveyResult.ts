@@ -1,25 +1,19 @@
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
 
 @Entity()
-export class Event extends BaseEntity {
+export default class SurveyResult extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  type: string;
+  survey_question_id: number;
 
   @Column()
-  name: string;
+  user_id: string;
 
   @Column()
-  location: string;
+  event_id: number;
 
   @Column()
-  state: string;
-
-  @Column()
-  start_time: any;
-
-  @Column()
-  end_time: any;
+  response: any;
 }
