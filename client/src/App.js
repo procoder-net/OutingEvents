@@ -1,6 +1,7 @@
 import React from "react";
 import NavBar from "./Component/NavBar";
 import EventList from "./Component/EventList";
+import PaymentRec from "./Component/PaymentRec";
 import { Query } from "react-apollo";
 import { GET_ALL_EVENTS } from "./queries";
 
@@ -17,7 +18,6 @@ class App extends React.Component {
             console.log(data);
             return (
               <div>
-                <p>Events</p>
                 <EventList />
               </div>
             );
