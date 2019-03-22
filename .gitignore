@@ -1,11 +1,6 @@
-client/node_modules
-client/dist
-client/.cache
-client/src/dist
-server/node_modules
-server/build
-node_modules
-.cache
-client/package-lock.json
-server/package-lock.json
-package-lock.json
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/

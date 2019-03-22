@@ -1,3 +1,4 @@
+import "reflect-metadata";
 const express = require("express");
 require("dotenv").config({ path: "../variables.env" });
 const bodyParser = require("body-parser");
