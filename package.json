@@ -6,6 +6,7 @@
   "scripts": {
     "cli": "cd client && npm install",
     "sei": "cd server && npm install",
+    "postinstall": "npm run cli && npm run sei",
     "client": "cd client && npm start",
     "server": "cd server && npm start",
     "start": "ts-node src/index.ts",
