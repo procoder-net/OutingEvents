@@ -2,21 +2,21 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export default class Receipt {
-  @PrimaryGeneratedColumn("receiptid")
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("eventid")
+  @Column()
   event_id: number;
 
-  @Column("vendor")
+  @Column()
   vendor: string;
 
-  @Column("description")
+  @Column()
   description: string;
 
-  @Column("amount")
+  @Column()
   amount: number;
 
-  @Column("currency")
+  @Column()
   currency: string;
 }

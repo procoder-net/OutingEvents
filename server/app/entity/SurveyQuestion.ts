@@ -12,5 +12,5 @@ export default class SurveyQuestion extends BaseEntity {
   event_id: number;
 
   @Column()
-  questions: any;
+  questions: string;
 }

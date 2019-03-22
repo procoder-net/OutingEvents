@@ -9,7 +9,9 @@ const cors = require("cors");
 const { ApolloServer } = require("apollo-server-express");
 const { typeDefs } = require("./schema");
 const { resolvers } = require("./resolvers");
-const { Event } = require("./entity/Event");
+//const { Event } = require("./entity/Event");
+import Event from "./entity/Event";
+
 import { createConnection, ConnectionOptions } from "typeorm";
 
 const ormConfig: ConnectionOptions = {
@@ -19,11 +21,10 @@ const ormConfig: ConnectionOptions = {
   username: process.env.PGUSER,
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
-  entities: [__dirname + "/entity/*.js"],
+  entities: [Event],
   synchronize: true,
   logging: false
 };
-
 console.log(JSON.stringify(ormConfig, null, 4));
 
 const app = express();
@@ -45,9 +46,10 @@ createConnection(ormConfig)
     const PORT = process.env.PORT || 3000;
     server.applyMiddleware({ app });
 
-    app.get("/events", (req: any, res: any) => {
+    app.get("/event", (req: any, res: any) => {
       connection.manager
-        .find(Event)
+        .getRepository(Event)
+        .find()
         .then(events => {
           res.status(200);
           res.send(events);
@@ -55,7 +57,20 @@ createConnection(ormConfig)
         .catch(err => {
           res.status(500);
           res.send(err);
-          console.log(JSON.stringify(err, null, 4));
+        });
+    });
+
+    app.get("/event/:event_name", (req: any, res: any) => {
+      connection.manager
+        .getRepository(Event)
+        .find({ name: req.params.event_name })
+        .then(events => {
+          res.status(200);
+          res.send(events);
+        })
+        .catch(err => {
+          res.status(500);
+          res.send(err);
         });
     });
 
@@ -65,6 +80,7 @@ createConnection(ormConfig)
       event.type = "Jokes";
       event.location = "Planet earth";
       event.state = "planning";
+      event.survey_id = 367;
       event.start_time = new Date(2019, 3, 1, 0, 0, 0, 0);
       event.end_time = new Date(2019, 3, 2, 0, 0, 0, 0);
       connection.manager

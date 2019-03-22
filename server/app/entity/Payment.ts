@@ -5,21 +5,21 @@ export default class Payment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("eventid")
+  @Column()
   event_id: number;
 
-  @Column("userid")
+  @Column()
   user_id: number;
 
-  @Column("status")
+  @Column()
   status: string;
 
-  @Column("description")
+  @Column()
   description: string;
 
-  @Column("amount")
+  @Column()
   amount: number;
 
-  @Column("currency")
+  @Column()
   currency: string;
 }

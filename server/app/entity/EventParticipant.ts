@@ -1,26 +1,29 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import Event from "./Event";
 
 @Entity()
 export default class EventParticipant {
-  @Column("event_id")
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   event_id: number;
 
-  @Column("userid")
+  @Column()
   user_id: number;
 
-  @Column("isorganizer")
+  @Column()
   is_organizer: boolean;
 
-  @Column("notified")
+  @Column()
   notified: boolean;
 
-  @Column("confirmed")
+  @Column()
   confirmed: boolean;
 
-  @Column("attended")
+  @Column()
   attended: boolean;
 
-  @Column("tooksurvey")
+  @Column()
   tooksurvey: boolean;
 }
