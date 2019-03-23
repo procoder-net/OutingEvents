@@ -38,16 +38,14 @@ You can also define port and host, but those are 5432 and localhost by default.
 
 NOTE: You can continue using the command line, or psequel for a GUI: http://www.psequel.com/
 Psequel will ask for your username, password, database, port, host. 
-Execute the following query to create the table(s): 
+Execute the following commands to create the relevant table(s): 
 ```
-NOTE: this table is temporary, will replace with actual schema 
-CREATE TABLE example_table (
-    name VARCHAR
-)
+$ psql -f sql/createtables.sql
 ```
+It will create the tables if they exist. 
 Test the apis by calling the following:
 ```
-POST https://localhost:3000/api
-GET https://localhost:3000/api
+POST https://localhost:3000/event
+GET https://localhost:3000/event
 ```
 You should get back elements in the database.
