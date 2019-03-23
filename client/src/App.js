@@ -18,7 +18,8 @@ class App extends React.Component {
             console.log(data);
             return (
               <div>
-                <EventList />
+                {/*<EventList />*/}
+                <PaymentRec />
               </div>
             );
           }}
