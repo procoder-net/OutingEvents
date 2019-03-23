@@ -1,0 +1,139 @@
+{
+  "pages": [
+    {
+      "name": "page1",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "question1",
+          "title": "Which Event you want to go?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Ski"
+            },
+            {
+              "value": "item2",
+              "text": "Bowling"
+            },
+            {
+              "value": "item3",
+              "text": "Movie"
+            },
+            {
+              "value": "item4",
+              "text": "Lunch"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "question6",
+          "visibleIf": "{question1} contains [\"item2\"]",
+          "title": "Which Bowling place you want to go?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": " Bowlero,San Jose"
+            },
+            {
+              "value": "item2",
+              "text": "4th Street Bowl,San Jose"
+            },
+            {
+              "value": "item3",
+              "text": " Bowlmor,Cupertino"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "question4",
+          "visibleIf": "{question1} contains [\"item1\"]",
+          "title": "Which Ski Place?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Sierra, Tahoe"
+            },
+            {
+              "value": "item2",
+              "text": "Borreal, Tahoe"
+            },
+            {
+              "value": "item3",
+              "text": "Heavenly, Tahoe"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "question2",
+          "visibleIf": "{question1} contains [\"item3\"]",
+          "title": "Which Movie you want to go?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Avengers"
+            },
+            {
+              "value": "item2",
+              "text": "How to train your Dragon"
+            },
+            {
+              "value": "item3",
+              "text": "Captain Marvel"
+            },
+            {
+              "value": "item4",
+              "text": "Kesari"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "question3",
+          "visibleIf": "{question1} contains \"item4\"",
+          "title": "Which place you would like to go for lunch?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "Pastis, Palo Alto"
+            },
+            {
+              "value": "item2",
+              "text": "INDO Restaurant & Lounge, Palo Alto"
+            },
+            {
+              "value": "item3",
+              "text": "Zareen's"
+            },
+            {
+              "value": "item4",
+              "text": "Amber India"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "name": "question5",
+          "title": "When you would like to go?",
+          "choices": [
+            {
+              "value": "item1",
+              "text": "04/06/2019"
+            },
+            {
+              "value": "item2",
+              "text": "04/13/2019"
+            },
+            {
+              "value": "item3",
+              "text": "04/20/2019"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
