@@ -1,4 +1,4 @@
-create schema if not exists 'outingevents';
+create schema if not exists outingevents;
 set schema 'outingevents';
 
 CREATE TABLE IF NOT EXISTS Event(
