@@ -10,7 +10,7 @@
     "client": "cd client && npm start",
     "server": "cd server && npm start",
     "start": "ts-node src/index.ts",
-    "inittables":"psql -f sql/createtables.sql",
+    "inittables": "psql -f sql/createtables.sql",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
