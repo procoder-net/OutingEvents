@@ -18,9 +18,9 @@ const ormConfig: ConnectionOptions = {
   type: "postgres",
   host: process.env.PGHOST,
   port: 5432,
-  username: "i055023",
-  password: "123456",
-  database: "outingevents",
+  username: process.env.PGUSER,
+  password: process.env.PGPASSWORD,
+  database: process.env.PGDATABASE,
   entities: [Event],
   synchronize: true,
   logging: false
