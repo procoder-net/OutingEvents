@@ -25,5 +25,6 @@ type Query {
 type Mutation {
     addEvent(name: String!, eventType: String!, description: String, eventDate: String!,
         location: String!, invited: [String]): Event
+    sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String
 }
 `;
