@@ -1,6 +1,6 @@
 import "reflect-metadata";
 const express = require("express");
-require("dotenv").config({ path: "../variables.env" });
+require("dotenv").config({ path: "variables.env" });
 const bodyParser = require("body-parser");
 var pg = require("pg");
 const client = new pg.Client();

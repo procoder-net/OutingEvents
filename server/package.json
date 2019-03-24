@@ -21,6 +21,7 @@
     "express": "^4.16.4",
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.4",
+    "nodemailer": "^5.1.1",
     "pg": "^7.9.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.15",
