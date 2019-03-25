@@ -1,30 +1,24 @@
 import React from "react";
 import NavBar from "./Component/NavBar";
-import EventList from "./Component/EventList";
+import SurveyDisplay from "./Component/Survey";
+import HomePage from "./homePage";
 import PaymentRec from "./Component/PaymentRec";
-import { Query } from "react-apollo";
-import { GET_ALL_EVENTS } from "./queries";
+import { BrowserRouter, Route } from "react-router-dom";
 
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        <NavBar />
-        <h1>Home</h1>
-        <Query query={GET_ALL_EVENTS}>
-          {({ data, loading, error }) => {
-            if (loading) return <div>Loading.....</div>;
-            if (error) return <div>Error...</div>;
-            console.log(data);
-            return (
-              <div>
-                {/*<EventList />*/}
-                <PaymentRec />
-              </div>
-            );
-          }}
-        </Query>
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <NavBar />
+          <h1>Home</h1>
+        </div>
+        <div className="content">
+          <Route exact path="/" component={HomePage} />
+          <Route path="/survey" component={SurveyDisplay} />
+          <Route path="/paymentRec" component={PaymentRec} />
+        </div>
+      </BrowserRouter>
     );
   }
 }
