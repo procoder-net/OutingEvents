@@ -28,7 +28,7 @@
   "homepage": "https://github.com/procoder-net/OutingEvents#readme",
   "dependencies": {
     "graphql": "^14.1.1",
-    "typeorm": "0.2.15",
-    "reflect-metadata": "^0.1.10"
+    "reflect-metadata": "^0.1.10",
+    "typeorm": "0.2.15"
   }
 }
