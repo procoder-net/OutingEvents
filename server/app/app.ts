@@ -42,11 +42,10 @@ const corsOptions = {
 createConnection(ormConfig)
   .then(async connection => {
     app.use(cors());
-    server.applyMiddleware({ app });
+    server.applyMiddleware({ app, path: "/api/" });
     const PORT = process.env.PORT || 3000;
-    server.applyMiddleware({ app });
 
-    app.get("/event", (req: any, res: any) => {
+    app.get("/api/event", (req: any, res: any) => {
       connection.manager
         .getRepository(Event)
         .find()
@@ -60,7 +59,7 @@ createConnection(ormConfig)
         });
     });
 
-    app.get("/event/:event_name", (req: any, res: any) => {
+    app.get("/api/event/:event_name", (req: any, res: any) => {
       connection.manager
         .getRepository(Event)
         .find({ name: req.params.event_name })
@@ -74,7 +73,7 @@ createConnection(ormConfig)
         });
     });
 
-    app.post("/event", (req: any, res: any) => {
+    app.post("/api/event", (req: any, res: any) => {
       const event = new Event();
       event.name = "April fools";
       event.type = "Jokes";
