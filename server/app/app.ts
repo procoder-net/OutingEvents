@@ -22,7 +22,7 @@ const ormConfig: ConnectionOptions = {
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
   entities: [Event],
-  synchronize: true,
+  synchronize: false,
   logging: false
 };
 console.log(JSON.stringify(ormConfig, null, 4));
@@ -71,6 +71,28 @@ createConnection(ormConfig)
         .catch(err => {
           res.status(500);
           res.send(err);
+        });
+    });
+
+    app.post("/event", (req: any, res: any) => {
+      const event = new Event();
+      event.name = "April fools";
+      event.type = "Jokes";
+      event.location = "Planet earth";
+      event.state = "planning";
+      event.survey_id = 367;
+      event.start_time = new Date(2019, 3, 1, 0, 0, 0, 0);
+      event.end_time = new Date(2019, 3, 2, 0, 0, 0, 0);
+      connection.manager
+        .save(event)
+        .then((result: any) => {
+          res.status(202);
+          res.send(result);
+        })
+        .catch(err => {
+          res.status(500);
+          res.send(err);
+          console.log(JSON.stringify(err, null, 4));
         });
     });
 
