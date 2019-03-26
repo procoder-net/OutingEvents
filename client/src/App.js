@@ -3,6 +3,7 @@ import NavBar from "./Component/NavBar";
 import SurveyDisplay from "./Component/Survey";
 import HomePage from "./homePage";
 import PaymentRec from "./Component/PaymentRec";
+import EventFinalDetail from "./Component/EventFinalDetail";
 import { BrowserRouter, Route } from "react-router-dom";
 
 class App extends React.Component {

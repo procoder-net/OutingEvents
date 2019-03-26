@@ -18,9 +18,7 @@ import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/lab/Container";
 import Markdown from "./Markdown";
-import post1 from "./event-detail.1.md";
-import post2 from "./event-detail.2.md";
-import post3 from "./event-detail.3.md";
+import EventDetail from "./event-detail.md";
 
 const styles = theme => ({
   "@global": {
@@ -42,7 +40,7 @@ const styles = theme => ({
     padding: theme.spacing(1),
     flexShrink: 0
   },
-  mainFeaturedPost: {
+  mainFeaturedEvent: {
     position: "relative",
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
@@ -60,7 +58,7 @@ const styles = theme => ({
     left: 0,
     backgroundColor: "rgba(0,0,0,.3)"
   },
-  mainFeaturedPostContent: {
+  mainFeaturedEventContent: {
     position: "relative",
     padding: theme.spacing(3),
     [theme.breakpoints.up("md")]: {
@@ -98,35 +96,20 @@ const styles = theme => ({
   }
 });
 
-const sections = [
-  "Technology",
-  "Design",
-  "Culture",
-  "Business",
-  "Politics",
-  "Opinion",
-  "Science",
-  "Health",
-  "Style",
-  "Travel"
-];
-
-const featuredPosts = [
+const peopleComing = [
   {
-    title: "Featured post",
+    title: "Featured event",
     date: "Nov 12",
     description:
       "This is a wider card with supporting text below as a natural lead-in to additional content."
   },
   {
-    title: "Post title",
+    title: "Event title",
     date: "Nov 11",
     description:
       "This is a wider card with supporting text below as a natural lead-in to additional content."
   }
 ];
-
-const posts = [post1, post2, post3];
 
 const archives = [
   "March 2020",
@@ -145,7 +128,7 @@ const archives = [
 
 const social = ["GitHub", "Twitter", "Facebook"];
 
-function Blog(props) {
+function EventFinalDetail(props) {
   const { classes } = props;
 
   return (
@@ -153,7 +136,6 @@ function Blog(props) {
       <CssBaseline />
       <Container maxWidth="lg">
         <Toolbar className={classes.toolbar}>
-          <Button size="small">Subscribe</Button>
           <Typography
             component="h2"
             variant="h5"
@@ -162,36 +144,15 @@ function Blog(props) {
             noWrap
             className={classes.toolbarTitle}
           >
-            Blog
+            Event Final Detail
           </Typography>
-          <IconButton>
-            <SearchIcon />
-          </IconButton>
           <Button variant="outlined" size="small">
-            Sign up
+            RSVP
           </Button>
         </Toolbar>
-        <Toolbar
-          component="nav"
-          variant="dense"
-          className={classes.toolbarSecondary}
-        >
-          {sections.map(section => (
-            <Link
-              color="inherit"
-              noWrap
-              key={section}
-              variant="body2"
-              href="#"
-              className={classes.toolbarLink}
-            >
-              {section}
-            </Link>
-          ))}
-        </Toolbar>
         <main>
-          {/* Main featured post */}
-          <Paper className={classes.mainFeaturedPost}>
+          {/* Main featured event */}
+          <Paper className={classes.mainFeaturedEvent}>
             {/* Increase the priority of the hero background image */}
             {
               <img
@@ -203,19 +164,19 @@ function Blog(props) {
             <div className={classes.overlay} />
             <Grid container>
               <Grid item md={6}>
-                <div className={classes.mainFeaturedPostContent}>
+                <div className={classes.mainFeaturedEventContent}>
                   <Typography
                     component="h1"
                     variant="h3"
                     color="inherit"
                     gutterBottom
                   >
-                    Title of a longer featured blog post
+                    Title of a longer featured event
                   </Typography>
                   <Typography variant="h5" color="inherit" paragraph>
                     Multiple lines of text that form the lede, informing new
                     readers quickly and efficiently about what&apos;s most
-                    interesting in this post&apos;s contents.
+                    interesting in this event&apos;s contents.
                   </Typography>
                   <Link variant="subtitle1" href="#">
                     Continue reading…
@@ -224,23 +185,23 @@ function Blog(props) {
               </Grid>
             </Grid>
           </Paper>
-          {/* End main featured post */}
-          {/* Sub featured posts */}
+          {/* End main featured event */}
+          {/* Sub people coming */}
           <Grid container spacing={4} className={classes.cardGrid}>
-            {featuredPosts.map(post => (
-              <Grid item key={post.title} xs={12} md={6}>
+            {peopleComing.map(event => (
+              <Grid item key={event.title} xs={12} md={6}>
                 <CardActionArea component="a" href="#">
                   <Card className={classes.card}>
                     <div className={classes.cardDetails}>
                       <CardContent>
                         <Typography component="h2" variant="h5">
-                          {post.title}
+                          {event.title}
                         </Typography>
                         <Typography variant="subtitle1" color="textSecondary">
-                          {post.date}
+                          {event.date}
                         </Typography>
                         <Typography variant="subtitle1" paragraph>
-                          {post.description}
+                          {event.description}
                         </Typography>
                         <Typography variant="subtitle1" color="primary">
                           Continue reading...
@@ -259,7 +220,7 @@ function Blog(props) {
               </Grid>
             ))}
           </Grid>
-          {/* End sub featured posts */}
+          {/* End sub people coming */}
           <Grid container spacing={5} className={classes.mainGrid}>
             {/* Main content */}
             <Grid item xs={12} md={8}>
@@ -267,21 +228,19 @@ function Blog(props) {
                 From the Firehose
               </Typography>
               <Divider />
-              {posts.map(post => (
-                <Markdown
-                  className={classes.markdown}
-                  key={post.substring(0, 40)}
-                >
-                  {post}
-                </Markdown>
-              ))}
+              <Markdown
+                className={classes.markdown}
+                key={EventDetail.substring(0, 40)}
+              >
+                {EventDetail}
+              </Markdown>
             </Grid>
             {/* End main content */}
             {/* Sidebar */}
             <Grid item xs={12} md={4}>
               <Paper elevation={0} className={classes.sidebarAboutBox}>
                 <Typography variant="h6" gutterBottom>
-                  About
+                  About event organazier
                 </Typography>
                 <Typography>
                   Etiam porta sem malesuada magna mollis euismod. Cras mattis
@@ -294,7 +253,7 @@ function Blog(props) {
                 gutterBottom
                 className={classes.sidebarSection}
               >
-                Archives
+                How to find us
               </Typography>
               {archives.map(archive => (
                 <Link display="block" variant="body1" href="#" key={archive}>
@@ -306,7 +265,7 @@ function Blog(props) {
                 gutterBottom
                 className={classes.sidebarSection}
               >
-                Social
+                Share
               </Typography>
               {social.map(network => (
                 <Link display="block" variant="body1" href="#" key={network}>
@@ -322,7 +281,7 @@ function Blog(props) {
       <footer className={classes.footer}>
         <Container maxWidth="lg">
           <Typography variant="h6" align="center" gutterBottom>
-            Footer
+            Pictures
           </Typography>
           <Typography
             variant="subtitle1"
@@ -339,8 +298,8 @@ function Blog(props) {
   );
 }
 
-Blog.propTypes = {
+EventFinalDetail.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Blog);
+export default withStyles(styles)(EventFinalDetail);
