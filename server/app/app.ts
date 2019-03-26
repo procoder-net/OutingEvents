@@ -12,6 +12,7 @@ const bodyParser = require("body-parser");
 
 //const { Event } = require("./entity/Event");
 import Event from "./entity/Event";
+import * as surveyQuestionService from "./surveyQuestionService";
 
 import { createConnection, ConnectionOptions } from "typeorm";
 import SurveyQuestion from "./entity/SurveyQuestion";
@@ -100,22 +101,14 @@ createConnection(ormConfig)
     });
 
     app.post("/api/event/:eventId/surveyQuestion", (req: any, res: any) => {
-      const body = req.params;
-      const surveyQuestion = new SurveyQuestion();
-      surveyQuestion.event_id = req.params.eventId;
-      console.log(req.body);
-      surveyQuestion.name = req.body.name;
-      surveyQuestion.questions = JSON.stringify({
-        question: req.body.name,
-        options: req.body.options
-      });
-      connection.manager
-        .save(surveyQuestion)
+      console.log("post");
+      surveyQuestionService
+        .createSurveyQuestion(req.body, req.params)
         .then((result: any) => {
           res.status(202);
           res.send(result);
         })
-        .catch(err => {
+        .catch((err: any) => {
           res.status(500);
           res.send(err);
           console.log(JSON.stringify(err, null, 4));
@@ -123,15 +116,9 @@ createConnection(ormConfig)
     });
 
     app.get("/api/event/:eventId/surveyQuestion", (req: any, res: any) => {
-      connection.manager
-        .getRepository(SurveyQuestion)
-        .find({ event_id: req.params.eventId })
+      surveyQuestionService
+        .getSurveyQuestionsByEventId(req.params.eventId)
         .then(surveyQuestions => {
-          surveyQuestions.forEach(function(obj) {
-            let questionString: string = obj.questions;
-            console.log(obj);
-            obj.questions = JSON.parse(questionString);
-          });
           res.status(200);
           res.send(surveyQuestions);
         })
@@ -144,20 +131,16 @@ createConnection(ormConfig)
     app.delete(
       "/api/event/:eventId/surveyQuestion/:questionId",
       (req: any, res: any) => {
-        connection.manager
-          .getRepository(SurveyQuestion)
-          .delete(req.params.questionId)
-          .then(surveyQuestion => {
-            res.status(200);
-            res.send({
-              status: "success",
-              id: req.params.questionId,
-              event_id: req.params.eventId
-            });
+        surveyQuestionService
+          .deleteSurveyQuestion(req.params.questionId)
+          .then((result: any) => {
+            res.status(202);
+            res.send(result);
           })
-          .catch(err => {
+          .catch((err: any) => {
             res.status(500);
             res.send(err);
+            console.log(JSON.stringify(err, null, 4));
           });
       }
     );
