@@ -4,7 +4,6 @@ import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -17,8 +16,11 @@ import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 import Container from "@material-ui/lab/Container";
+import Avatar from "@material-ui/core/Avatar";
+import SimpleMap from "./SimpleMap";
 import Markdown from "./Markdown";
 import EventDetail from "./event-detail.md";
+import { sizing } from "@material-ui/system";
 
 const styles = theme => ({
   "@global": {
@@ -75,9 +77,6 @@ const styles = theme => ({
   cardDetails: {
     flex: 1
   },
-  cardMedia: {
-    width: 160
-  },
   markdown: {
     ...theme.typography.body2,
     padding: theme.spacing(3, 0)
@@ -93,37 +92,57 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     marginTop: theme.spacing(8),
     padding: theme.spacing(6, 0)
+  },
+  avatar: {
+    margin: 10
   }
 });
 
-const peopleComing = [
+const invitees = [
   {
-    title: "Featured event",
-    date: "Nov 12",
-    description:
-      "This is a wider card with supporting text below as a natural lead-in to additional content."
+    name: "John Doe",
+    rsvp: "invited"
   },
   {
-    title: "Event title",
-    date: "Nov 11",
-    description:
-      "This is a wider card with supporting text below as a natural lead-in to additional content."
+    name: "Mike Loe",
+    rsvp: "going"
+  },
+  {
+    name: "Jane Moe",
+    rsvp: "not going"
+  },
+  {
+    name: "Suzy Roe",
+    rsvp: "invited"
+  },
+  {
+    name: "Lucy Goe",
+    rsvp: "invited"
+  },
+  {
+    name: "Pete Roe",
+    rsvp: "invited"
+  },
+  {
+    name: "Icen Joe",
+    rsvp: "invited"
+  },
+  {
+    name: "Jell Boe",
+    rsvp: "invited"
+  },
+  {
+    name: "Kite Koe",
+    rsvp: "invited"
+  },
+  {
+    name: "Loll Pop",
+    rsvp: "invited"
+  },
+  {
+    name: "Nogu Toe",
+    rsvp: "invited"
   }
-];
-
-const archives = [
-  "March 2020",
-  "February 2020",
-  "January 2020",
-  "December 2019",
-  "November 2019",
-  "October 2019",
-  "September 2019",
-  "August 2019",
-  "July 2019",
-  "June 2019",
-  "May 2019",
-  "April 2019"
 ];
 
 const social = ["GitHub", "Twitter", "Facebook"];
@@ -188,33 +207,27 @@ function EventFinalDetail(props) {
           {/* End main featured event */}
           {/* Sub people coming */}
           <Grid container spacing={4} className={classes.cardGrid}>
-            {peopleComing.map(event => (
-              <Grid item key={event.title} xs={12} md={6}>
+            {invitees.map(invitee => (
+              <Grid item key={invitee.name} xs={12} md={2}>
                 <CardActionArea component="a" href="#">
                   <Card className={classes.card}>
                     <div className={classes.cardDetails}>
-                      <CardContent>
-                        <Typography component="h2" variant="h5">
-                          {event.title}
+                      <CardContent align="center">
+                        <Avatar className={classes.avatar}>
+                          {invitee.name.match(/\b\w/g) || "??"}
+                        </Avatar>
+                        <Typography component="h2" variant="h5" align="center">
+                          {invitee.name}
                         </Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
-                          {event.date}
-                        </Typography>
-                        <Typography variant="subtitle1" paragraph>
-                          {event.description}
-                        </Typography>
-                        <Typography variant="subtitle1" color="primary">
-                          Continue reading...
+                        <Typography
+                          variant="subtitle1"
+                          color="textSecondary"
+                          align="center"
+                        >
+                          {invitee.rsvp}
                         </Typography>
                       </CardContent>
                     </div>
-                    <Hidden xsDown>
-                      <CardMedia
-                        className={classes.cardMedia}
-                        image="https://source.unsplash.com/random"
-                        title="Image title"
-                      />
-                    </Hidden>
                   </Card>
                 </CardActionArea>
               </Grid>
@@ -225,7 +238,7 @@ function EventFinalDetail(props) {
             {/* Main content */}
             <Grid item xs={12} md={8}>
               <Typography variant="h6" gutterBottom>
-                From the Firehose
+                Event Description
               </Typography>
               <Divider />
               <Markdown
@@ -240,14 +253,31 @@ function EventFinalDetail(props) {
             <Grid item xs={12} md={4}>
               <Paper elevation={0} className={classes.sidebarAboutBox}>
                 <Typography variant="h6" gutterBottom>
-                  About event organazier
+                  Event organizer
                 </Typography>
-                <Typography>
-                  Etiam porta sem malesuada magna mollis euismod. Cras mattis
-                  consectetur purus sit amet fermentum. Aenean lacinia bibendum
-                  nulla sed consectetur.
-                </Typography>
+                <CardActionArea component="a" href="#">
+                  <Card className={classes.card}>
+                    <div className={classes.cardDetails}>
+                      <CardContent align="center">
+                        <Avatar className={classes.avatar}>
+                          {invitees[1].name.match(/\b\w/g) || "??"}
+                        </Avatar>
+                        <Typography component="h2" variant="h5" align="center">
+                          {invitees[1].name}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          color="textSecondary"
+                          align="center"
+                        >
+                          {invitees[1].rsvp}
+                        </Typography>
+                      </CardContent>
+                    </div>
+                  </Card>
+                </CardActionArea>
               </Paper>
+
               <Typography
                 variant="h6"
                 gutterBottom
@@ -255,11 +285,9 @@ function EventFinalDetail(props) {
               >
                 How to find us
               </Typography>
-              {archives.map(archive => (
-                <Link display="block" variant="body1" href="#" key={archive}>
-                  {archive}
-                </Link>
-              ))}
+              <div style={{ height: "400px", width: "100%" }}>
+                <SimpleMap />
+              </div>
               <Typography
                 variant="h6"
                 gutterBottom
@@ -281,7 +309,7 @@ function EventFinalDetail(props) {
       <footer className={classes.footer}>
         <Container maxWidth="lg">
           <Typography variant="h6" align="center" gutterBottom>
-            Pictures
+            Have a good time!
           </Typography>
           <Typography
             variant="subtitle1"
@@ -289,7 +317,7 @@ function EventFinalDetail(props) {
             color="textSecondary"
             component="p"
           >
-            Something here to give the footer a purpose!
+            Feedback [+]
           </Typography>
         </Container>
       </footer>
