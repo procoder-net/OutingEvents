@@ -1,4 +1,5 @@
-import SurveyQuestion from "./entity/SurveyQuestion";
+import SurveyQuestion from "../entity/SurveyQuestion";
+import { getRepository } from "typeorm";
 
 export function createSurveyQuestion(body: any, params: any) {
   console.log(body);
@@ -10,14 +11,13 @@ export function createSurveyQuestion(body: any, params: any) {
     question: body.name,
     options: body.options
   });
-  console.log(surveyQuestion);
   return surveyQuestion.save();
 }
 
 export function deleteSurveyQuestion(questionId: number) {
   return SurveyQuestion.getRepository()
     .delete(questionId)
-    .then(result => {
+    .then((result: any) => {
       return result;
     })
     .catch(err => {
@@ -26,10 +26,13 @@ export function deleteSurveyQuestion(questionId: number) {
 }
 
 export function getSurveyQuestionsByEventId(eventId: number) {
+  console.log("getSurvey");
+  const surveyQuestionRepo = getRepository(SurveyQuestion);
+  console.log("got repository");
   return SurveyQuestion.getRepository()
     .find({ event_id: eventId })
     .then(surveyQuestions => {
-      surveyQuestions.forEach(function(obj) {
+      surveyQuestions.forEach(function(obj: any) {
         let questionString: string = obj.questions;
         obj.questions = JSON.parse(questionString);
       });

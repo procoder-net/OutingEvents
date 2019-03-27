@@ -1,4 +1,4 @@
-import * as surveyQuestionService from "./surveyQuestionService";
+import * as surveyQuestionService from "./service/surveyQuestionService";
 var emailSurvey = require("./mail").sendSurveyEmail;
 
 exports.resolvers = {
