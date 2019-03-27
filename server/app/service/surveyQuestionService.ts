@@ -1,9 +1,7 @@
 import SurveyQuestion from "../entity/SurveyQuestion";
-import { getRepository } from "typeorm";
+import connectORM from "./../connection";
 
 export function createSurveyQuestion(body: any, params: any) {
-  console.log(body);
-  console.log(params);
   const surveyQuestion = new SurveyQuestion();
   surveyQuestion.event_id = params.event_id;
   surveyQuestion.name = body.name;
@@ -11,11 +9,12 @@ export function createSurveyQuestion(body: any, params: any) {
     question: body.name,
     options: body.options
   });
-  return surveyQuestion.save();
+  return connectORM.getRepository(SurveyQuestion).save(surveyQuestion);
 }
 
 export function deleteSurveyQuestion(questionId: number) {
-  return SurveyQuestion.getRepository()
+  return connectORM
+    .getRepository(SurveyQuestion)
     .delete(questionId)
     .then((result: any) => {
       return result;
@@ -27,9 +26,9 @@ export function deleteSurveyQuestion(questionId: number) {
 
 export function getSurveyQuestionsByEventId(eventId: number) {
   console.log("getSurvey");
-  const surveyQuestionRepo = getRepository(SurveyQuestion);
   console.log("got repository");
-  return SurveyQuestion.getRepository()
+  return connectORM
+    .getRepository(SurveyQuestion)
     .find({ event_id: eventId })
     .then(surveyQuestions => {
       surveyQuestions.forEach(function(obj: any) {

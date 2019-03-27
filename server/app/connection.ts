@@ -6,7 +6,8 @@ import {
   ConnectionManager,
   ConnectionOptions,
   getManager,
-  getRepository
+  getConnection,
+  createConnection
 } from "typeorm";
 const connectionManager = new ConnectionManager();
 const ormConfig: ConnectionOptions = {
@@ -24,15 +25,12 @@ const ormConfig: ConnectionOptions = {
 console.log(JSON.stringify(ormConfig, null, 4));
 
 class ConnectDB {
-  constructor() {
-    console.log("create constructor");
-  }
+  constructor() {}
   connect = async () => {
-    const connection = connectionManager.create(ormConfig);
-    return await connection.connect();
+    return await createConnection(ormConfig);
   };
   getRepository = (entityName: any) => {
-    return getRepository(entityName);
+    return getConnection().getRepository(entityName);
   };
   getManager = () => {
     return getManager();

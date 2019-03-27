@@ -13,6 +13,7 @@ router.get("/api/event", authorize, (req: Request, res: Response) => {
       res.status(200).send(events);
     })
     .catch((err: any) => {
+      console.log("@catch");
       res.status(500).send(err);
     });
 });
