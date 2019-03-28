@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Survey_Result (
 	response json
 );
 
-CREATE TABLE IF NOT EXISTS CurrentUser (
+CREATE TABLE IF NOT EXISTS User_Profile (
 	id integer NOT NULL PRIMARY KEY,
 	first_name varchar NOT NULL,
 	last_name varchar NOT NULL,

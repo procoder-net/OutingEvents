@@ -1,11 +1,4 @@
 exports.typeDefs = `
-type User {
-    username: String!
-    password: String!
-    email: String!
-    joinedDate: String
-    favorites: [String],  
-}
 
 type Event{
     name: String!
@@ -62,6 +55,14 @@ type SurveyResult{
     response: String
 }
 
+type User{
+    first_name: String
+    last_name: String
+    email: String
+    username: String
+    password: String
+}
+
 type Query {
     getAllEvents: [Event]
     getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
@@ -69,6 +70,8 @@ type Query {
     getReceiptByEvent(event_id: Int): [Receipt]
     getPaymentByEvent(event_id: Int): [Payment]
     getSurveyResponsesByQuestionId(survey_question_id: Int): [SurveyResult]
+    getAllUserProfiles: [User]
+    getUserProfile(id: Int): User
 }
 
 type Mutation {
@@ -85,5 +88,6 @@ type Mutation {
     createPayment(event_id: Int, user_id: Int, payment_status: String, amount: Int, currency: String, description: String): Payment
     updatePaymentStatus(id: Int, new_status: String): Payment
     createSurveyResponse(survey_question_id: Int, event_id: Int, user_id: Int,response:String): SurveyResult
+    createUserProfile(first_name: String, last_name: String, email: String, username: String, password: String): User
 }
 `;

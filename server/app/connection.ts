@@ -4,6 +4,7 @@ import SurveyResult from "./entity/SurveyResult";
 import Receipt from "./entity/Receipt";
 import EventParticipant from "./entity/EventParticipant";
 import Payment from "./entity/Payment";
+import UserProfile from "./entity/UserProfile";
 
 import {
   ConnectionManager,
@@ -26,7 +27,8 @@ const ormConfig: ConnectionOptions = {
     SurveyResult,
     EventParticipant,
     Receipt,
-    Payment
+    Payment,
+    UserProfile
   ],
   synchronize: true,
   logging: false

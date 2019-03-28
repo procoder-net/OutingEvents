@@ -2,7 +2,7 @@ import * as surveyQuestionService from "./service/surveyQuestionService";
 import * as eventParticipantService from "./service/eventParticipantService";
 import * as receiptService from "./service/receiptService";
 import * as paymentService from "./service/paymentService";
-import { updatePaymentStatus } from "./service/paymentService";
+import * as userService from "./service/userService";
 
 var emailSurvey = require("./mail").sendSurveyEmail;
 
@@ -25,6 +25,12 @@ exports.resolvers = {
       return surveyQuestionService.getSurveyResultByQuestionId(
         args.survey_question_id
       );
+    },
+    getAllUserProfiles: (root: any, args: any) => {
+      return userService.getAllUserProfiles();
+    },
+    getUserProfile: (root: any, args: any) => {
+      return userService.getUserProfileById(args.id);
     }
   },
 
@@ -94,6 +100,9 @@ exports.resolvers = {
         id: args.id
       };
       return paymentService.updatePaymentStatus(filter, args.new_status);
+    },
+    createUserProfile: (root: any, args: any) => {
+      return userService.createUserProfile(args);
     },
     createSurveyResponse: (root: any, args: any) => {
       return surveyQuestionService.createSurveyResult(
