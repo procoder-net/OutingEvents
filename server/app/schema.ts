@@ -18,13 +18,23 @@ type Event{
     organizer: [String]
 }
 
+type SurveyQuestion{
+    id: Int
+    name: String
+    event_id: Int
+    questions: String
+}
+
 type Query {
     getAllEvents: [Event]
+    getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
 }
 
 type Mutation {
     addEvent(name: String!, eventType: String!, description: String, eventDate: String!,
         location: String!, invited: [String]): Event
     sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String
+    addSurveyQuestion(id: Int, name: String, event_id: Int, questions: String):SurveyQuestion
+    deleteSurveyQuestion(id: Int): SurveyQuestion
 }
 `;

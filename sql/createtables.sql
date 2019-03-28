@@ -1,5 +1,5 @@
-create schema if not exists outingevents;
-set schema 'outingevents';
+/*create schema if not exists outingevents;
+set schema 'outingevents';*/
 
 CREATE TABLE IF NOT EXISTS Event(
 	id integer NOT NULL PRIMARY KEY,
@@ -12,14 +12,14 @@ CREATE TABLE IF NOT EXISTS Event(
 	end_time timestamp NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS SurveyQuestions (
+CREATE TABLE IF NOT EXISTS Survey_Question (
 	id integer NOT NULL PRIMARY KEY,
 	name varchar,
 	event_id integer,
 	questions json
 );
 
-CREATE TABLE IF NOT EXISTS SurveyResults (
+CREATE TABLE IF NOT EXISTS Survey_Result (
 	id integer NOT NULL PRIMARY KEY,
 	survey_question_id integer NOT NULL,
 	user_id integer NOT NULL,
