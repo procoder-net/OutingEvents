@@ -20,6 +20,7 @@ import Avatar from "@material-ui/core/Avatar";
 import SimpleMap from "./SimpleMap";
 import Markdown from "./Markdown";
 import EventDetail from "./event-detail.md";
+import InvitationDecision from "./InvitationDecision";
 import { sizing } from "@material-ui/system";
 
 const styles = theme => ({
@@ -99,6 +100,7 @@ const styles = theme => ({
 });
 
 const social = ["GitHub", "Twitter", "Facebook"];
+const emails = ["username@gmail.com", "user02@gmail.com"];
 
 function EventFinalDetail(props) {
   const { classes, event, invitees } = props;
@@ -118,9 +120,7 @@ function EventFinalDetail(props) {
           >
             Event Final Detail
           </Typography>
-          <Button variant="outlined" size="small">
-            RSVP
-          </Button>
+          <InvitationDecision />
         </Toolbar>
         <main>
           {/* Main featured event */}
