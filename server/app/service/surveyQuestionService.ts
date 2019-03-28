@@ -1,4 +1,5 @@
 import SurveyQuestion from "../entity/SurveyQuestion";
+import SurveyResult from "../entity/SurveyResult";
 import connectORM from "./../connection";
 
 export function createSurveyQuestion(body: any, params: any) {
@@ -25,8 +26,6 @@ export function deleteSurveyQuestion(questionId: number) {
 }
 
 export function getSurveyQuestionsByEventId(eventId: number) {
-  console.log("getSurvey");
-  console.log("got repository");
   return connectORM
     .getRepository(SurveyQuestion)
     .find({ event_id: eventId })
@@ -37,6 +36,35 @@ export function getSurveyQuestionsByEventId(eventId: number) {
       });
       console.log(surveyQuestions);
       return surveyQuestions;
+    })
+    .catch(err => {
+      throw err;
+    });
+}
+
+export function createSurveyResult(
+  event_id: number,
+  user_id: number,
+  survey_question_id: number,
+  result: any
+) {
+  const surveyResult = new SurveyResult();
+  surveyResult.event_id = event_id;
+  surveyResult.user_id = user_id;
+  surveyResult.survey_question_id = survey_question_id;
+  surveyResult.response = JSON.parse(result);
+  return connectORM.getRepository(SurveyResult).save(surveyResult);
+}
+
+export function getSurveyResultByQuestionId(survey_question_id: number) {
+  return connectORM
+    .getRepository(SurveyResult)
+    .find({ survey_question_id: survey_question_id })
+    .then(surveyQuestionResults => {
+      surveyQuestionResults.forEach((obj: any) => {
+        obj.response = JSON.stringify(obj.response);
+      });
+      return surveyQuestionResults;
     })
     .catch(err => {
       throw err;

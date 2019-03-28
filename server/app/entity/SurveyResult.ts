@@ -9,11 +9,11 @@ export default class SurveyResult extends BaseEntity {
   survey_question_id: number;
 
   @Column()
-  user_id: string;
+  user_id: number;
 
   @Column()
   event_id: number;
 
-  @Column()
+  @Column("json", { nullable: false })
   response: string;
 }
