@@ -1,6 +1,8 @@
 import * as surveyQuestionService from "./service/surveyQuestionService";
 import * as eventParticipantService from "./service/eventParticipantService";
 import * as receiptService from "./service/receiptService";
+import * as paymentService from "./service/paymentService";
+import { updatePaymentStatus } from "./service/paymentService";
 
 var emailSurvey = require("./mail").sendSurveyEmail;
 
@@ -15,6 +17,9 @@ exports.resolvers = {
     },
     getReceiptByEvent: (root: any, args: any) => {
       return receiptService.getReceiptsByEventId(args.event_id);
+    },
+    getPaymentByEvent: (root: any, args: any) => {
+      return paymentService.getPaymentInformationByEventId(args.event_id);
     }
   },
 
@@ -65,6 +70,25 @@ exports.resolvers = {
     },
     deleteReceipt: (root: any, args: any) => {
       return receiptService.deleteReceipt(args.id);
+    },
+    createPayment: (root: any, args: any) => {
+      const paymentDetails = {
+        currency: args.currency,
+        description: args.description,
+        amount: args.amount
+      };
+      return paymentService.createPayment(
+        args.event_id,
+        args.user_id,
+        args.payment_status,
+        paymentDetails
+      );
+    },
+    updatePaymentStatus: (root: any, args: any) => {
+      const filter = {
+        id: args.id
+      };
+      return paymentService.updatePaymentStatus(filter, args.new_status);
     }
   }
 };

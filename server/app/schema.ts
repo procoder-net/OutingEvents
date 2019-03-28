@@ -45,11 +45,22 @@ type Receipt{
     currency: String
 }
 
+type Payment{
+    id: Int
+    event_id: Int
+    user_id: Int
+    status: String
+    description: String
+    amount: Int
+    currency: String
+}
+
 type Query {
     getAllEvents: [Event]
     getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
     getAllEventParticipants(event_id: Int): [EventParticipant]
     getReceiptByEvent(event_id: Int): [Receipt]
+    getPaymentByEvent(event_id: Int): [Payment]
 }
 
 type Mutation {
@@ -63,5 +74,7 @@ type Mutation {
     updateEventParticipant(id: Int, is_organizer: Boolean, notified: Boolean, confirmed: Boolean, attended: Boolean, tooksurvey: Boolean): EventParticipant
     addReceipt(event_id: Int, vendor: String, description: String, amount: Int, currency: String): Receipt
     deleteReceipt(id: Int): Receipt
+    createPayment(event_id: Int, user_id: Int, payment_status: String, amount: Int, currency: String, description: String): Payment
+    updatePaymentStatus(id: Int, new_status: String): Payment
 }
 `;

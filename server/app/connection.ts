@@ -20,7 +20,14 @@ const ormConfig: ConnectionOptions = {
   username: process.env.PGUSER,
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
-  entities: [Event, SurveyQuestion, SurveyResult, EventParticipant, Receipt],
+  entities: [
+    Event,
+    SurveyQuestion,
+    SurveyResult,
+    EventParticipant,
+    Receipt,
+    Payment
+  ],
   synchronize: true,
   logging: false
 };
