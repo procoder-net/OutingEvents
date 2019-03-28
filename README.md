@@ -18,34 +18,44 @@ Server is running on Express with Typescript in node.
 
 -> PostGres setup
 https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
-Install postgres, it will ask you to go through the installation process and will ask for a super user password. Make sure you remember that password as it will be useful. 
+Install postgres, it will ask you to go through the installation process and will ask for a super user password. Make sure you remember that password as it will be useful.
 
 Use the following command to open a commandline interface:
+
 ```
 psql -U postgres -h localhost -p 5432
 ```
+
 Execute the following queries to create database:
+
 ```
 CREATE DATABASE outingevents
 ```
+
 We will come back to editing the database, but first in .bash_profile, include the following:
+
 ```
 PGUSER={your postgres user}
 PGDATABASE=outingevents
 PGPASSWORD={super user password}
 ```
-You can also define port and host, but those are 5432 and localhost by default. 
+
+You can also define port and host, but those are 5432 and localhost by default.
 
 NOTE: You can continue using the command line, or psequel for a GUI: http://www.psequel.com/
-Psequel will ask for your username, password, database, port, host. 
-Execute the following commands to create the relevant table(s): 
+Psequel will ask for your username, password, database, port, host.
+Execute the following commands to create the relevant table(s):
+
 ```
 $ psql -f sql/createtables.sql
 ```
-It will create the tables if they exist. 
+
+It will create the tables if they exist.
 Test the apis by calling the following:
+
 ```
 POST https://localhost:3000/event
 GET https://localhost:3000/event
 ```
+
 You should get back elements in the database.

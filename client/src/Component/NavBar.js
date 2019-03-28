@@ -51,7 +51,7 @@ class NavBar extends Component {
       <div>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="title" color="inherit" style={{ flex: 1 }}>
+            <Typography variant="subtitle1" color="inherit" style={{ flex: 1 }}>
               Orgo Events
             </Typography>
             {isLoggedIn ? (

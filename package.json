@@ -23,10 +23,7 @@
     "url": "https://github.com/procoder-net/OutingEvents/issues"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1",
-    "ts-node": "3.3.0",
-    "@types/node": "^8.0.29",
-    "typescript": "2.5.2"
+    "concurrently": "^4.0.1"
   },
   "homepage": "https://github.com/procoder-net/OutingEvents#readme",
   "dependencies": {
