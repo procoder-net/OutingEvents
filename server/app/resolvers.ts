@@ -20,6 +20,11 @@ exports.resolvers = {
     },
     getPaymentByEvent: (root: any, args: any) => {
       return paymentService.getPaymentInformationByEventId(args.event_id);
+    },
+    getSurveyResponsesByQuestionId: (root: any, args: any) => {
+      return surveyQuestionService.getSurveyResultByQuestionId(
+        args.survey_question_id
+      );
     }
   },
 
@@ -89,6 +94,14 @@ exports.resolvers = {
         id: args.id
       };
       return paymentService.updatePaymentStatus(filter, args.new_status);
+    },
+    createSurveyResponse: (root: any, args: any) => {
+      return surveyQuestionService.createSurveyResult(
+        args.survey_question_id,
+        args.event_id,
+        args.user_id,
+        args.response
+      );
     }
   }
 };
