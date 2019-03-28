@@ -5,8 +5,12 @@ exports.resolvers = {
   Query: {
     getAllEvents: () => {},
     getAllSurveyQuestions: (root: any, args: any) => {
-      console.log(args);
       return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
+    },
+    getSurveyResponsesByQuestionId: (root: any, args: any) => {
+      return surveyQuestionService.getSurveyResultByQuestionId(
+        args.survey_question_id
+      );
     }
   },
 
@@ -24,6 +28,14 @@ exports.resolvers = {
     },
     deleteSurveyQuestion: (root: any, args: any) => {
       return surveyQuestionService.deleteSurveyQuestion(args.id);
+    },
+    createSurveyResponse: (root: any, args: any) => {
+      return surveyQuestionService.createSurveyResult(
+        args.survey_question_id,
+        args.event_id,
+        args.user_id,
+        args.response
+      );
     }
   }
 };
