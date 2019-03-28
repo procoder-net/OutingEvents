@@ -98,57 +98,10 @@ const styles = theme => ({
   }
 });
 
-const invitees = [
-  {
-    name: "John Doe",
-    rsvp: "invited"
-  },
-  {
-    name: "Mike Loe",
-    rsvp: "going"
-  },
-  {
-    name: "Jane Moe",
-    rsvp: "not going"
-  },
-  {
-    name: "Suzy Roe",
-    rsvp: "invited"
-  },
-  {
-    name: "Lucy Goe",
-    rsvp: "invited"
-  },
-  {
-    name: "Pete Roe",
-    rsvp: "invited"
-  },
-  {
-    name: "Icen Joe",
-    rsvp: "invited"
-  },
-  {
-    name: "Jell Boe",
-    rsvp: "invited"
-  },
-  {
-    name: "Kite Koe",
-    rsvp: "invited"
-  },
-  {
-    name: "Loll Pop",
-    rsvp: "invited"
-  },
-  {
-    name: "Nogu Toe",
-    rsvp: "invited"
-  }
-];
-
 const social = ["GitHub", "Twitter", "Facebook"];
 
 function EventFinalDetail(props) {
-  const { classes } = props;
+  const { classes, event, invitees } = props;
 
   return (
     <React.Fragment>
@@ -176,7 +129,7 @@ function EventFinalDetail(props) {
             {
               <img
                 style={{ display: "none" }}
-                src="https://source.unsplash.com/user/erondu"
+                src="{event.image}"
                 alt="background"
               />
             }
@@ -190,15 +143,13 @@ function EventFinalDetail(props) {
                     color="inherit"
                     gutterBottom
                   >
-                    Title of a longer featured event
+                    {event.title}
                   </Typography>
                   <Typography variant="h5" color="inherit" paragraph>
-                    Multiple lines of text that form the lede, informing new
-                    readers quickly and efficiently about what&apos;s most
-                    interesting in this event&apos;s contents.
+                    {event.description}
                   </Typography>
-                  <Link variant="subtitle1" href="#">
-                    Continue reading…
+                  <Link variant="subtitle1" href="#event-details">
+                    Continue details…
                   </Link>
                 </div>
               </Grid>
@@ -237,15 +188,17 @@ function EventFinalDetail(props) {
           <Grid container spacing={5} className={classes.mainGrid}>
             {/* Main content */}
             <Grid item xs={12} md={8}>
-              <Typography variant="h6" gutterBottom>
-                Event Description
-              </Typography>
+              <div id="event-details">
+                <Typography variant="h6" gutterBottom>
+                  Event Description
+                </Typography>
+              </div>
               <Divider />
               <Markdown
                 className={classes.markdown}
                 key={EventDetail.substring(0, 40)}
               >
-                {EventDetail}
+                {event.details}
               </Markdown>
             </Grid>
             {/* End main content */}
@@ -325,6 +278,66 @@ function EventFinalDetail(props) {
     </React.Fragment>
   );
 }
+
+EventFinalDetail.defaultProps = {
+  event: {
+    image: "https://source.unsplash.com/user/erondu",
+    title: "Title of a longer featured event",
+    description:
+      "Multiple lines of text that form the lede, informing new \
+                    readers quickly and efficiently about what's most \
+                    interesting in this event's contents.",
+    date: "",
+    location: "",
+    details: EventDetail
+  },
+  invitees: [
+    {
+      name: "John Doe",
+      rsvp: "invited"
+    },
+    {
+      name: "Mike Loe",
+      rsvp: "going"
+    },
+    {
+      name: "Jane Moe",
+      rsvp: "not going"
+    },
+    {
+      name: "Suzy Roe",
+      rsvp: "invited"
+    },
+    {
+      name: "Lucy Goe",
+      rsvp: "invited"
+    },
+    {
+      name: "Pete Roe",
+      rsvp: "invited"
+    },
+    {
+      name: "Icen Joe",
+      rsvp: "invited"
+    },
+    {
+      name: "Jell Boe",
+      rsvp: "invited"
+    },
+    {
+      name: "Kite Koe",
+      rsvp: "invited"
+    },
+    {
+      name: "Loll Pop",
+      rsvp: "invited"
+    },
+    {
+      name: "Nogu Toe",
+      rsvp: "invited"
+    }
+  ]
+};
 
 EventFinalDetail.propTypes = {
   classes: PropTypes.object.isRequired

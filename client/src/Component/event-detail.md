@@ -1,6 +1,6 @@
 ## Sample event detail
 
-#### April 1, 2020 by [Olivier](/)
+#### April 1, 2020 by [Mike](/)
 
 This event detail shows a few different types of content that are supported and styled with
 Material styles. Basic typography, images, and code are all supported.
