@@ -25,8 +25,6 @@ export function deleteSurveyQuestion(questionId: number) {
 }
 
 export function getSurveyQuestionsByEventId(eventId: number) {
-  console.log("getSurvey");
-  console.log("got repository");
   return connectORM
     .getRepository(SurveyQuestion)
     .find({ event_id: eventId })

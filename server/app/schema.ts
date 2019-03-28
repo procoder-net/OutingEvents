@@ -25,9 +25,21 @@ type SurveyQuestion{
     questions: String
 }
 
+type EventParticipant{
+    id: Int
+    event_id: Int
+    user_id: Int
+    is_organizer: Boolean
+    notified: Boolean
+    confirmed: Boolean
+    attended: Boolean
+    tooksurvey: Boolean
+}
+
 type Query {
     getAllEvents: [Event]
     getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
+    getAllEventParticipants(event_id: Int): [EventParticipant]
 }
 
 type Mutation {
@@ -36,5 +48,8 @@ type Mutation {
     sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String
     addSurveyQuestion(id: Int, name: String, event_id: Int, questions: String):SurveyQuestion
     deleteSurveyQuestion(id: Int): SurveyQuestion
+    addEventParticipant(event_id: Int, user_id: Int, is_organizer: Boolean): EventParticipant
+    removeEventParticipant(id: Int): EventParticipant
+    updateEventParticipant(id: Int, is_organizer: Boolean, notified: Boolean, confirmed: Boolean, attended: Boolean, tooksurvey: Boolean): EventParticipant
 }
 `;

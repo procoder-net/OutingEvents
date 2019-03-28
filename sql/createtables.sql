@@ -1,5 +1,5 @@
-/*create schema if not exists outingevents;
-set schema 'outingevents';*/
+create schema if not exists outingevents;
+set schema 'outingevents';
 
 CREATE TABLE IF NOT EXISTS Event(
 	id integer NOT NULL PRIMARY KEY,
@@ -53,4 +53,15 @@ CREATE TABLE IF NOT EXISTS Receipt (
 	description varchar NOT NULL,
 	amount integer NOT NULL,
 	currency varchar NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Event_Participant (
+	id integer NOT NULL PRIMARY KEY,
+	event_id integer NOT NULL,
+	user_id integer NOT NULL,
+	is_organizer boolean DEFAULT false,
+	notified boolean DEFAULT false,
+	confirmed boolean DEFAULT false,
+	attended boolean DEFAULT false,
+	tooksurvey boolean DEFAULT false
 );
