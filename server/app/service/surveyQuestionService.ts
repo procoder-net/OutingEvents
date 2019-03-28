@@ -70,3 +70,8 @@ export function getSurveyResultByQuestionId(survey_question_id: number) {
       throw err;
     });
 }
+
+export function getSurveyResultsByEvent(event_id: number) {
+  //TODO: will do this after writing base for all services
+  return {};
+}
