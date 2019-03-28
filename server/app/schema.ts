@@ -36,10 +36,20 @@ type EventParticipant{
     tooksurvey: Boolean
 }
 
+type Receipt{
+    id: Int
+    event_id: Int
+    vendor: String
+    description: String
+    amount: Int
+    currency: String
+}
+
 type Query {
     getAllEvents: [Event]
     getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
     getAllEventParticipants(event_id: Int): [EventParticipant]
+    getReceiptByEvent(event_id: Int): [Receipt]
 }
 
 type Mutation {
@@ -51,5 +61,7 @@ type Mutation {
     addEventParticipant(event_id: Int, user_id: Int, is_organizer: Boolean): EventParticipant
     removeEventParticipant(id: Int): EventParticipant
     updateEventParticipant(id: Int, is_organizer: Boolean, notified: Boolean, confirmed: Boolean, attended: Boolean, tooksurvey: Boolean): EventParticipant
+    addReceipt(event_id: Int, vendor: String, description: String, amount: Int, currency: String): Receipt
+    deleteReceipt(id: Int): Receipt
 }
 `;

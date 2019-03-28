@@ -1,5 +1,7 @@
 import * as surveyQuestionService from "./service/surveyQuestionService";
 import * as eventParticipantService from "./service/eventParticipantService";
+import * as receiptService from "./service/receiptService";
+
 var emailSurvey = require("./mail").sendSurveyEmail;
 
 exports.resolvers = {
@@ -10,6 +12,9 @@ exports.resolvers = {
     },
     getAllEventParticipants: (root: any, args: any) => {
       return eventParticipantService.getEventParticipants(args.event_id);
+    },
+    getReceiptByEvent: (root: any, args: any) => {
+      return receiptService.getReceiptsByEventId(args.event_id);
     }
   },
 
@@ -48,6 +53,18 @@ exports.resolvers = {
     },
     removeEventParticipant: (root: any, args: any) => {
       return eventParticipantService.removeEventParticipant(args.id);
+    },
+    addReceipt: (root: any, args: any) => {
+      const body = {
+        vendor: args.vendor,
+        description: args.description || "",
+        amount: args.amount,
+        currency: args.currency
+      };
+      return receiptService.createReceipt(args.event_id, body);
+    },
+    deleteReceipt: (root: any, args: any) => {
+      return receiptService.deleteReceipt(args.id);
     }
   }
 };
