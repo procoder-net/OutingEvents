@@ -1,6 +1,10 @@
 import Event from "./entity/Event";
 import SurveyQuestion from "./entity/SurveyQuestion";
 import SurveyResult from "./entity/SurveyResult";
+import Receipt from "./entity/Receipt";
+import EventParticipant from "./entity/EventParticipant";
+import Payment from "./entity/Payment";
+import UserProfile from "./entity/UserProfile";
 
 import {
   ConnectionManager,
@@ -17,7 +21,15 @@ const ormConfig: ConnectionOptions = {
   username: process.env.PGUSER,
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
-  entities: [Event, SurveyQuestion, SurveyResult],
+  entities: [
+    Event,
+    SurveyQuestion,
+    SurveyResult,
+    EventParticipant,
+    Receipt,
+    Payment,
+    UserProfile
+  ],
   synchronize: true,
   logging: false
 };
