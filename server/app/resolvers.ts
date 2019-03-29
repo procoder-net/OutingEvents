@@ -3,12 +3,21 @@ import * as eventParticipantService from "./service/eventParticipantService";
 import * as receiptService from "./service/receiptService";
 import * as paymentService from "./service/paymentService";
 import * as userService from "./service/userService";
+import * as eventService from "./service/eventService";
 
 var emailSurvey = require("./mail").sendSurveyEmail;
 
 exports.resolvers = {
   Query: {
-    getAllEvents: () => {},
+    getAllEvents: (root: any, args: any) => {
+      console.log("the resolver root is: " + root);
+      return eventService.getAllEvents();
+    },
+
+    getEventByEventId: (oot: any, args: any) => {
+      return eventService.getEventByEventId(args.event_id);
+    },
+
     getAllSurveyQuestions: (root: any, args: any) => {
       return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
     },
@@ -35,7 +44,46 @@ exports.resolvers = {
   },
 
   Mutation: {
-    addEvent: () => {},
+    addEvent: (root: any, args: any) => {
+      const start_time: Date = new Date(
+        args.start_time.year,
+        args.start_time.month - 1,
+        args.start_time.day,
+        args.start_time.hour,
+        args.start_time.minute
+      );
+      const end_time: Date = new Date(
+        args.end_time.year,
+        args.end_time.month - 1,
+        args.end_time.day,
+        args.end_time.hour,
+        args.end_time.minute
+      );
+      return eventService.addEvent(
+        args.type,
+        args.name,
+        args.location,
+        args.state,
+        args.survey_id,
+        start_time,
+        end_time
+      );
+    },
+
+    updateEventNameByEventId: (root: any, args: any) => {
+      return eventService.updateEventNameByEventId(
+        {
+          id: args.id,
+          name: args.name
+        },
+        { id: args.id, name: args.name }
+      );
+    },
+
+    deleteEventById: (root: any, args: any) => {
+      return eventService.deleteEventById(args.id);
+    },
+
     sendSurveyEmail: (root: any, args: any) =>
       emailSurvey(args.eventId, args.eventName, args.surveyId, args.emailList),
     addSurveyQuestion: (root: any, args: any) => {
