@@ -58,7 +58,6 @@ export function updateEventNameByEventId(body: any, paramas: any) {
 
 //delete Event by event id
 export function deleteEventById(id: number) {
-  // const event = new Event();
   return connectORM
     .getRepository(Event)
     .remove({ id: id })

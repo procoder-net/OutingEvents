@@ -10,8 +10,7 @@ var emailSurvey = require("./mail").sendSurveyEmail;
 exports.resolvers = {
   Query: {
     getAllEvents: (root: any, args: any) => {
-      console.log(root);
-      console.log("resolver");
+      console.log("the resolver root is: " + root);
       return eventService.getAllEvents();
     },
 
@@ -68,9 +67,9 @@ exports.resolvers = {
       );
     },
 
-    // deleteEventById: (root: any, args: any) => {
-    //   return eventService.deleteEventById(args.id);
-    // },
+    deleteEventById: (root: any, args: any) => {
+      return eventService.deleteEventById(args.id);
+    },
 
     sendSurveyEmail: (root: any, args: any) =>
       emailSurvey(args.eventId, args.eventName, args.surveyId, args.emailList),

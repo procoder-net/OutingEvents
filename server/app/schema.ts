@@ -81,8 +81,8 @@ type Mutation {
 
     addEvent : Event
     updateEventNameByEventId( id: Int, name: String!) : Event
-    deleteEventById( id: Int, name: String!) : Event
-    
+    deleteEventById(id: Int):Event
+
     sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String   
     addSurveyQuestion(id: Int, name: String, event_id: Int, questions: String):SurveyQuestion
     deleteSurveyQuestion(id: Int): SurveyQuestion
