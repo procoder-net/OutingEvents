@@ -45,12 +45,28 @@ exports.resolvers = {
 
   Mutation: {
     addEvent: (root: any, args: any) => {
-      console.log("addevent");
+      const start_time: Date = new Date(
+        args.start_time.year,
+        args.start_time.month - 1,
+        args.start_time.day,
+        args.start_time.hour,
+        args.start_time.minute
+      );
+      const end_time: Date = new Date(
+        args.end_time.year,
+        args.end_time.month - 1,
+        args.end_time.day,
+        args.end_time.hour,
+        args.end_time.minute
+      );
       return eventService.addEvent(
         args.type,
         args.name,
         args.location,
-        args.state
+        args.state,
+        args.survey_id,
+        start_time,
+        end_time
       );
     },
 

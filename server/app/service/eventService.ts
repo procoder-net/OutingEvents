@@ -4,12 +4,10 @@ import EventParticipant from "../entity/EventParticipant";
 
 // get events
 export function getAllEvents() {
-  console.log("in get All events");
   return connectORM
     .getRepository(Event)
     .find()
     .then(events => {
-      console.log(events);
       return events;
     })
     .catch(err => {
@@ -35,20 +33,19 @@ export function addEvent(
   type: string,
   name: string,
   location: string,
-  state: string
-  // survey_id: number,
-  // start_time: Date,
-  // end_time: Date
+  state: string,
+  survey_id: number,
+  start_time: Date,
+  end_time: Date
 ) {
   const event = new Event();
   event.type = type;
   event.name = name;
   event.location = location;
   event.state = state;
-  event.survey_id = 1;
-  event.start_time = new Date(2019, 3, 1, 0, 0, 0, 0);
-  event.end_time = new Date(2019, 3, 2, 0, 0, 0, 0);
-
+  event.survey_id = survey_id;
+  event.start_time = start_time.toString();
+  event.end_time = end_time.toString();
   return connectORM.getRepository(Event).save(event);
 }
 

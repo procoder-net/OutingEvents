@@ -5,11 +5,17 @@ type Event{
     name: String
     eventType: String!
     description: String
-    eventDate: String!
-    location: String!
-    invited: [String]
-    acceptedInvite: [String]
-    organizer: [String]
+    location: String
+    start_time: String
+    end_time: String
+}
+
+input DateInput {
+    month: Int!
+    day: Int!
+    year: Int!
+    hour: Int!
+    minute: Int!
 }
 
 type SurveyQuestion{
@@ -77,7 +83,7 @@ type Query {
 }
 
 type Mutation {
-    addEvent(type: String!, name: String!, location: String!, state: String!) : Event
+    addEvent(type: String!, name: String!, location: String!, state: String!, start_time: DateInput, end_time: DateInput, survey_id: Int) : Event
     updateEventNameByEventId( id: Int, name: String!) : Event
     deleteEventById(id: Int):Event
 
