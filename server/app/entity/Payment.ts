@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn
+} from "typeorm";
+import UserProfile from "./UserProfile";
 
 @Entity()
 export default class Payment {
@@ -8,8 +15,9 @@ export default class Payment {
   @Column()
   event_id: number;
 
-  @Column()
-  user_id: number;
+  @ManyToOne(type => UserProfile, userProfile => userProfile.payments)
+  @JoinColumn({ name: "user_id" })
+  user: UserProfile;
 
   @Column()
   status: string;

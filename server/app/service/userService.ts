@@ -29,7 +29,6 @@ export function getAllUserProfiles() {
     .getRepository(UserProfile)
     .find()
     .then(profiles => {
-      console.log(profiles);
       return profiles;
     })
     .catch((err: any) => {

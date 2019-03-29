@@ -41,7 +41,7 @@ type Receipt{
 type Payment{
     id: Int
     event_id: Int
-    user_id: Int
+    user: User
     status: String
     description: String
     amount: Int
@@ -56,11 +56,13 @@ type SurveyResult{
 }
 
 type User{
+    id: Int
     first_name: String
     last_name: String
     email: String
     username: String
     password: String
+    payments: [Payment]
 }
 
 type Query {
