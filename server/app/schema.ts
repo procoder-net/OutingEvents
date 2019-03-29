@@ -1,7 +1,8 @@
 exports.typeDefs = `
 
 type Event{
-    name: String!
+    id: Int
+    name: String
     eventType: String!
     description: String
     eventDate: String!
@@ -65,6 +66,7 @@ type User{
 
 type Query {
     getAllEvents: [Event]
+    getEventByEventId(event_id: Int): [Event]
     getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
     getAllEventParticipants(event_id: Int): [EventParticipant]
     getReceiptByEvent(event_id: Int): [Receipt]
@@ -75,11 +77,19 @@ type Query {
 }
 
 type Mutation {
-    addEvent(name: String!, eventType: String!, description: String, eventDate: String!,
-        location: String!, invited: [String]): Event
-    sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String
+    helloWorld(type: String!, name: String!, location: String!, state: String!,  survey_id: Int!, start_time: String!, end_time: String!) : Event
+    addEvent : Event
+
+
+    updateEventNameByEventId( id: Int, name: String!) : Event
+    
+
+
+
+    sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String   
     addSurveyQuestion(id: Int, name: String, event_id: Int, questions: String):SurveyQuestion
     deleteSurveyQuestion(id: Int): SurveyQuestion
+<<<<<<< Updated upstream
     addEventParticipant(event_id: Int, user_id: Int, is_organizer: Boolean): EventParticipant
     removeEventParticipant(id: Int): EventParticipant
     updateEventParticipant(id: Int, is_organizer: Boolean, notified: Boolean, confirmed: Boolean, attended: Boolean, tooksurvey: Boolean): EventParticipant
@@ -89,5 +99,8 @@ type Mutation {
     updatePaymentStatus(id: Int, new_status: String): Payment
     createSurveyResponse(survey_question_id: Int, event_id: Int, user_id: Int,response:String): SurveyResult
     createUserProfile(first_name: String, last_name: String, email: String, username: String, password: String): User
+=======
+    
+>>>>>>> Stashed changes
 }
 `;

@@ -3,12 +3,22 @@ import * as eventParticipantService from "./service/eventParticipantService";
 import * as receiptService from "./service/receiptService";
 import * as paymentService from "./service/paymentService";
 import * as userService from "./service/userService";
+import * as eventService from "./service/eventService";
 
 var emailSurvey = require("./mail").sendSurveyEmail;
 
 exports.resolvers = {
   Query: {
-    getAllEvents: () => {},
+    getAllEvents: (root: any, args: any) => {
+      console.log(root);
+      console.log("resolver");
+      return eventService.getAllEvents();
+    },
+
+    getEventByEventId: (oot: any, args: any) => {
+      return eventService.getEventByEventId(args.event_id);
+    },
+
     getAllSurveyQuestions: (root: any, args: any) => {
       return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
     },
@@ -35,7 +45,29 @@ exports.resolvers = {
   },
 
   Mutation: {
-    addEvent: () => {},
+    addEvent: (root: any, args: any) => {
+      console.log("addevent");
+      return eventService.addEvent({
+        type: args.type,
+        name: args.name,
+        location: args.location,
+        state: args.state,
+        survey: args.surey,
+        start_time: args.start_time,
+        end_time: args.end_time
+      });
+    },
+
+    updateEventNameByEventId: (root: any, args: any) => {
+      return eventService.updateEventNameByEventId(
+        {
+          id: args.id,
+          name: args.name
+        },
+        { id: args.id, name: args.name }
+      );
+    },
+
     sendSurveyEmail: (root: any, args: any) =>
       emailSurvey(args.eventId, args.eventName, args.surveyId, args.emailList),
     addSurveyQuestion: (root: any, args: any) => {
