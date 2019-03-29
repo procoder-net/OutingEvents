@@ -100,7 +100,6 @@ const styles = theme => ({
 });
 
 const social = ["GitHub", "Twitter", "Facebook"];
-const emails = ["username@gmail.com", "user02@gmail.com"];
 
 function EventFinalDetail(props) {
   const { classes, event, invitees } = props;
