@@ -77,9 +77,7 @@ type Query {
 }
 
 type Mutation {
-    helloWorld(type: String!, name: String!, location: String!, state: String!,  survey_id: Int!, start_time: String!, end_time: String!) : Event
-
-    addEvent : Event
+    addEvent(type: String!, name: String!, location: String!, state: String!) : Event
     updateEventNameByEventId( id: Int, name: String!) : Event
     deleteEventById(id: Int):Event
 

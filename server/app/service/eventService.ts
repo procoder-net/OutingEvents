@@ -1,5 +1,6 @@
 import Event from "../entity/Event";
 import connectORM from "./../connection";
+import EventParticipant from "../entity/EventParticipant";
 
 // get events
 export function getAllEvents() {
@@ -30,17 +31,42 @@ export function getEventByEventId(eventId: number) {
 }
 
 // create event
-export function addEvent(body: any) {
+export function addEvent(
+  type: string,
+  name: string,
+  location: string,
+  state: string
+  // survey_id: number,
+  // start_time: Date,
+  // end_time: Date
+) {
   const event = new Event();
-  event.type = "Jokes";
-  event.name = "April fools";
-  event.location = "Planet earth";
-  event.state = "planning";
-  event.survey_id = 367;
+  event.type = type;
+  event.name = name;
+  event.location = location;
+  event.state = state;
+  event.survey_id = 1;
   event.start_time = new Date(2019, 3, 1, 0, 0, 0, 0);
   event.end_time = new Date(2019, 3, 2, 0, 0, 0, 0);
 
   return connectORM.getRepository(Event).save(event);
+}
+
+export function addEventParticipant(
+  user_id: number,
+  event_id: number,
+  isOrganizer: boolean
+) {
+  const eventParticipant = new EventParticipant();
+  eventParticipant.user_id = user_id;
+  eventParticipant.event_id = event_id;
+  eventParticipant.is_organizer = isOrganizer;
+  //when participant is created, all of these are false
+  eventParticipant.attended = false;
+  eventParticipant.confirmed = false;
+  eventParticipant.notified = false;
+  eventParticipant.tooksurvey = false;
+  return connectORM.getRepository(EventParticipant).save(eventParticipant);
 }
 
 // update event name value by event id

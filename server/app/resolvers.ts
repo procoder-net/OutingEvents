@@ -46,15 +46,12 @@ exports.resolvers = {
   Mutation: {
     addEvent: (root: any, args: any) => {
       console.log("addevent");
-      return eventService.addEvent({
-        type: args.type,
-        name: args.name,
-        location: args.location,
-        state: args.state,
-        survey: args.surey,
-        start_time: args.start_time,
-        end_time: args.end_time
-      });
+      return eventService.addEvent(
+        args.type,
+        args.name,
+        args.location,
+        args.state
+      );
     },
 
     updateEventNameByEventId: (root: any, args: any) => {
