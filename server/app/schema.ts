@@ -78,18 +78,14 @@ type Query {
 
 type Mutation {
     helloWorld(type: String!, name: String!, location: String!, state: String!,  survey_id: Int!, start_time: String!, end_time: String!) : Event
+
     addEvent : Event
-
-
     updateEventNameByEventId( id: Int, name: String!) : Event
+    deleteEventById( id: Int, name: String!) : Event
     
-
-
-
     sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String   
     addSurveyQuestion(id: Int, name: String, event_id: Int, questions: String):SurveyQuestion
     deleteSurveyQuestion(id: Int): SurveyQuestion
-<<<<<<< Updated upstream
     addEventParticipant(event_id: Int, user_id: Int, is_organizer: Boolean): EventParticipant
     removeEventParticipant(id: Int): EventParticipant
     updateEventParticipant(id: Int, is_organizer: Boolean, notified: Boolean, confirmed: Boolean, attended: Boolean, tooksurvey: Boolean): EventParticipant
@@ -99,8 +95,5 @@ type Mutation {
     updatePaymentStatus(id: Int, new_status: String): Payment
     createSurveyResponse(survey_question_id: Int, event_id: Int, user_id: Int,response:String): SurveyResult
     createUserProfile(first_name: String, last_name: String, email: String, username: String, password: String): User
-=======
-    
->>>>>>> Stashed changes
 }
 `;

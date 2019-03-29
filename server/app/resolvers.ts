@@ -68,6 +68,10 @@ exports.resolvers = {
       );
     },
 
+    // deleteEventById: (root: any, args: any) => {
+    //   return eventService.deleteEventById(args.id);
+    // },
+
     sendSurveyEmail: (root: any, args: any) =>
       emailSurvey(args.eventId, args.eventName, args.surveyId, args.emailList),
     addSurveyQuestion: (root: any, args: any) => {

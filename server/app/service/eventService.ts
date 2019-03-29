@@ -57,13 +57,13 @@ export function updateEventNameByEventId(body: any, paramas: any) {
 }
 
 //delete Event by event id
-export function deleteEventById(eventId: number) {
+export function deleteEventById(id: number) {
   // const event = new Event();
   return connectORM
     .getRepository(Event)
-    .remove({ id: eventId })
-    .then((result: any) => {
-      return result;
+    .remove({ id: id })
+    .then(result => {
+      return connectORM.getRepository(Event).find();
     })
     .catch(err => {
       throw err;
