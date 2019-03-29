@@ -1,14 +1,21 @@
 exports.typeDefs = `
 
 type Event{
-    name: String!
+    id: Int
+    name: String
     eventType: String!
     description: String
-    eventDate: String!
-    location: String!
-    invited: [String]
-    acceptedInvite: [String]
-    organizer: [String]
+    location: String
+    start_time: String
+    end_time: String
+}
+
+input DateInput {
+    month: Int!
+    day: Int!
+    year: Int!
+    hour: Int!
+    minute: Int!
 }
 
 type SurveyQuestion{
@@ -67,6 +74,7 @@ type User{
 
 type Query {
     getAllEvents: [Event]
+    getEventByEventId(event_id: Int): [Event]
     getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
     getAllEventParticipants(event_id: Int): [EventParticipant]
     getReceiptByEvent(event_id: Int): [Receipt]
@@ -77,9 +85,11 @@ type Query {
 }
 
 type Mutation {
-    addEvent(name: String!, eventType: String!, description: String, eventDate: String!,
-        location: String!, invited: [String]): Event
-    sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String
+    addEvent(type: String!, name: String!, location: String!, state: String!, start_time: DateInput, end_time: DateInput, survey_id: Int) : Event
+    updateEventNameByEventId( id: Int, name: String!) : Event
+    deleteEventById(id: Int):Event
+
+    sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String   
     addSurveyQuestion(id: Int, name: String, event_id: Int, questions: String):SurveyQuestion
     deleteSurveyQuestion(id: Int): SurveyQuestion
     addEventParticipant(event_id: Int, user_id: Int, is_organizer: Boolean): EventParticipant

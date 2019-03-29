@@ -21,8 +21,8 @@ export default class Event extends BaseEntity {
   survey_id: number;
 
   @Column()
-  start_time: Date;
+  start_time: String;
 
   @Column()
-  end_time: Date;
+  end_time: String;
 }
