@@ -101,8 +101,12 @@ const styles = theme => ({
 
 const social = ["GitHub", "Twitter", "Facebook"];
 
+function handleRSVPChange(value) {
+  console.log("handleRSVPChange ==>", value);
+}
+
 function EventFinalDetail(props) {
-  const { classes, event, invitees } = props;
+  const { classes, user, onRSVPChange, event, invitees } = props;
 
   return (
     <React.Fragment>
@@ -119,7 +123,10 @@ function EventFinalDetail(props) {
           >
             Event Final Detail
           </Typography>
-          <InvitationDecision />
+          <InvitationDecision
+            rsvp={invitees[user.inviteeid].rsvp}
+            onChange={handleRSVPChange}
+          />
         </Toolbar>
         <main>
           {/* Main featured event */}
@@ -212,17 +219,18 @@ function EventFinalDetail(props) {
                     <div className={classes.cardDetails}>
                       <CardContent align="center">
                         <Avatar className={classes.avatar}>
-                          {invitees[1].name.match(/\b\w/g) || "??"}
+                          {invitees[event.organizerid].name.match(/\b\w/g) ||
+                            "??"}
                         </Avatar>
                         <Typography component="h2" variant="h5" align="center">
-                          {invitees[1].name}
+                          {invitees[event.organizerid].name}
                         </Typography>
                         <Typography
                           variant="subtitle1"
                           color="textSecondary"
                           align="center"
                         >
-                          {invitees[1].rsvp}
+                          {invitees[event.organizerid].rsvp}
                         </Typography>
                       </CardContent>
                     </div>
@@ -279,6 +287,12 @@ function EventFinalDetail(props) {
 }
 
 EventFinalDetail.defaultProps = {
+  user: {
+    firstname: "John",
+    lastname: "Doe",
+    email: "john.doe@some.com",
+    inviteeid: 0
+  },
   event: {
     image: "https://source.unsplash.com/user/erondu",
     title: "Title of a longer featured event",
@@ -288,7 +302,8 @@ EventFinalDetail.defaultProps = {
                     interesting in this event's contents.",
     date: "",
     location: "",
-    details: EventDetail
+    details: EventDetail,
+    organizerid: 1
   },
   invitees: [
     {
@@ -339,7 +354,8 @@ EventFinalDetail.defaultProps = {
 };
 
 EventFinalDetail.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  onRSVPChange: PropTypes.func
 };
 
 export default withStyles(styles)(EventFinalDetail);
