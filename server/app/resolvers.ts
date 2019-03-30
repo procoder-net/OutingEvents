@@ -42,7 +42,6 @@ exports.resolvers = {
       return userService.getUserProfileById(args.id);
     }
   },
-
   Mutation: {
     addEvent: (root: any, args: any) => {
       const start_time: Date = new Date(

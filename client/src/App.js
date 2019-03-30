@@ -6,6 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Home from "./Home";
 import Login from "./Component/auth/Login";
 import PaymentRec from "./Component/PaymentRec";
+import EventAdd from "./EventAdd";
 import EventFinalDetail from "./Component/EventFinalDetail";
 import { Security, SecureRoute, ImplicitCallback } from "@okta/okta-react";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -42,8 +43,12 @@ class App extends React.Component {
             <Route path="/implicit/callback" component={ImplicitCallback} />
             <SecureRoute exact path="/events" component={HomePage} />
             <SecureRoute path="/survey" component={SurveyDisplay} />
+            <SecureRoute path="/addevent" component={EventAdd} />
             <SecureRoute path="/paymentRec" component={PaymentRec} />
-              <SecureRoute path="/eventfinaldetail" component={EventFinalDetail} />
+            <SecureRoute
+              path="/eventfinaldetail"
+              component={EventFinalDetail}
+            />
           </div>
         </Security>
       </BrowserRouter>
