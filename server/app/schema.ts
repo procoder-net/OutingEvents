@@ -3,11 +3,12 @@ exports.typeDefs = `
 type Event{
     id: Int
     name: String
-    eventType: String!
+    type: String!
     description: String
     location: String
     start_time: String
     end_time: String
+    event_participants: [EventParticipant]
 }
 
 input DateInput {
@@ -27,13 +28,13 @@ type SurveyQuestion{
 
 type EventParticipant{
     id: Int
-    event_id: Int
     user_id: Int
     is_organizer: Boolean
     notified: Boolean
     confirmed: Boolean
     attended: Boolean
     tooksurvey: Boolean
+    event: Event
 }
 
 type Receipt{
@@ -85,7 +86,7 @@ type Query {
 }
 
 type Mutation {
-    addEvent(type: String!, name: String!, location: String!, state: String!, start_time: DateInput, end_time: DateInput, survey_id: Int) : Event
+    addEvent(type: String!, name: String!, type:String, location: String!, state: String!, start_time: DateInput, end_time: DateInput, survey_id: Int) : Event
     updateEventNameByEventId( id: Int, name: String!) : Event
     deleteEventById(id: Int):Event
 

@@ -15,7 +15,9 @@ export default class Payment {
   @Column()
   event_id: number;
 
-  @ManyToOne(type => UserProfile, userProfile => userProfile.payments)
+  @ManyToOne(type => UserProfile, userProfile => userProfile.payments, {
+    onDelete: "CASCADE"
+  })
   @JoinColumn({ name: "user_id" })
   user: UserProfile;
 

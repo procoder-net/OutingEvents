@@ -96,6 +96,7 @@ exports.resolvers = {
       return surveyQuestionService.deleteSurveyQuestion(args.id);
     },
     addEventParticipant: (root: any, args: any) => {
+      console.log(args);
       return eventParticipantService.addEventParticipant(
         args.user_id,
         args.event_id,

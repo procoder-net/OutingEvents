@@ -21,8 +21,6 @@ export default class UserProfile {
   @Column()
   password: string;
 
-  @OneToMany(type => Payment, payment => payment.user, {
-    cascade: true
-  })
+  @OneToMany(type => Payment, payment => payment.user, { cascade: true })
   payments: Payment[];
 }

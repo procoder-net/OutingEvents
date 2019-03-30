@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany
+} from "typeorm";
+import EventParticipant from "./EventParticipant";
 
 @Entity()
 export default class Event extends BaseEntity {
@@ -25,4 +32,9 @@ export default class Event extends BaseEntity {
 
   @Column()
   end_time: String;
+
+  @OneToMany(type => EventParticipant, participant => participant.event, {
+    cascade: true
+  })
+  event_participants: EventParticipant[];
 }

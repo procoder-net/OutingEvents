@@ -6,8 +6,8 @@ import EventParticipant from "../entity/EventParticipant";
 export function getAllEvents() {
   return connectORM
     .getRepository(Event)
-    .find()
-    .then(events => {
+    .find({ relations: ["event_participants"] })
+    .then((events: any) => {
       return events;
     })
     .catch(err => {
@@ -19,7 +19,7 @@ export function getAllEvents() {
 export function getEventByEventId(eventId: number) {
   return connectORM
     .getRepository(Event)
-    .find({ id: eventId })
+    .findOne({ id: eventId, relations: ["event_participants"] })
     .then(events => {
       return events;
     })
@@ -47,23 +47,6 @@ export function addEvent(
   event.start_time = start_time.toString();
   event.end_time = end_time.toString();
   return connectORM.getRepository(Event).save(event);
-}
-
-export function addEventParticipant(
-  user_id: number,
-  event_id: number,
-  isOrganizer: boolean
-) {
-  const eventParticipant = new EventParticipant();
-  eventParticipant.user_id = user_id;
-  eventParticipant.event_id = event_id;
-  eventParticipant.is_organizer = isOrganizer;
-  //when participant is created, all of these are false
-  eventParticipant.attended = false;
-  eventParticipant.confirmed = false;
-  eventParticipant.notified = false;
-  eventParticipant.tooksurvey = false;
-  return connectORM.getRepository(EventParticipant).save(eventParticipant);
 }
 
 // update event name value by event id
