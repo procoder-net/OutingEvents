@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import Event from "./Event";
 
 @Entity()
@@ -6,24 +6,22 @@ export default class EventParticipant {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  event_id: number;
+  @ManyToOne(() => Event, (event: Event) => event.id)
+  public event: Event;
 
   @Column()
-  user_id: number;
+  useremail: string;
 
   @Column()
   is_organizer: boolean;
 
-  @Column()
-  notified: boolean;
-
-  @Column()
+  @Column({
+    default: false
+  })
   confirmed: boolean;
 
-  @Column()
+  @Column({
+    default: false
+  })
   attended: boolean;
-
-  @Column()
-  tooksurvey: boolean;
 }

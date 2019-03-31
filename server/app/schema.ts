@@ -8,30 +8,44 @@ input DateInput {
     minute: Int!
 }
 
+type EventParticipant{
+    id: Int
+    event_id: Event
+    useremail: String!
+    is_organizer: Boolean
+    confirmed: Boolean
+    attended: Boolean
+}
+
+input EventParticipantInput{
+    event_id: String!
+    useremail: String!
+    is_organizer: Boolean!
+    confirmed: Boolean
+    attended: Boolean
+}
+
 type Event{
-    id: String!,
-    name: String!
-    eventType: String!
+    id: Int
+    name: String
+    type: String
     description: String
-    eventDate: String!,
-    eventTime: String!,
-    deadlineDate: String,
-    deadlineTime: String,
-    location: String!
-    invited: [String]
-    acceptedInvite: [String]
+    eventDate: String
+    deadlineDate: String
+    location: String
+    invites: [EventParticipant]
     organizer: [String]
 }
 
 input EventInput{
     name: String!
-    eventType: String!
+    type: String!
     description: String
     eventDateTime: DateInput!
     deadlineDatetime: DateInput!,
+    surveyId: String!
     location: String!
     invited: [String]
-    acceptedInvite: [String]
     organizer: [String]
 }
 
@@ -40,17 +54,6 @@ type SurveyQuestion{
     name: String
     event_id: Int
     questions: String
-}
-
-type EventParticipant{
-    id: Int
-    event_id: Int
-    user_id: Int
-    is_organizer: Boolean
-    notified: Boolean
-    confirmed: Boolean
-    attended: Boolean
-    tooksurvey: Boolean
 }
 
 type Receipt{
@@ -106,7 +109,7 @@ type Mutation {
     sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String   
     addSurveyQuestion(id: Int, name: String, event_id: Int, questions: String):SurveyQuestion
     deleteSurveyQuestion(id: Int): SurveyQuestion
-    addEventParticipant(event_id: Int, user_id: Int, is_organizer: Boolean): EventParticipant
+    addEventParticipant(participant: EventParticipantInput): EventParticipant
     removeEventParticipant(id: Int): EventParticipant
     updateEventParticipant(id: Int, is_organizer: Boolean, notified: Boolean, confirmed: Boolean, attended: Boolean, tooksurvey: Boolean): EventParticipant
     addReceipt(event_id: Int, vendor: String, description: String, amount: Int, currency: String): Receipt

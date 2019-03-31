@@ -1,7 +1,6 @@
 import Event from "../entity/Event";
 import connectORM from "./../connection";
-import EventParticipant from "../entity/EventParticipant";
-
+import * as EventParticipant from "./eventParticipantService";
 // get events
 export function getAllEvents() {
   return connectORM
@@ -29,14 +28,16 @@ export function getEventByEventId(eventId: number) {
 }
 
 // create event
-export function addEvent(
+export async function addEvent(
   type: string,
   name: string,
   location: string,
   state: string,
   survey_id: number,
-  start_time: Date,
-  end_time: Date
+  description: string,
+  event_date: Date,
+  deadline_date: Date,
+  invites: [string]
 ) {
   const event = new Event();
   event.type = type;
@@ -44,26 +45,20 @@ export function addEvent(
   event.location = location;
   event.state = state;
   event.survey_id = survey_id;
-  event.start_time = start_time.toString();
-  event.end_time = end_time.toString();
-  return connectORM.getRepository(Event).save(event);
-}
-
-export function addEventParticipant(
-  user_id: number,
-  event_id: number,
-  isOrganizer: boolean
-) {
-  const eventParticipant = new EventParticipant();
-  eventParticipant.user_id = user_id;
-  eventParticipant.event_id = event_id;
-  eventParticipant.is_organizer = isOrganizer;
-  //when participant is created, all of these are false
-  eventParticipant.attended = false;
-  eventParticipant.confirmed = false;
-  eventParticipant.notified = false;
-  eventParticipant.tooksurvey = false;
-  return connectORM.getRepository(EventParticipant).save(eventParticipant);
+  event.event_date = event_date;
+  event.deadline_date = deadline_date;
+  event.description = description;
+  var createdEvent = await connectORM.getRepository(Event).save(event);
+  invites.forEach(async invite => {
+    await EventParticipant.addEventParticipant(
+      invite,
+      event,
+      true,
+      true,
+      false
+    );
+  });
+  return createdEvent;
 }
 
 // update event name value by event id

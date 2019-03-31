@@ -1,6 +1,8 @@
 import SurveyQuestion from "../entity/SurveyQuestion";
 import SurveyResult from "../entity/SurveyResult";
 import connectORM from "./../connection";
+import Event from "../entity/Event";
+import { getEventByEventId } from "./eventService";
 
 export function createSurveyQuestion(body: any, params: any) {
   const surveyQuestion = new SurveyQuestion();
@@ -42,16 +44,17 @@ export function getSurveyQuestionsByEventId(eventId: number) {
     });
 }
 
-export function createSurveyResult(
-  event_id: number,
-  user_id: number,
+export async function createSurveyResult(
+  event: any,
+  user_id: string,
   survey_question_id: number,
   result: any
 ) {
   const surveyResult = new SurveyResult();
-  surveyResult.event_id = event_id;
-  surveyResult.user_id = user_id;
-  surveyResult.survey_question_id = survey_question_id;
+  surveyResult.event =
+    event instanceof Event ? event : await getEventByEventId(event);
+  surveyResult.useremail = user_id;
+  surveyResult.survey_id = survey_question_id;
   surveyResult.response = JSON.parse(result);
   return connectORM.getRepository(SurveyResult).save(surveyResult);
 }

@@ -37,10 +37,10 @@ router.post("/api/event", (req: any, res: any) => {
   event.name = "April fools";
   event.type = "Jokes";
   event.location = "Planet earth";
-  event.state = "planning";
+  event.state = "Draft";
   event.survey_id = 367;
-  event.start_time = new Date(2019, 3, 1, 0, 0, 0, 0).toString();
-  event.end_time = new Date(2019, 3, 2, 0, 0, 0, 0).toString();
+  event.event_date = new Date(2019, 3, 1, 0, 0, 0, 0);
+  event.deadline_date = new Date(2019, 3, 2, 0, 0, 0, 0);
   connectORM
     .getManager()
     .save(event)

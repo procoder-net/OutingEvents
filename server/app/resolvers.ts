@@ -43,41 +43,45 @@ exports.resolvers = {
     }
   },
   Mutation: {
-    addEvent: (root: any, args: any) => {
-      const start_time: Date = new Date(
-        args.start_time.year,
-        args.start_time.month - 1,
-        args.start_time.day,
-        args.start_time.hour,
-        args.start_time.minute
+    addEvent: async (root: any, args: any) => {
+      const event = args.event;
+      const eventDate: Date = new Date(
+        event.eventDateTime.year,
+        event.eventDateTime.month,
+        event.eventDateTime.day,
+        event.eventDateTime.hour,
+        event.eventDateTime.minute
       );
-      const end_time: Date = new Date(
-        args.end_time.year,
-        args.end_time.month - 1,
-        args.end_time.day,
-        args.end_time.hour,
-        args.end_time.minute
+      const deadlineDate: Date = new Date(
+        event.deadlineDatetime.year,
+        event.deadlineDatetime.month,
+        event.deadlineDatetime.day,
+        event.deadlineDatetime.hour,
+        event.deadlineDatetime.minute
       );
       return eventService.addEvent(
-        args.type,
-        args.name,
-        args.location,
-        args.state,
-        args.survey_id,
-        start_time,
-        end_time
+        event.type,
+        event.name,
+        event.location,
+        "Draft",
+        event.surveyId,
+        event.description,
+        eventDate,
+        deadlineDate,
+        event.invited
       );
     },
 
-    updateEventNameByEventId: (root: any, args: any) => {
-      return eventService.updateEventNameByEventId(
-        {
-          id: args.id,
-          name: args.name
-        },
-        { id: args.id, name: args.name }
-      );
-    },
+    /*  updateEventNameByEventId: (root: any, args: any) => {
+              return eventService.updateEventNameByEventId(
+                  {
+                      id: args.id,
+                      name: args.name
+                  },
+                  { id: args.id, name: args.name }
+              );
+              console.log(args);
+          }, */
 
     deleteEventById: (root: any, args: any) => {
       return eventService.deleteEventById(args.id);
@@ -95,11 +99,11 @@ exports.resolvers = {
       return surveyQuestionService.deleteSurveyQuestion(args.id);
     },
     addEventParticipant: (root: any, args: any) => {
-      return eventParticipantService.addEventParticipant(
-        args.user_id,
-        args.event_id,
-        args.is_organizer
-      );
+      /*return eventParticipantService.addEventParticipant(
+                args.usernemail,
+                args.event_id,
+                args.is_organizer
+            );*/
     },
     updateEventParticipant: (root: any, args: any) => {
       const updatedStatus = {
