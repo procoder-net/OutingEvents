@@ -43,7 +43,7 @@ input EventInput{
     description: String
     eventDateTime: DateInput!
     deadlineDatetime: DateInput!,
-    surveyId: String!
+    surveyId: Int!
     location: String!
     invited: [String]
     organizer: [String]

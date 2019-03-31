@@ -1,14 +1,49 @@
 import React from "react";
-import { Query } from "react-apollo";
 import DemoForm from "./Component/EventAdd";
-import { GET_ALL_EVENTS } from "./queries";
+import gql from "graphql-tag";
+import { Mutation } from "react-apollo";
 
+const ADD_EVENT = gql`
+  mutation addEvent($event: EventInput) {
+    addEvent(event: $event) {
+      id
+      name
+      description
+    }
+  }
+`;
 class EventAdd extends React.Component {
-  handleDemoFormSubmit = (values, setSubmitting) => {
-    console.log(values);
-    setTimeout(() => {
-      setSubmitting(false);
-    }, 1000);
+  handleDemoFormSubmit = async (addFunc, input) => {
+    var d = new Date();
+    var deadlineDate = input.deadlinedate.split("-");
+    var deadlineTime = input.deadlinetime.split(":");
+    const i = {
+      event: {
+        name: input.name,
+        type: input.type.value,
+        description: input.description,
+        eventDateTime: {
+          month: d.getMonth(),
+          day: d.getDay(),
+          year: d.getFullYear(),
+          hour: d.getHours(),
+          minute: d.getMinutes()
+        },
+        deadlineDatetime: {
+          month: parseInt(deadlineDate[1]),
+          day: parseInt(deadlineDate[2]),
+          year: parseInt(deadlineDate[0]),
+          hour: parseInt(deadlineTime[0]),
+          minute: parseInt(deadlineTime[1])
+        },
+        surveyId: 1234,
+        location: "san jose",
+        invited: input.invited.map(invite => invite.value),
+        organizer: ["Moyeen"]
+      }
+    };
+    console.log(i);
+    await addFunc({ variables: i });
   };
   render() {
     let values = {
@@ -17,9 +52,17 @@ class EventAdd extends React.Component {
       age: 20
     };
     return (
-      <div className="App">
-        <DemoForm values={values} handleSubmit={this.handleDemoFormSubmit} />
-      </div>
+      <Mutation mutation={ADD_EVENT}>
+        {(addEvent, { data }) => (
+          <div className="App">
+            <DemoForm
+              values={values}
+              handleSubmit={this.handleDemoFormSubmit}
+              addEvent={addEvent}
+            />
+          </div>
+        )}
+      </Mutation>
     );
   }
 }

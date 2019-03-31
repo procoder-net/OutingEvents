@@ -44,6 +44,7 @@ exports.resolvers = {
   },
   Mutation: {
     addEvent: async (root: any, args: any) => {
+      console.log(args);
       const event = args.event;
       const eventDate: Date = new Date(
         event.eventDateTime.year,
@@ -59,7 +60,7 @@ exports.resolvers = {
         event.deadlineDatetime.hour,
         event.deadlineDatetime.minute
       );
-      return eventService.addEvent(
+      await eventService.addEvent(
         event.type,
         event.name,
         event.location,
@@ -73,15 +74,15 @@ exports.resolvers = {
     },
 
     /*  updateEventNameByEventId: (root: any, args: any) => {
-              return eventService.updateEventNameByEventId(
-                  {
-                      id: args.id,
-                      name: args.name
-                  },
-                  { id: args.id, name: args.name }
-              );
-              console.log(args);
-          }, */
+                  return eventService.updateEventNameByEventId(
+                      {
+                          id: args.id,
+                          name: args.name
+                      },
+                      { id: args.id, name: args.name }
+                  );
+                  console.log(args);
+              }, */
 
     deleteEventById: (root: any, args: any) => {
       return eventService.deleteEventById(args.id);
@@ -100,10 +101,10 @@ exports.resolvers = {
     },
     addEventParticipant: (root: any, args: any) => {
       /*return eventParticipantService.addEventParticipant(
-                args.usernemail,
-                args.event_id,
-                args.is_organizer
-            );*/
+                      args.usernemail,
+                      args.event_id,
+                      args.is_organizer
+                  );*/
     },
     updateEventParticipant: (root: any, args: any) => {
       const updatedStatus = {

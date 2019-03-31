@@ -15,7 +15,7 @@ export function getAllEvents() {
 }
 
 // get events by event id
-export function getEventByEventId(eventId: number) {
+export function getEventByEventId(eventId: number): Promise<any> {
   return connectORM
     .getRepository(Event)
     .find({ id: eventId })

@@ -93,9 +93,9 @@ class DemoForm extends React.Component {
       deadlinetime: this.state.deadlinetime,
       selectedsurvey: this.state.selectedSurvey.value,
       invited: this.state.invited,
-      type: this.state.type.value
+      type: this.state.type
     };
-    console.log(`Email: ${JSON.stringify(eventInput)}`);
+    this.props.handleSubmit(this.props.addEvent, eventInput);
   }
 
   render() {
