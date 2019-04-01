@@ -1,9 +1,8 @@
 import SurveyQuestion from "../entity/SurveyQuestion";
 import SurveyResult from "../entity/SurveyResult";
 import connectORM from "./../connection";
-import Event from "../entity/Event";
-import { getEventByEventId } from "./eventService";
-import { InsertQueryBuilder } from "typeorm";
+import { default as Event } from "../entity/Event";
+import EventParticipant from "../entity/EventParticipant";
 
 export async function createSurveyQuestion(
   name: string,
@@ -49,13 +48,8 @@ export function deleteSurveyQuestion(questionId: number) {
 export function getSurveyQuestionsByEventId(eventId: number) {
   return connectORM
     .getRepository(SurveyQuestion)
-    .find({ event_id: eventId })
+    .find({ event_id: eventId, relations: ["survey_results"] })
     .then(surveyQuestions => {
-      surveyQuestions.forEach(function(obj: any) {
-        let questionString: string = obj.questions;
-        obj.questions = JSON.parse(questionString);
-      });
-      console.log(surveyQuestions);
       return surveyQuestions;
     })
     .catch(err => {
@@ -64,27 +58,43 @@ export function getSurveyQuestionsByEventId(eventId: number) {
 }
 
 export async function createSurveyResult(
-  event: any,
+  eventId: any,
   surveyId: number,
   useremail: string,
+  participantId: number,
   result: any
 ) {
   const surveyResult = new SurveyResult();
-  surveyResult.event = event;
   // /event instanceof Event ? event : await getEventByEventId(event);
   surveyResult.useremail = useremail;
-  surveyResult.survey_id = surveyId;
+  const event: any = await connectORM
+    .getRepository(Event)
+    .findOne({ id: eventId, relations: ["survey_result"] });
+  const survey_question: any = await connectORM
+    .getRepository(SurveyQuestion)
+    .findOne({ id: surveyId, relations: ["survey_results"] });
+  const event_participant: any = await connectORM
+    .getRepository(EventParticipant)
+    .findOne({ id: surveyId, relations: ["survey_results"] });
   surveyResult.response = result;
-  let surveyResp = await connectORM
-    .getRepository(SurveyResult)
-    .save(surveyResult);
-  return surveyResp;
+  surveyResult.event = event;
+  surveyResult.survey_question = survey_question;
+  event.survey_result.push(surveyResult);
+  survey_question.survey_results.push(surveyResult);
+  event_participant.survey_results.push(surveyResult);
+  await connectORM.getRepository(SurveyQuestion).save(survey_question);
+  await connectORM.getRepository(EventParticipant).save(event_participant);
+  await connectORM.getRepository(Event).save(event);
+  return surveyResult;
 }
 
 export function getSurveyResultByQuestionId(survey_question_id: number) {
   return connectORM
     .getRepository(SurveyResult)
-    .find({ survey_question_id: survey_question_id })
+    .find({
+      survey_question_id: survey_question_id,
+      relations: ["event", "event_participant", "survey_question"]
+    })
     .then(surveyQuestionResults => {
       surveyQuestionResults.forEach((obj: any) => {
         obj.response = JSON.stringify(obj.response);

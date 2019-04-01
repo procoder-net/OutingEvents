@@ -61,7 +61,7 @@ exports.resolvers = {
         event.deadlineDatetime.hour,
         event.deadlineDatetime.minute
       );
-      await eventService.addEvent(
+      return await eventService.addEvent(
         event.type,
         event.name,
         event.location,
@@ -92,6 +92,11 @@ exports.resolvers = {
     sendSurveyEmail: (root: any, args: any) =>
       emailSurvey(args.eventId, args.eventName, args.surveyId, args.emailList),
     addSurveyQuestion: (root: any, args: any) => {
+      return surveyQuestionService.createSurveyQuestion(
+        args.name,
+        args.formattedquestion,
+        args.question
+      );
       /*    return surveyQuestionService.createSurveyQuestion(
                     { name: args.name, questions: args.questions },
                     { event_id: args.event_id }
@@ -166,6 +171,7 @@ exports.resolvers = {
         args.survey.eventId,
         args.survey.surveyId,
         args.survey.useremail,
+        args.survey.participantId,
         args.survey.response
       );
       return response;

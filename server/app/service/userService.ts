@@ -18,7 +18,7 @@ export function createUserProfile(userInformation: any) {
 export function getUserProfileById(userId: number) {
   return connectORM
     .getRepository(UserProfile)
-    .findOne(userId)
+    .findOne({ id: userId, relations: ["payments"] })
     .catch((err: any) => {
       throw err;
     });
@@ -27,9 +27,8 @@ export function getUserProfileById(userId: number) {
 export function getAllUserProfiles() {
   return connectORM
     .getRepository(UserProfile)
-    .find()
+    .find({ relations: ["payments"] })
     .then(profiles => {
-      console.log(profiles);
       return profiles;
     })
     .catch((err: any) => {

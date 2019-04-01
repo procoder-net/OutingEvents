@@ -1,12 +1,21 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn
+} from "typeorm";
+import Event from "./Event";
 
 @Entity()
 export default class Receipt {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  event_id: number;
+  @OneToOne(type => Event, event => event.receipt, {
+    onDelete: "CASCADE"
+  })
+  event: Event;
 
   @Column()
   vendor: string;
