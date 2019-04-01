@@ -1,7 +1,8 @@
 import Event from "../entity/Event";
 import connectORM from "./../connection";
-import EventParticipant from "../entity/EventParticipant";
-
+import * as EventParticipant from "./eventParticipantService";
+import SurveyQuestion from "../entity/SurveyQuestion";
+const sendSurveyEmail = require("../mail").sendSurveyEmail;
 // get events
 export function getAllEvents() {
   return connectORM
@@ -24,7 +25,7 @@ export function getAllEvents() {
 }
 
 // get events by event id
-export function getEventByEventId(eventId: number) {
+export function getEventByEventId(eventId: number): Promise<any> {
   return connectORM
     .getRepository(Event)
     .findOne({
@@ -46,24 +47,43 @@ export function getEventByEventId(eventId: number) {
 }
 
 // create event
-export function addEvent(
+export async function addEvent(
   type: string,
   name: string,
   location: string,
   state: string,
   survey_id: number,
-  start_time: Date,
-  end_time: Date
+  description: string,
+  event_date: Date,
+  deadline_date: Date,
+  invites: [string]
 ) {
   const event = new Event();
   event.type = type;
   event.name = name;
   event.location = location;
   event.state = state;
-  //event.survey_id = survey_id;
-  event.start_time = start_time.toString();
-  event.end_time = end_time.toString();
-  return connectORM.getRepository(Event).save(event);
+  event.event_date = event_date;
+  event.deadline_date = deadline_date;
+  event.description = description;
+  const survey_question: any = connectORM
+    .getRepository(SurveyQuestion)
+    .findOne(survey_id);
+  if (survey_question) {
+    event.survey_question = survey_question;
+  }
+  var createdEvent = await connectORM.getRepository(Event).save(event);
+  invites.forEach(async invite => {
+    await EventParticipant.addEventParticipant(
+      invite,
+      event.id,
+      true,
+      true,
+      false
+    );
+  });
+  await sendSurveyEmail(createdEvent.id, createdEvent.name, survey_id, invites);
+  return createdEvent;
 }
 
 // update event name value by event id

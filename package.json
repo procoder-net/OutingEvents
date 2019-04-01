@@ -23,7 +23,8 @@
     "url": "https://github.com/procoder-net/OutingEvents/issues"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1"
+    "concurrently": "^4.0.1",
+    "nodemon": "1.18.10"
   },
   "homepage": "https://github.com/procoder-net/OutingEvents#readme",
   "dependencies": {

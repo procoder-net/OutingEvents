@@ -30,19 +30,20 @@ export default class EventParticipant {
   user: UserProfile;
 
   @Column()
+  useremail: string;
+
+  @Column()
   is_organizer: boolean;
 
-  @Column()
-  notified: boolean;
-
-  @Column()
+  @Column({
+    default: false
+  })
   confirmed: boolean;
 
-  @Column()
+  @Column({
+    default: false
+  })
   attended: boolean;
-
-  @Column()
-  tooksurvey: boolean;
 
   @OneToMany(
     type => SurveyResult,

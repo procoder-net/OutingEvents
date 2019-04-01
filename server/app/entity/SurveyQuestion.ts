@@ -24,9 +24,12 @@ export default class SurveyQuestion extends BaseEntity {
   @JoinColumn({ name: "event_id" })
   event: Event;
 
+  @OneToMany(type => SurveyResult, result => result.survey_question)
+  survey_results: SurveyResult[];
+
   @Column("json", { nullable: false })
   questions: string;
 
-  @OneToMany(type => SurveyResult, result => result.survey_question)
-  survey_results: SurveyResult[];
+  @Column("json", { nullable: true })
+  formattedquestion: string;
 }

@@ -2,33 +2,28 @@ import EventParticipant from "../entity/EventParticipant";
 import Event from "../entity/Event";
 
 import connectORM from "./../connection";
-import UserProfile from "../entity/UserProfile";
 
 export async function addEventParticipant(
-  user_id: number,
+  useremail: string,
   event_id: number,
-  isOrganizer: boolean
+  isOrganizer: boolean,
+  confirmed: boolean,
+  attended: boolean
 ) {
   const eventParticipant = new EventParticipant();
   //eventParticipant.user_id = user_id;
   eventParticipant.is_organizer = isOrganizer;
   //when participant is created, all of these are false
-  eventParticipant.attended = false;
-  eventParticipant.confirmed = false;
-  eventParticipant.notified = false;
-  eventParticipant.tooksurvey = false;
+  eventParticipant.attended = attended;
+  eventParticipant.confirmed = confirmed;
+  eventParticipant.useremail = useremail;
 
   const event: any = await connectORM
     .getRepository(Event)
     .findOne({ id: event_id, relations: ["event_participants"] });
 
-  const user: any = await connectORM
-    .getRepository(UserProfile)
-    .findOne({ id: user_id, relations: ["participatedEvents"] });
-  if (event && user) {
-    user.participatedEvents.push(eventParticipant);
+  if (event) {
     event.event_participants.push(eventParticipant);
-    await connectORM.getRepository(UserProfile).save(user);
     await connectORM.getRepository(Event).save(event);
     return eventParticipant;
   }

@@ -14,12 +14,6 @@ export default class Payment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => Event, event => event.payments, {
-    onDelete: "CASCADE"
-  })
-  @JoinColumn({ name: "event_id" })
-  event: Event;
-
   @ManyToOne(type => EventParticipant, participant => participant.payments, {
     onDelete: "CASCADE"
   })

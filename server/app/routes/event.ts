@@ -37,10 +37,9 @@ router.post("/api/event", (req: any, res: any) => {
   event.name = "April fools";
   event.type = "Jokes";
   event.location = "Planet earth";
-  event.state = "planning";
-  //event.survey_id = 367;
-  event.start_time = new Date(2019, 3, 1, 0, 0, 0, 0).toString();
-  event.end_time = new Date(2019, 3, 2, 0, 0, 0, 0).toString();
+  event.state = "Draft";
+  event.event_date = new Date(2019, 3, 1, 0, 0, 0, 0);
+  event.deadline_date = new Date(2019, 3, 2, 0, 0, 0, 0);
   connectORM
     .getManager()
     .save(event)
@@ -58,7 +57,7 @@ router.post("/api/event", (req: any, res: any) => {
 router.post("/api/event/:eventId/surveyQuestion", (req: any, res: any) => {
   console.log("post");
   surveyQuestionService
-    .createSurveyQuestion(req.body, req.params)
+    .createSurveyQuestion("anc", "aaa", "aaa", 12)
     .then((result: any) => {
       res.status(202);
       res.send(result);

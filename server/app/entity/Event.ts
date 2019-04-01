@@ -8,7 +8,6 @@ import {
   JoinColumn
 } from "typeorm";
 import EventParticipant from "./EventParticipant";
-import Payment from "./Payment";
 import Receipt from "./Receipt";
 import SurveyQuestion from "./SurveyQuestion";
 import SurveyResult from "./SurveyResult";
@@ -22,19 +21,16 @@ export default class Event extends BaseEntity {
   type: string;
 
   @Column()
+  state: string;
+
+  @Column()
   name: string;
 
   @Column()
   location: string;
 
   @Column()
-  state: string;
-
-  @Column()
-  start_time: String;
-
-  @Column()
-  end_time: String;
+  description: string;
 
   @OneToOne(type => Receipt, receipt => receipt.event, {
     cascade: true
@@ -47,11 +43,6 @@ export default class Event extends BaseEntity {
   })
   @JoinColumn({ name: "survey_id" })
   survey_question: SurveyQuestion;
-
-  @OneToMany(type => Payment, payment => payment.event, {
-    cascade: true
-  })
-  payments: Payment[];
 
   @OneToMany(
     type => EventParticipant,
@@ -67,4 +58,16 @@ export default class Event extends BaseEntity {
     cascade: true
   })
   survey_result: SurveyResult[];
+
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  event_date: Date;
+
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  deadline_date: Date;
+
+  @OneToMany(
+    () => EventParticipant,
+    (participant: EventParticipant) => participant.event
+  )
+  public invites: EventParticipant[];
 }

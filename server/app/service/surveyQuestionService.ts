@@ -2,23 +2,41 @@ import SurveyQuestion from "../entity/SurveyQuestion";
 import SurveyResult from "../entity/SurveyResult";
 import connectORM from "./../connection";
 import Event from "../entity/Event";
-import EventParticipant from "../entity/EventParticipant";
+import { getEventByEventId } from "./eventService";
+import { InsertQueryBuilder } from "typeorm";
 
-export async function createSurveyQuestion(body: any, params: any) {
+export async function createSurveyQuestion(
+  name: string,
+  formattedquestion: any,
+  questions: any,
+  event_id: number
+) {
   const surveyQuestion = new SurveyQuestion();
-  const event_id = params.event_id;
-  surveyQuestion.name = body.name;
-  surveyQuestion.questions = JSON.stringify({
-    question: body.name,
-    options: body.options
-  });
+  surveyQuestion.name = name;
+  surveyQuestion.formattedquestion = formattedquestion;
+  surveyQuestion.questions = questions;
   const event: any = await connectORM
     .getRepository(Event)
     .findOne({ id: event_id, relations: ["survey_question"] });
-  event.survey_question = surveyQuestion;
   surveyQuestion.event = event;
-  await connectORM.getRepository(Event).save(event);
-  return surveyQuestion;
+  let surveyq = await connectORM
+    .getRepository(SurveyQuestion)
+    .save(surveyQuestion);
+  return surveyq;
+}
+
+export async function updateSurveyQuestion(id: any, formattedquestion: any) {
+  await connectORM
+    .getRepository(SurveyQuestion)
+    .findOne(id)
+    .then((surveyq: any) => {
+      if (!surveyq.formattedquestion) {
+        console.log(surveyq);
+        surveyq.formattedquestion = formattedquestion;
+        return connectORM.getRepository(SurveyQuestion).save(surveyq);
+      }
+      return true;
+    });
 }
 
 export function deleteSurveyQuestion(questionId: number) {
@@ -46,38 +64,22 @@ export function getSurveyQuestionsByEventId(eventId: number) {
 }
 
 export async function createSurveyResult(
-  event_id: number,
-  participant_id: number,
-  survey_question_id: number,
+  event: any,
+  surveyId: number,
+  useremail: string,
   result: any
 ) {
   const surveyResult = new SurveyResult();
-  surveyResult.response = JSON.parse(result);
-  const eventRepo = connectORM.getRepository(Event);
-  const eventParticipantRepo = connectORM.getRepository(EventParticipant);
-  const surveyQuestionRepo = connectORM.getRepository(SurveyQuestion);
-  const event: any = await eventRepo.findOne({
-    id: event_id,
-    relations: ["survey_result"]
-  });
-  const eventParticipant: any = await eventParticipantRepo.findOne({
-    id: participant_id,
-    relations: ["survey_results"]
-  });
-  const surveyQuestion: any = await surveyQuestionRepo.findOne({
-    id: survey_question_id,
-    relations: ["survey_results"]
-  });
-  if (event && eventParticipant && surveyQuestion) {
-    event.survey_result.push(surveyResult);
-    eventParticipant.survey_results.push(surveyResult);
-    surveyQuestion.survey_results.push(surveyResult);
-    await eventRepo.save(event);
-    await eventParticipantRepo.save(eventParticipant);
-    await surveyQuestionRepo.save(surveyQuestion);
-    return surveyResult;
-  }
-  return connectORM.getRepository(SurveyResult).save(surveyResult);
+  surveyResult.event = event;
+  // /event instanceof Event ? event : await getEventByEventId(event);
+  surveyResult.useremail = useremail;
+  const survey_question: any = await connectORM
+    .getRepository(SurveyQuestion)
+    .findOne({ id: surveyId, relations: ["survey_results"] });
+  surveyResult.response = result;
+  surveyResult.survey_question = survey_question;
+  survey_question.survey_results.push(surveyResult);
+  return surveyResult;
 }
 
 export function getSurveyResultByQuestionId(survey_question_id: number) {

@@ -2,7 +2,6 @@ import React from "react";
 import EventList from "./Component/EventList";
 import { Query } from "react-apollo";
 import { GET_ALL_EVENTS } from "./queries";
-
 class HomePage extends React.Component {
   render() {
     return (

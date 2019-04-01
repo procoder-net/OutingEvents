@@ -10,7 +10,6 @@ import {
 } from "typeorm";
 import Event from "./Event";
 import SurveyQuestion from "./SurveyQuestion";
-import UserProfile from "./UserProfile";
 import EventParticipant from "./EventParticipant";
 
 @Entity()
@@ -21,7 +20,7 @@ export default class SurveyResult extends BaseEntity {
   @ManyToOne(type => SurveyQuestion, question => question.survey_results, {
     onDelete: "CASCADE"
   })
-  @JoinColumn({ name: "survey_question_id" })
+  @JoinColumn({ name: "survey_id" })
   survey_question: SurveyQuestion;
 
   @ManyToOne(
@@ -39,6 +38,9 @@ export default class SurveyResult extends BaseEntity {
   })
   @JoinColumn({ name: "event_id" })
   event: Event;
+
+  @Column()
+  useremail: string;
 
   @Column("json", { nullable: false })
   response: string;
