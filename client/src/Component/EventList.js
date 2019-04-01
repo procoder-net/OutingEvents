@@ -19,7 +19,7 @@ const EventList = () => {
   return (
     <div>
       <div>
-        <Grid container spacing={24} style={{ padding: 24 }}>
+        <Grid container spacing={4} style={{ padding: 24 }}>
           {[0, 1, 2, 3, 4, 5, 6].map(value => (
             <Grid key={value} item xs={2} sm={3} lg={2} xl={3}>
               <Event event={event} />
