@@ -1,5 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity } from "typeorm";
-
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  OneToMany
+} from "typeorm";
+import Event from "./Event";
 @Entity()
 export default class SurveyQuestion extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -8,9 +14,9 @@ export default class SurveyQuestion extends BaseEntity {
   @Column()
   name: string;
 
-  @Column()
-  event_id: number;
-
   @Column("json", { nullable: false })
   questions: string;
+
+  @Column("json", { nullable: true })
+  formattedquestion: string;
 }

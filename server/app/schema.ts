@@ -1,15 +1,5 @@
 exports.typeDefs = `
 
-type Event{
-    id: Int
-    name: String
-    eventType: String!
-    description: String
-    location: String
-    start_time: String
-    end_time: String
-}
-
 input DateInput {
     month: Int!
     day: Int!
@@ -18,22 +8,52 @@ input DateInput {
     minute: Int!
 }
 
+type EventParticipant{
+    id: Int
+    event_id: Event
+    useremail: String!
+    is_organizer: Boolean
+    confirmed: Boolean
+    attended: Boolean
+}
+
+input EventParticipantInput{
+    event_id: String!
+    useremail: String!
+    is_organizer: Boolean!
+    confirmed: Boolean
+    attended: Boolean
+}
+
+type Event{
+    id: Int
+    name: String
+    type: String
+    description: String
+    eventDate: String
+    deadlineDate: String
+    location: String
+    invites: [EventParticipant]
+    organizer: [String]
+}
+
+input EventInput{
+    name: String!
+    type: String!
+    description: String
+    eventDateTime: DateInput!
+    deadlineDatetime: DateInput!,
+    surveyId: Int!
+    location: String!
+    invited: [String]
+    organizer: [String]
+}
+
 type SurveyQuestion{
     id: Int
     name: String
     event_id: Int
     questions: String
-}
-
-type EventParticipant{
-    id: Int
-    event_id: Int
-    user_id: Int
-    is_organizer: Boolean
-    notified: Boolean
-    confirmed: Boolean
-    attended: Boolean
-    tooksurvey: Boolean
 }
 
 type Receipt{
@@ -55,11 +75,20 @@ type Payment{
     currency: String
 }
 
+input SurveyResultInput{
+    surveyquestion: String!
+    eventId: Int!
+    surveyId: Int!
+    useremail: String!
+    response: String!
+}
+
 type SurveyResult{
-    id: Int
-    survey_question_id: Int
-    event_id: Int
-    response: String
+    id: Int!
+    event: Int!
+    survey_id: Int!
+    useremail: String!
+    response: String!
 }
 
 type User{
@@ -83,21 +112,20 @@ type Query {
 }
 
 type Mutation {
-    addEvent(type: String!, name: String!, location: String!, state: String!, start_time: DateInput, end_time: DateInput, survey_id: Int) : Event
+    addEvent(event: EventInput) : Event
     updateEventNameByEventId( id: Int, name: String!) : Event
     deleteEventById(id: Int):Event
-
     sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String   
     addSurveyQuestion(id: Int, name: String, event_id: Int, questions: String):SurveyQuestion
     deleteSurveyQuestion(id: Int): SurveyQuestion
-    addEventParticipant(event_id: Int, user_id: Int, is_organizer: Boolean): EventParticipant
+    addEventParticipant(participant: EventParticipantInput): EventParticipant
     removeEventParticipant(id: Int): EventParticipant
     updateEventParticipant(id: Int, is_organizer: Boolean, notified: Boolean, confirmed: Boolean, attended: Boolean, tooksurvey: Boolean): EventParticipant
     addReceipt(event_id: Int, vendor: String, description: String, amount: Int, currency: String): Receipt
     deleteReceipt(id: Int): Receipt
     createPayment(event_id: Int, user_id: Int, payment_status: String, amount: Int, currency: String, description: String): Payment
     updatePaymentStatus(id: Int, new_status: String): Payment
-    createSurveyResponse(survey_question_id: Int, event_id: Int, user_id: Int,response:String): SurveyResult
+    createSurveyResponse(survey: SurveyResultInput): SurveyResult
     createUserProfile(first_name: String, last_name: String, email: String, username: String, password: String): User
 }
 `;

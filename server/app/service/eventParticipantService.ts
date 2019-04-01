@@ -1,20 +1,23 @@
 import EventParticipant from "../entity/EventParticipant";
 import connectORM from "./../connection";
+import Event from "../entity/Event";
+import { getEventByEventId } from "./eventService";
 
-export function addEventParticipant(
-  user_id: number,
-  event_id: number,
-  isOrganizer: boolean
+export async function addEventParticipant(
+  useremail: string,
+  event: any,
+  isOrganizer: boolean,
+  confirmed: boolean,
+  attended: boolean
 ) {
   const eventParticipant = new EventParticipant();
-  eventParticipant.user_id = user_id;
-  eventParticipant.event_id = event_id;
+  eventParticipant.useremail = useremail;
+  eventParticipant.event =
+    event instanceof Event ? event : await getEventByEventId(event);
   eventParticipant.is_organizer = isOrganizer;
   //when participant is created, all of these are false
-  eventParticipant.attended = false;
-  eventParticipant.confirmed = false;
-  eventParticipant.notified = false;
-  eventParticipant.tooksurvey = false;
+  eventParticipant.attended = confirmed;
+  eventParticipant.confirmed = attended;
   return connectORM.getRepository(EventParticipant).save(eventParticipant);
 }
 
