@@ -12,28 +12,28 @@ import Dialog from "@material-ui/core/Dialog";
 import PersonIcon from "@material-ui/icons/Person";
 import AddIcon from "@material-ui/icons/Add";
 import Typography from "@material-ui/core/Typography";
-import blue from "@material-ui/core/colors/blue";
+import grey from "@material-ui/core/colors/grey";
 import green from "@material-ui/core/colors/green";
-import red from "@material-ui/core/colors/red";
+import blue from "@material-ui/core/colors/blue";
 
 const rsvps = {
-  invited: { text: "invited", className: "blue" },
+  invited: { text: "not sure yet", className: "grey" },
   going: { text: "going", className: "green" },
-  "not going": { text: "not going", className: "red" }
+  "not going": { text: "not going", className: "blue" }
 };
 
 const styles = {
-  blue: {
-    backgroundColor: blue[100],
-    color: blue[600]
+  grey: {
+    backgroundColor: grey[100],
+    color: grey[600]
   },
   green: {
     backgroundColor: green[100],
     color: green[600]
   },
-  red: {
-    backgroundColor: red[100],
-    color: red[600]
+  blue: {
+    backgroundColor: blue[100],
+    color: blue[600]
   }
 };
 
@@ -69,7 +69,7 @@ class SimpleDialog extends React.Component {
                     <PersonIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={rsvp} />
+                <ListItemText primary={rsvps[rsvp].text} />
               </ListItem>
             ))}
           </List>
@@ -88,9 +88,11 @@ SimpleDialog.propTypes = {
 const SimpleDialogWrapped = withStyles(styles)(SimpleDialog);
 
 class InvitationDecision extends React.Component {
+  static defaultProps = { rsvp: "invited" };
+
   state = {
     open: false,
-    selectedValue: rsvps[0]
+    selectedValue: this.props.rsvp
   };
 
   handleClickOpen = () => {
@@ -100,18 +102,21 @@ class InvitationDecision extends React.Component {
   };
 
   handleClose = value => {
+    if (typeof this.props.onChange === "function") {
+      this.props.onChange(value);
+    }
     this.setState({ selectedValue: value, open: false });
   };
 
   render() {
-    const { classes, rsvp } = this.props;
+    const { classes, onChange, rsvp } = this.props;
     return (
       <div>
         <Button
           variant="outlined"
           color="primary"
           onClick={this.handleClickOpen}
-          className={classes[0]}
+          className={classes[rsvps[this.state.selectedValue].className]}
         >
           You are {this.state.selectedValue}
         </Button>
@@ -124,5 +129,11 @@ class InvitationDecision extends React.Component {
     );
   }
 }
+
+InvitationDecision.propTypes = {
+  classes: PropTypes.object.isRequired,
+  onChange: PropTypes.func,
+  rsvp: PropTypes.string
+};
 
 export default withStyles(styles)(InvitationDecision);
