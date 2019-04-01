@@ -7,8 +7,6 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 import Event from "./Event";
-import { type } from "os";
-import UserProfile from "./UserProfile";
 import SurveyResult from "./SurveyResult";
 import Payment from "./Payment";
 
@@ -22,12 +20,6 @@ export default class EventParticipant {
   })
   @JoinColumn({ name: "event_id" })
   event: Event;
-
-  @ManyToOne(type => UserProfile, user => user.participatedEvents, {
-    onDelete: "CASCADE"
-  })
-  @JoinColumn({ name: "user_id" })
-  user: UserProfile;
 
   @Column()
   useremail: string;

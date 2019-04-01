@@ -18,12 +18,6 @@ export default class SurveyQuestion extends BaseEntity {
   @Column()
   name: string;
 
-  @OneToOne(type => Event, event => event.survey_question, {
-    onDelete: "CASCADE"
-  })
-  @JoinColumn({ name: "event_id" })
-  event: Event;
-
   @OneToMany(type => SurveyResult, result => result.survey_question)
   survey_results: SurveyResult[];
 

@@ -5,7 +5,8 @@ import {
   BaseEntity,
   OneToMany,
   OneToOne,
-  JoinColumn
+  JoinColumn,
+  ManyToOne
 } from "typeorm";
 import EventParticipant from "./EventParticipant";
 import Receipt from "./Receipt";
@@ -32,17 +33,25 @@ export default class Event extends BaseEntity {
   @Column()
   description: string;
 
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  event_date: Date;
+
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  deadline_date: Date;
+
   @OneToOne(type => Receipt, receipt => receipt.event, {
     cascade: true
   })
   @JoinColumn({ name: "receipt_id" })
   receipt: Receipt;
 
-  @OneToOne(type => SurveyQuestion, survey_question => survey_question.event, {
-    cascade: true
-  })
-  @JoinColumn({ name: "survey_id" })
-  survey_question: SurveyQuestion;
+  survey_id: number;
+
+  @OneToMany(
+    () => EventParticipant,
+    (participant: EventParticipant) => participant.event
+  )
+  public invites: EventParticipant[];
 
   @OneToMany(
     type => EventParticipant,
@@ -58,16 +67,4 @@ export default class Event extends BaseEntity {
     cascade: true
   })
   survey_result: SurveyResult[];
-
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  event_date: Date;
-
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  deadline_date: Date;
-
-  @OneToMany(
-    () => EventParticipant,
-    (participant: EventParticipant) => participant.event
-  )
-  public invites: EventParticipant[];
 }

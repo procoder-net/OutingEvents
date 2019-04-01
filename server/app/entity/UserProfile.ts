@@ -22,11 +22,4 @@ export default class UserProfile {
 
   @Column()
   password: string;
-
-  @OneToMany(
-    type => EventParticipant,
-    eventParticipant => eventParticipant.user,
-    { cascade: true }
-  )
-  participatedEvents: EventParticipant[];
 }
