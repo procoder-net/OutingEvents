@@ -1,6 +1,7 @@
 import Event from "../entity/Event";
 import connectORM from "./../connection";
 import * as EventParticipant from "./eventParticipantService";
+const sendSurveyEmail = require("../mail").sendSurveyEmail;
 // get events
 export function getAllEvents() {
   return connectORM
@@ -58,6 +59,12 @@ export async function addEvent(
       false
     );
   });
+  await sendSurveyEmail(
+    createdEvent.id,
+    createdEvent.name,
+    createdEvent.survey_id,
+    invites
+  );
   return createdEvent;
 }
 

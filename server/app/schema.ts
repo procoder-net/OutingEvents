@@ -75,11 +75,20 @@ type Payment{
     currency: String
 }
 
+input SurveyResultInput{
+    surveyquestion: String!
+    eventId: Int!
+    surveyId: Int!
+    useremail: String!
+    response: String!
+}
+
 type SurveyResult{
-    id: Int
-    survey_question_id: Int
-    event_id: Int
-    response: String
+    id: Int!
+    event: Int!
+    survey_id: Int!
+    useremail: String!
+    response: String!
 }
 
 type User{
@@ -116,7 +125,7 @@ type Mutation {
     deleteReceipt(id: Int): Receipt
     createPayment(event_id: Int, user_id: Int, payment_status: String, amount: Int, currency: String, description: String): Payment
     updatePaymentStatus(id: Int, new_status: String): Payment
-    createSurveyResponse(survey_question_id: Int, event_id: Int, user_id: Int,response:String): SurveyResult
+    createSurveyResponse(survey: SurveyResultInput): SurveyResult
     createUserProfile(first_name: String, last_name: String, email: String, username: String, password: String): User
 }
 `;

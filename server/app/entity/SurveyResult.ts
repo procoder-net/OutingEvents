@@ -20,6 +20,6 @@ export default class SurveyResult extends BaseEntity {
   @Column("json", { nullable: false })
   response: string;
 
-  @ManyToOne(() => Event, (event: Event) => event.id)
-  public event: Event;
+  @Column()
+  event: string;
 }

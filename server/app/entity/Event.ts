@@ -3,10 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
-  OneToMany
+  OneToMany,
+  ManyToOne,
+  OneToOne
 } from "typeorm";
 import EventParticipant from "./EventParticipant";
 import SurveyResults from "./SurveyResult";
+import SurveyQuestions from "./SurveyQuestion";
 
 @Entity()
 export default class Event extends BaseEntity {
@@ -42,10 +45,4 @@ export default class Event extends BaseEntity {
     (participant: EventParticipant) => participant.event
   )
   public invites: EventParticipant[];
-
-  @OneToMany(
-    () => SurveyResults,
-    (surveyresults: SurveyResults) => surveyresults.event
-  )
-  public surveyresults: SurveyResults[];
 }
