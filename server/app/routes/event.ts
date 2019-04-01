@@ -38,7 +38,7 @@ router.post("/api/event", (req: any, res: any) => {
   event.type = "Jokes";
   event.location = "Planet earth";
   event.state = "planning";
-  event.survey_id = 367;
+  //event.survey_id = 367;
   event.start_time = new Date(2019, 3, 1, 0, 0, 0, 0).toString();
   event.end_time = new Date(2019, 3, 2, 0, 0, 0, 0).toString();
   connectORM

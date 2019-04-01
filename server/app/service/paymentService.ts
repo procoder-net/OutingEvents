@@ -1,31 +1,39 @@
 import Payment from "../entity/Payment";
 import connectORM from "./../connection";
 import UserProfile from "../entity/UserProfile";
+import Event from "../entity/Event";
+import EventParticipant from "../entity/EventParticipant";
 
 export async function createPayment(
   event_id: number,
-  user_id: number,
+  event_participant_id: number,
   payment_status: string,
   payment_details: any
 ) {
   const payment = new Payment();
-  payment.event_id = event_id;
   payment.status = payment_status || "pending";
   payment.amount = payment_details.amount || 0;
   payment.currency = payment_details.currency || "USD";
   payment.description = payment_details.description || "";
-  const user: any = await connectORM
-    .getRepository(UserProfile)
-    .findOne(1, { relations: ["payments"] });
-  user.payments.push(payment);
-  await connectORM.getRepository(UserProfile).save(user);
+  const eventParticipant: any = await connectORM
+    .getRepository(EventParticipant)
+    .findOne(event_participant_id, { relations: ["payments"] });
+  const event: any = await connectORM
+    .getRepository(Event)
+    .findOne(event_id, { relations: ["payments"] });
+  if (eventParticipant && event) {
+    eventParticipant.payments.push(payment);
+    event.payments.push(payment);
+    await connectORM.getRepository(EventParticipant).save(eventParticipant);
+    await connectORM.getRepository(Event).save(event);
+  }
   return payment;
 }
 
 export function getPaymentInformationByEventId(event_id: number) {
   return connectORM
     .getRepository(Payment)
-    .find({ event_id: event_id, relations: ["user"] })
+    .find({ event_id: event_id, relations: ["event_participant", "event"] })
     .then(payments => {
       return payments;
     })

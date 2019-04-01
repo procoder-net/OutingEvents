@@ -1,5 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Payment from "./Payment";
+import EventParticipant from "./EventParticipant";
+import SurveyResult from "./SurveyResult";
 
 @Entity()
 export default class UserProfile {
@@ -21,6 +23,10 @@ export default class UserProfile {
   @Column()
   password: string;
 
-  @OneToMany(type => Payment, payment => payment.user, { cascade: true })
-  payments: Payment[];
+  @OneToMany(
+    type => EventParticipant,
+    eventParticipant => eventParticipant.user,
+    { cascade: true }
+  )
+  participatedEvents: EventParticipant[];
 }

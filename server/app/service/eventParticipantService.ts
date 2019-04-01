@@ -2,6 +2,7 @@ import EventParticipant from "../entity/EventParticipant";
 import Event from "../entity/Event";
 
 import connectORM from "./../connection";
+import UserProfile from "../entity/UserProfile";
 
 export async function addEventParticipant(
   user_id: number,
@@ -9,18 +10,25 @@ export async function addEventParticipant(
   isOrganizer: boolean
 ) {
   const eventParticipant = new EventParticipant();
-  eventParticipant.user_id = user_id;
+  //eventParticipant.user_id = user_id;
   eventParticipant.is_organizer = isOrganizer;
   //when participant is created, all of these are false
   eventParticipant.attended = false;
   eventParticipant.confirmed = false;
   eventParticipant.notified = false;
   eventParticipant.tooksurvey = false;
+
   const event: any = await connectORM
     .getRepository(Event)
     .findOne({ id: event_id, relations: ["event_participants"] });
-  if (event) {
+
+  const user: any = await connectORM
+    .getRepository(UserProfile)
+    .findOne({ id: user_id, relations: ["participatedEvents"] });
+  if (event && user) {
+    user.participatedEvents.push(eventParticipant);
     event.event_participants.push(eventParticipant);
+    await connectORM.getRepository(UserProfile).save(user);
     await connectORM.getRepository(Event).save(event);
     return eventParticipant;
   }
@@ -41,7 +49,10 @@ export function removeEventParticipant(participant_id: number) {
 export function getEventParticipants(event_id: number) {
   return connectORM
     .getRepository(EventParticipant)
-    .find({ event_id: event_id, relations: ["event"] })
+    .find({
+      event_id: event_id,
+      relations: ["event", "user", "survey_results", "payments"]
+    })
     .then(eventParticipants => {
       return eventParticipants;
     })
@@ -58,7 +69,6 @@ export function updateEventParticipantStatus(
     .getRepository(EventParticipant)
     .findOne({ id: participant_id })
     .then((eventParticipant: any) => {
-      console.log(eventParticipant);
       eventParticipant.notified = updatedData.notified
         ? updatedData.notified
         : eventParticipant.notified;

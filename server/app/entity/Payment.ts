@@ -6,20 +6,25 @@ import {
   PrimaryGeneratedColumn
 } from "typeorm";
 import UserProfile from "./UserProfile";
+import Event from "./Event";
+import EventParticipant from "./EventParticipant";
 
 @Entity()
 export default class Payment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  event_id: number;
-
-  @ManyToOne(type => UserProfile, userProfile => userProfile.payments, {
+  @ManyToOne(type => Event, event => event.payments, {
     onDelete: "CASCADE"
   })
-  @JoinColumn({ name: "user_id" })
-  user: UserProfile;
+  @JoinColumn({ name: "event_id" })
+  event: Event;
+
+  @ManyToOne(type => EventParticipant, participant => participant.payments, {
+    onDelete: "CASCADE"
+  })
+  @JoinColumn({ name: "event_participant_id" })
+  event_participant: EventParticipant;
 
   @Column()
   status: string;

@@ -6,7 +6,15 @@ import EventParticipant from "../entity/EventParticipant";
 export function getAllEvents() {
   return connectORM
     .getRepository(Event)
-    .find({ relations: ["event_participants"] })
+    .find({
+      relations: [
+        "event_participants",
+        "survey_result",
+        "payments",
+        "survey_question",
+        "receipt"
+      ]
+    })
     .then((events: any) => {
       return events;
     })
@@ -19,7 +27,16 @@ export function getAllEvents() {
 export function getEventByEventId(eventId: number) {
   return connectORM
     .getRepository(Event)
-    .findOne({ id: eventId, relations: ["event_participants"] })
+    .findOne({
+      id: eventId,
+      relations: [
+        "event_participants",
+        "survey_result",
+        "payments",
+        "survey_question",
+        "receipt"
+      ]
+    })
     .then(events => {
       return events;
     })
@@ -43,7 +60,7 @@ export function addEvent(
   event.name = name;
   event.location = location;
   event.state = state;
-  event.survey_id = survey_id;
+  //event.survey_id = survey_id;
   event.start_time = start_time.toString();
   event.end_time = end_time.toString();
   return connectORM.getRepository(Event).save(event);
