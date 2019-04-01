@@ -2,23 +2,16 @@ import SurveyQuestion from "../entity/SurveyQuestion";
 import SurveyResult from "../entity/SurveyResult";
 import connectORM from "./../connection";
 import Event from "../entity/Event";
-import { getEventByEventId } from "./eventService";
-import { InsertQueryBuilder } from "typeorm";
 
 export async function createSurveyQuestion(
   name: string,
   formattedquestion: any,
-  questions: any,
-  event_id: number
+  questions: any
 ) {
   const surveyQuestion = new SurveyQuestion();
   surveyQuestion.name = name;
   surveyQuestion.formattedquestion = formattedquestion;
   surveyQuestion.questions = questions;
-  const event: any = await connectORM
-    .getRepository(Event)
-    .findOne({ id: event_id, relations: ["survey_question"] });
-  surveyQuestion.event = event;
   let surveyq = await connectORM
     .getRepository(SurveyQuestion)
     .save(surveyQuestion);

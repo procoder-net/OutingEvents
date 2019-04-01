@@ -18,14 +18,9 @@ export async function createPayment(
   const eventParticipant: any = await connectORM
     .getRepository(EventParticipant)
     .findOne(event_participant_id, { relations: ["payments"] });
-  const event: any = await connectORM
-    .getRepository(Event)
-    .findOne(event_id, { relations: ["payments"] });
-  if (eventParticipant && event) {
+  if (eventParticipant) {
     eventParticipant.payments.push(payment);
-    event.payments.push(payment);
     await connectORM.getRepository(EventParticipant).save(eventParticipant);
-    await connectORM.getRepository(Event).save(event);
   }
   return payment;
 }

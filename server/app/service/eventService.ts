@@ -66,12 +66,7 @@ export async function addEvent(
   event.event_date = event_date;
   event.deadline_date = deadline_date;
   event.description = description;
-  const survey_question: any = connectORM
-    .getRepository(SurveyQuestion)
-    .findOne(survey_id);
-  if (survey_question) {
-    event.survey_question = survey_question;
-  }
+  event.survey_id = survey_id;
   var createdEvent = await connectORM.getRepository(Event).save(event);
   invites.forEach(async invite => {
     await EventParticipant.addEventParticipant(
