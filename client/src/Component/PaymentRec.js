@@ -203,7 +203,9 @@ const styles = theme => ({
     minWidth: 1020
   },
   tableWrapper: {
-    overflowX: "auto"
+    overflowX: "auto",
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2
   }
 });
 
