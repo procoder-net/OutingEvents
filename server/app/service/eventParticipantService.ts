@@ -46,7 +46,7 @@ export function getEventParticipants(event_id: number) {
     .getRepository(EventParticipant)
     .find({
       event_id: event_id,
-      relations: ["event", "user", "survey_results", "payments"]
+      relations: ["event", "survey_results", "payments"]
     })
     .then(eventParticipants => {
       return eventParticipants;

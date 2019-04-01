@@ -28,7 +28,7 @@ export async function createPayment(
 export function getPaymentInformationByEventId(event_id: number) {
   return connectORM
     .getRepository(Payment)
-    .find({ event_id: event_id, relations: ["event_participant", "event"] })
+    .find({ event_id: event_id, relations: ["event_participant"] })
     .then(payments => {
       return payments;
     })

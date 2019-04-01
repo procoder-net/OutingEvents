@@ -1,7 +1,8 @@
 import SurveyQuestion from "../entity/SurveyQuestion";
 import SurveyResult from "../entity/SurveyResult";
 import connectORM from "./../connection";
-import Event from "../entity/Event";
+import { default as Event } from "../entity/Event";
+import EventParticipant from "../entity/EventParticipant";
 
 export async function createSurveyQuestion(
   name: string,
@@ -47,7 +48,7 @@ export function deleteSurveyQuestion(questionId: number) {
 export function getSurveyQuestionsByEventId(eventId: number) {
   return connectORM
     .getRepository(SurveyQuestion)
-    .find({ event_id: eventId, relations: ["event"] })
+    .find({ event_id: eventId, relations: ["survey_results"] })
     .then(surveyQuestions => {
       return surveyQuestions;
     })
@@ -57,21 +58,33 @@ export function getSurveyQuestionsByEventId(eventId: number) {
 }
 
 export async function createSurveyResult(
-  event: any,
+  eventId: any,
   surveyId: number,
   useremail: string,
+  participantId: number,
   result: any
 ) {
   const surveyResult = new SurveyResult();
-  surveyResult.event = event;
   // /event instanceof Event ? event : await getEventByEventId(event);
   surveyResult.useremail = useremail;
+  const event: any = await connectORM
+    .getRepository(Event)
+    .findOne({ id: eventId, relations: ["survey_result"] });
   const survey_question: any = await connectORM
     .getRepository(SurveyQuestion)
     .findOne({ id: surveyId, relations: ["survey_results"] });
+  const event_participant: any = await connectORM
+    .getRepository(EventParticipant)
+    .findOne({ id: surveyId, relations: ["survey_results"] });
   surveyResult.response = result;
+  surveyResult.event = event;
   surveyResult.survey_question = survey_question;
+  event.survey_result.push(surveyResult);
   survey_question.survey_results.push(surveyResult);
+  event_participant.survey_results.push(surveyResult);
+  await connectORM.getRepository(SurveyQuestion).save(survey_question);
+  await connectORM.getRepository(EventParticipant).save(event_participant);
+  await connectORM.getRepository(Event).save(event);
   return surveyResult;
 }
 

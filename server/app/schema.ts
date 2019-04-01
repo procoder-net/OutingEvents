@@ -10,11 +10,13 @@ input DateInput {
 
 type EventParticipant{
     id: Int
-    event_id: Event
+    event: Event
     useremail: String!
     is_organizer: Boolean
     confirmed: Boolean
     attended: Boolean
+    payments: [Payment]
+    survey_results: [SurveyResult]
 }
 
 input EventParticipantInput{
@@ -74,8 +76,7 @@ type Receipt{
 
 type Payment{
     id: Int
-    event: Event
-    user: User
+    event_participant: EventParticipant
     status: String
     description: String
     amount: Int
@@ -86,6 +87,7 @@ input SurveyResultInput{
     surveyquestion: String!
     eventId: Int!
     surveyId: Int!
+    participantId: Int!
     useremail: String!
     response: String!
 }

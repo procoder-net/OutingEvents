@@ -171,6 +171,7 @@ exports.resolvers = {
         args.survey.eventId,
         args.survey.surveyId,
         args.survey.useremail,
+        args.survey.participantId,
         args.survey.response
       );
       return response;
