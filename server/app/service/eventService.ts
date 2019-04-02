@@ -6,15 +6,7 @@ const sendSurveyEmail = require("../mail").sendSurveyEmail;
 export function getAllEvents() {
   return connectORM
     .getRepository(Event)
-    .find({
-      relations: [
-        "event_participants",
-        "survey_result",
-        "payments",
-        "survey_question",
-        "receipt"
-      ]
-    })
+    .find()
     .then((events: any) => {
       return events;
     })
