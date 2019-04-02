@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn
 } from "typeorm";
@@ -12,7 +13,7 @@ export default class Receipt {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(type => Event, event => event.receipt, {
+  @ManyToOne(type => Event, event => event.receipts, {
     onDelete: "CASCADE"
   })
   event: Event;

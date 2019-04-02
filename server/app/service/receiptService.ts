@@ -17,8 +17,8 @@ export async function createReceipt(event_id: number, body: any) {
   receipt.currency = body.currency;
   const event: any = await connectORM
     .getRepository(Event)
-    .findOne({ id: event_id, relations: ["receipt"] });
-  event.receipt = receipt;
+    .findOne({ id: event_id, relations: ["receipts"] });
+  event.receipts.push(receipt);
   await connectORM.getRepository(Event).save(event);
   return receipt;
 }

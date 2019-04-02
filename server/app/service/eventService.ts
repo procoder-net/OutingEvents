@@ -28,14 +28,7 @@ export function getEventByEventId(eventId: number): Promise<any> {
   return connectORM
     .getRepository(Event)
     .findOne({
-      id: eventId,
-      relations: [
-        "event_participants",
-        "survey_result",
-        "payments",
-        "survey_question",
-        "receipt"
-      ]
+      id: eventId
     })
     .then(events => {
       return events;
