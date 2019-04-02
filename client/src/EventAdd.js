@@ -2,16 +2,7 @@ import React from "react";
 import DemoForm from "./Component/EventAdd";
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
-
-const ADD_EVENT = gql`
-  mutation addEvent($event: EventInput) {
-    addEvent(event: $event) {
-      id
-      name
-      description
-    }
-  }
-`;
+import { ADD_EVENT } from "./queries";
 class EventAdd extends React.Component {
   handleDemoFormSubmit = async (addFunc, input) => {
     var d = new Date();

@@ -19,10 +19,11 @@ exports.resolvers = {
       return eventService.getEventByEventId(args.event_id);
     },
 
-    getAllSurveyQuestions: (root: any, args: any) => {
+    getSurveyQuestionsByEventId: (root: any, args: any) => {
       return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
     },
     getAllEventParticipants: (root: any, args: any) => {
+      console.log(args);
       return eventParticipantService.getEventParticipants(args.event_id);
     },
     getReceiptByEvent: (root: any, args: any) => {
@@ -41,6 +42,14 @@ exports.resolvers = {
     },
     getUserProfile: (root: any, args: any) => {
       return userService.getUserProfileById(args.id);
+    },
+    event: (root: any, args: any) => {
+      return eventService.getEventByEventId(args.event_id);
+    }
+  },
+  Event: {
+    invites(event: any) {
+      return eventParticipantService.getEventParticipants(event.id);
     }
   },
   Mutation: {
@@ -75,15 +84,15 @@ exports.resolvers = {
     },
 
     /*  updateEventNameByEventId: (root: any, args: any) => {
-                      return eventService.updateEventNameByEventId(
-                          {
-                              id: args.id,
-                              name: args.name
-                          },
-                          { id: args.id, name: args.name }
-                      );
-                      console.log(args);
-                  }, */
+                          return eventService.updateEventNameByEventId(
+                              {
+                                  id: args.id,
+                                  name: args.name
+                              },
+                              { id: args.id, name: args.name }
+                          );
+                          console.log(args);
+                      }, */
 
     deleteEventById: (root: any, args: any) => {
       return eventService.deleteEventById(args.id);
@@ -93,19 +102,19 @@ exports.resolvers = {
       emailSurvey(args.eventId, args.eventName, args.surveyId, args.emailList),
     addSurveyQuestion: (root: any, args: any) => {
       /*    return surveyQuestionService.createSurveyQuestion(
-                    { name: args.name, questions: args.questions },
-                    { event_id: args.event_id }
-                );*/
+                          { name: args.name, questions: args.questions },
+                          { event_id: args.event_id }
+                      );*/
     },
     deleteSurveyQuestion: (root: any, args: any) => {
       return surveyQuestionService.deleteSurveyQuestion(args.id);
     },
     addEventParticipant: (root: any, args: any) => {
       /*return eventParticipantService.addEventParticipant(
-                            args.usernemail,
-                            args.event_id,
-                            args.is_organizer
-                        );*/
+                                  args.usernemail,
+                                  args.event_id,
+                                  args.is_organizer
+                              );*/
     },
     updateEventParticipant: (root: any, args: any) => {
       const updatedStatus = {
@@ -158,8 +167,8 @@ exports.resolvers = {
       return userService.createUserProfile(args);
     },
     createSurveyResponse: async (root: any, args: any) => {
-      let createQ = await surveyQuestionService.updateSurveyQuestion(
-        args.survey.surveyId,
+      let createQ = await surveyQuestionService.updateSurveyQuestionbyEventId(
+        args.survey.eventId,
         args.survey.surveyquestion
       );
       let response = await surveyQuestionService.createSurveyResult(

@@ -6,11 +6,13 @@ import { getEventByEventId } from "./eventService";
 import { InsertQueryBuilder } from "typeorm";
 
 export async function createSurveyQuestion(
+  event_id: number,
   name: string,
   formattedquestion: any,
   questions: any
 ) {
   const surveyQuestion = new SurveyQuestion();
+  surveyQuestion.event = event_id;
   surveyQuestion.name = name;
   surveyQuestion.formattedquestion = formattedquestion;
   surveyQuestion.questions = questions;
@@ -20,11 +22,17 @@ export async function createSurveyQuestion(
   return surveyq;
 }
 
-export async function updateSurveyQuestion(id: any, formattedquestion: any) {
+export async function updateSurveyQuestionbyEventId(
+  id: any,
+  formattedquestion: any
+) {
   await connectORM
     .getRepository(SurveyQuestion)
-    .findOne(id)
+    .findOne({ event: id })
     .then((surveyq: any) => {
+      console.log(id);
+      console.log(formattedquestion);
+      console.log(surveyq);
       if (!surveyq.formattedquestion) {
         console.log(surveyq);
         surveyq.formattedquestion = formattedquestion;
@@ -49,14 +57,19 @@ export function deleteSurveyQuestion(questionId: number) {
 export function getSurveyQuestionsByEventId(eventId: number) {
   return connectORM
     .getRepository(SurveyQuestion)
-    .find({ event_id: eventId })
-    .then(surveyQuestions => {
-      surveyQuestions.forEach(function(obj: any) {
-        let questionString: string = obj.questions;
-        obj.questions = JSON.parse(questionString);
-      });
-      console.log(surveyQuestions);
-      return surveyQuestions;
+    .find({ event: eventId })
+    .then((surveyQuestions: any) => {
+      /* surveyQuestions.forEach(function (obj: any) {
+                let questionString: string = obj.questions;
+                obj.questions = JSON.parse(questionString);
+            }); */
+      let responseSurvey = surveyQuestions[0];
+      responseSurvey.questions = JSON.stringify(responseSurvey.questions);
+      responseSurvey.formattedquestion = JSON.stringify(
+        responseSurvey.formattedquestion
+      );
+      console.log(responseSurvey);
+      return responseSurvey;
     })
     .catch(err => {
       throw err;

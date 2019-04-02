@@ -17,11 +17,12 @@ export function getAllEvents() {
 
 // get events by event id
 export function getEventByEventId(eventId: number): Promise<any> {
+  let find = eventId ? { id: eventId } : {};
   return connectORM
     .getRepository(Event)
-    .find({ id: eventId })
+    .find(find)
     .then(events => {
-      return events;
+      return eventId ? events[0] : events;
     })
     .catch(err => {
       throw err;

@@ -14,6 +14,9 @@ export default class SurveyQuestion extends BaseEntity {
   @Column()
   name: string;
 
+  @Column()
+  event: number;
+
   @Column("json", { nullable: false })
   questions: string;
 

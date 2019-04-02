@@ -36,8 +36,9 @@ export function removeEventParticipant(participant_id: number) {
 export function getEventParticipants(event_id: number) {
   return connectORM
     .getRepository(EventParticipant)
-    .find({ event_id: event_id })
+    .find({ eventId: event_id })
     .then(eventParticipants => {
+      console.log(eventParticipants);
       return eventParticipants;
     })
     .catch(err => {

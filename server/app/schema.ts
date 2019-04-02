@@ -52,7 +52,7 @@ input EventInput{
 type SurveyQuestion{
     id: Int
     name: String
-    event_id: Int
+    event: Int
     questions: String
 }
 
@@ -100,9 +100,11 @@ type User{
 }
 
 type Query {
+    event: [Event],
+    EventParticipant: [EventParticipant]
     getAllEvents: [Event]
     getEventByEventId(event_id: Int): [Event]
-    getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
+    getSurveyQuestionsByEventId(event_id: Int): SurveyQuestion
     getAllEventParticipants(event_id: Int): [EventParticipant]
     getReceiptByEvent(event_id: Int): [Receipt]
     getPaymentByEvent(event_id: Int): [Payment]
