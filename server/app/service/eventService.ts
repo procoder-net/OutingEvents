@@ -1,7 +1,6 @@
 import Event from "../entity/Event";
 import connectORM from "./../connection";
 import * as EventParticipant from "./eventParticipantService";
-import SurveyQuestion from "../entity/SurveyQuestion";
 const sendSurveyEmail = require("../mail").sendSurveyEmail;
 // get events
 export function getAllEvents() {
@@ -29,14 +28,7 @@ export function getEventByEventId(eventId: number): Promise<any> {
   return connectORM
     .getRepository(Event)
     .findOne({
-      id: eventId,
-      relations: [
-        "event_participants",
-        "survey_result",
-        "payments",
-        "survey_question",
-        "receipt"
-      ]
+      id: eventId
     })
     .then(events => {
       return events;

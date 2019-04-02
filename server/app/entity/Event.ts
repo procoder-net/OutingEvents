@@ -12,6 +12,7 @@ import EventParticipant from "./EventParticipant";
 import Receipt from "./Receipt";
 import SurveyQuestion from "./SurveyQuestion";
 import SurveyResult from "./SurveyResult";
+import Payment from "./Payment";
 
 @Entity()
 export default class Event extends BaseEntity {
@@ -39,12 +40,6 @@ export default class Event extends BaseEntity {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   deadline_date: Date;
 
-  @OneToOne(type => Receipt, receipt => receipt.event, {
-    cascade: true
-  })
-  @JoinColumn({ name: "receipt_id" })
-  receipt: Receipt;
-
   survey_id: number;
 
   @OneToMany(
@@ -67,4 +62,14 @@ export default class Event extends BaseEntity {
     cascade: true
   })
   survey_result: SurveyResult[];
+
+  @OneToMany(type => Payment, payment => payment.event, {
+    cascade: true
+  })
+  payments: Payment[];
+
+  @OneToMany(type => Receipt, receipt => receipt.event, {
+    cascade: true
+  })
+  receipts: Receipt[];
 }
