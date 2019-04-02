@@ -110,8 +110,7 @@ export function getSurveyResultByQuestionId(survey_question_id: number) {
   return connectORM
     .getRepository(SurveyResult)
     .find({
-      survey_question_id: survey_question_id,
-      relations: ["event", "event_participant", "survey_question"]
+      survey_question_id: survey_question_id
     })
     .then(surveyQuestionResults => {
       surveyQuestionResults.forEach((obj: any) => {
