@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import Payment from "./Payment";
+import EventParticipant from "./EventParticipant";
+import SurveyResult from "./SurveyResult";
 
 @Entity()
 export default class UserProfile {

@@ -3,9 +3,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BaseEntity,
+  OneToOne,
+  JoinColumn,
   OneToMany
 } from "typeorm";
 import Event from "./Event";
+import SurveyResult from "./SurveyResult";
+
 @Entity()
 export default class SurveyQuestion extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -14,8 +18,8 @@ export default class SurveyQuestion extends BaseEntity {
   @Column()
   name: string;
 
-  @Column()
-  event: number;
+  @OneToMany(type => SurveyResult, result => result.survey_question)
+  survey_results: SurveyResult[];
 
   @Column("json", { nullable: false })
   questions: string;

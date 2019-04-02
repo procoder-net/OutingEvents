@@ -1,6 +1,8 @@
 import React from "react";
 import * as Survey from "survey-react";
 import breakpoints from "@material-ui/system/breakpoints";
+import { Container } from "reactstrap";
+import "./survey.css";
 
 class SurveyDisplay extends React.Component {
   constructor(props) {
@@ -49,10 +51,13 @@ class SurveyDisplay extends React.Component {
   }
   render() {
     return (
-      <Survey.Survey
-        json={this.surveyJson}
-        onComplete={this.sendDataToServer}
-      />
+      <Container className="surveyForm">
+        <h2>Survey</h2>
+        <Survey.Survey
+          json={this.surveyJson}
+          onComplete={this.sendDataToServer}
+        />
+      </Container>
     );
   }
 }

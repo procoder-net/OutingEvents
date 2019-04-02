@@ -1,13 +1,25 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn
+} from "typeorm";
 import Event from "./Event";
+import SurveyResult from "./SurveyResult";
+import Payment from "./Payment";
 
 @Entity()
 export default class EventParticipant {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Event, (event: Event) => event.id)
-  public event: Event;
+  @ManyToOne(type => Event, event => event.event_participants, {
+    onDelete: "CASCADE"
+  })
+  @JoinColumn({ name: "event_id" })
+  event: Event;
 
   @Column()
   useremail: string;
@@ -24,4 +36,16 @@ export default class EventParticipant {
     default: false
   })
   attended: boolean;
+
+  @OneToMany(
+    type => SurveyResult,
+    surveyResult => surveyResult.event_participant,
+    { cascade: true }
+  )
+  survey_results: SurveyResult[];
+
+  @OneToMany(type => Payment, payment => payment.event_participant, {
+    cascade: true
+  })
+  payments: Payment[];
 }

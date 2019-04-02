@@ -1,24 +1,32 @@
 import EventParticipant from "../entity/EventParticipant";
-import connectORM from "./../connection";
 import Event from "../entity/Event";
-import { getEventByEventId } from "./eventService";
+
+import connectORM from "./../connection";
 
 export async function addEventParticipant(
   useremail: string,
-  event: any,
+  event_id: number,
   isOrganizer: boolean,
   confirmed: boolean,
   attended: boolean
 ) {
   const eventParticipant = new EventParticipant();
-  eventParticipant.useremail = useremail;
-  eventParticipant.event =
-    event instanceof Event ? event : await getEventByEventId(event);
+  //eventParticipant.user_id = user_id;
   eventParticipant.is_organizer = isOrganizer;
   //when participant is created, all of these are false
-  eventParticipant.attended = confirmed;
-  eventParticipant.confirmed = attended;
-  return connectORM.getRepository(EventParticipant).save(eventParticipant);
+  eventParticipant.attended = attended;
+  eventParticipant.confirmed = confirmed;
+  eventParticipant.useremail = useremail;
+
+  const event: any = await connectORM
+    .getRepository(Event)
+    .findOne({ id: event_id, relations: ["event_participants"] });
+
+  if (event) {
+    event.event_participants.push(eventParticipant);
+    await connectORM.getRepository(Event).save(event);
+    return eventParticipant;
+  }
 }
 
 export function removeEventParticipant(participant_id: number) {
@@ -36,7 +44,10 @@ export function removeEventParticipant(participant_id: number) {
 export function getEventParticipants(event_id: number) {
   return connectORM
     .getRepository(EventParticipant)
-    .find({ eventId: event_id })
+    .find({
+      event_id: event_id,
+      relations: ["event", "survey_results", "payments"]
+    })
     .then(eventParticipants => {
       console.log(eventParticipants);
       return eventParticipants;

@@ -10,11 +10,13 @@ input DateInput {
 
 type EventParticipant{
     id: Int
-    event_id: Event
+    event: Event
     useremail: String!
     is_organizer: Boolean
     confirmed: Boolean
     attended: Boolean
+    payments: [Payment]
+    survey_results: [SurveyResult]
 }
 
 input EventParticipantInput{
@@ -28,6 +30,8 @@ input EventParticipantInput{
 type Event{
     id: Int
     name: String
+    event: Event
+    questions: String
     type: String
     description: String
     eventDate: String
@@ -51,14 +55,23 @@ input EventInput{
 
 type SurveyQuestion{
     id: Int
+    is_organizer: Boolean
+    notified: Boolean
+    confirmed: Boolean
+    user: User
     name: String
+<<<<<<< HEAD
     event: Int
+=======
+    event: Event
+    survey_results: [SurveyResult]
+>>>>>>> master
     questions: String
 }
 
 type Receipt{
     id: Int
-    event_id: Int
+    event: Event
     vendor: String
     description: String
     amount: Int
@@ -67,8 +80,7 @@ type Receipt{
 
 type Payment{
     id: Int
-    event_id: Int
-    user_id: Int
+    event_participant: EventParticipant
     status: String
     description: String
     amount: Int
@@ -79,32 +91,36 @@ input SurveyResultInput{
     surveyquestion: String!
     eventId: Int!
     surveyId: Int!
+    participantId: Int!
     useremail: String!
     response: String!
 }
 
 type SurveyResult{
-    id: Int!
-    event: Int!
-    survey_id: Int!
     useremail: String!
-    response: String!
+    id: Int
+    survey_question: SurveyQuestion
+    event: Event
+    event_participant: EventParticipant
+    response: String
 }
 
 type User{
+    id: Int
     first_name: String
     last_name: String
     email: String
     username: String
     password: String
+    participated_events: [Event]
 }
 
 type Query {
     event: [Event],
     EventParticipant: [EventParticipant]
     getAllEvents: [Event]
-    getEventByEventId(event_id: Int): [Event]
-    getSurveyQuestionsByEventId(event_id: Int): SurveyQuestion
+    getEventByEventId(event_id: Int): Event
+    getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
     getAllEventParticipants(event_id: Int): [EventParticipant]
     getReceiptByEvent(event_id: Int): [Receipt]
     getPaymentByEvent(event_id: Int): [Payment]
@@ -118,7 +134,7 @@ type Mutation {
     updateEventNameByEventId( id: Int, name: String!) : Event
     deleteEventById(id: Int):Event
     sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String   
-    addSurveyQuestion(id: Int, name: String, event_id: Int, questions: String):SurveyQuestion
+    addSurveyQuestion(name: String, question: String, formattedquestion: String):SurveyQuestion
     deleteSurveyQuestion(id: Int): SurveyQuestion
     addEventParticipant(participant: EventParticipantInput): EventParticipant
     removeEventParticipant(id: Int): EventParticipant
