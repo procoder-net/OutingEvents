@@ -40,13 +40,13 @@ export default class Event extends BaseEntity {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   deadline_date: Date;
 
-  survey_id: number;
+  @OneToOne(type => Receipt, receipt => receipt.event, {
+    cascade: true
+  })
+  @JoinColumn({ name: "receipt_id" })
+  receipt: Receipt;
 
-  @OneToMany(
-    () => EventParticipant,
-    (participant: EventParticipant) => participant.event
-  )
-  public invites: EventParticipant[];
+  survey_id: number;
 
   @OneToMany(
     type => EventParticipant,

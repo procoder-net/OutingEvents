@@ -3,24 +3,8 @@ import connectORM from "./../connection";
 import * as EventParticipant from "./eventParticipantService";
 const sendSurveyEmail = require("../mail").sendSurveyEmail;
 // get events
-export function getAllEvents() {
-  return connectORM
-    .getRepository(Event)
-    .find({
-      relations: [
-        "event_participants",
-        "survey_result",
-        "payments",
-        "survey_question",
-        "receipt"
-      ]
-    })
-    .then((events: any) => {
-      return events;
-    })
-    .catch(err => {
-      throw err;
-    });
+export async function getAllEvents() {
+  await getEventByEventId();
 }
 
 // get events by event id

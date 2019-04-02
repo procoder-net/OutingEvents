@@ -57,7 +57,7 @@ router.post("/api/event", (req: any, res: any) => {
 router.post("/api/event/:eventId/surveyQuestion", (req: any, res: any) => {
   console.log("post");
   surveyQuestionService
-    .createSurveyQuestion(1, "aaa", "aaa", "aaa")
+    .createSurveyQuestion("aaa", "aaa", "aaa")
     .then((result: any) => {
       res.status(202);
       res.send(result);

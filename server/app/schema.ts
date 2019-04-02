@@ -30,15 +30,16 @@ input EventParticipantInput{
 type Event{
     id: Int
     name: String
-    event: Event
     questions: String
     type: String
     description: String
-    eventDate: String
-    deadlineDate: String
+    event_date: String
+    deadline_date: String
     location: String
-    invites: [EventParticipant]
-    organizer: [String]
+    surveyId: Int
+    receipt: [Receipt]
+    event_participants: [EventParticipant]
+    survey_result:[SurveyResult]
 }
 
 input EventInput{
@@ -55,18 +56,9 @@ input EventInput{
 
 type SurveyQuestion{
     id: Int
-    is_organizer: Boolean
-    notified: Boolean
-    confirmed: Boolean
-    user: User
-    name: String
-<<<<<<< HEAD
-    event: Int
-=======
-    event: Event
-    survey_results: [SurveyResult]
->>>>>>> master
+    user: String
     questions: String
+    formattedquestions: String
 }
 
 type Receipt{
@@ -116,8 +108,14 @@ type User{
 }
 
 type Query {
-    event: [Event],
-    EventParticipant: [EventParticipant]
+    allEvents: [Event]
+    event(eventId: Int): Event
+    eventParticipants(eventId: Int): [EventParticipant]
+    allSurvey: [SurveyQuestion]
+    survey(surveyId: Int): SurveyQuestion
+    surveyResults(eventId: Int): [SurveyResult]
+    payments(eventId: Int): [Payment]
+    receipt(eventId: Int): [Receipt]
     getAllEvents: [Event]
     getEventByEventId(event_id: Int): Event
     getAllSurveyQuestions(event_id: Int): [SurveyQuestion]

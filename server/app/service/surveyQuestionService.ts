@@ -5,13 +5,11 @@ import { default as Event } from "../entity/Event";
 import EventParticipant from "../entity/EventParticipant";
 
 export async function createSurveyQuestion(
-  event_id: number,
   name: string,
   formattedquestion: any,
   questions: any
 ) {
   const surveyQuestion = new SurveyQuestion();
-  surveyQuestion.event = event_id;
   surveyQuestion.name = name;
   surveyQuestion.formattedquestion = formattedquestion;
   surveyQuestion.questions = questions;
@@ -59,9 +57,9 @@ export function getSurveyQuestionsByEventId(eventId: number) {
     .find({ event_id: eventId, relations: ["survey_results"] })
     .then((surveyQuestions: any) => {
       /* surveyQuestions.forEach(function (obj: any) {
-                      let questionString: string = obj.questions;
-                      obj.questions = JSON.parse(questionString);
-                  }); */
+                            let questionString: string = obj.questions;
+                            obj.questions = JSON.parse(questionString);
+                        }); */
       let responseSurvey = surveyQuestions[0];
       responseSurvey.questions = JSON.stringify(responseSurvey.questions);
       responseSurvey.formattedquestion = JSON.stringify(
