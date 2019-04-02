@@ -12,6 +12,7 @@ import EventParticipant from "./EventParticipant";
 import Receipt from "./Receipt";
 import SurveyQuestion from "./SurveyQuestion";
 import SurveyResult from "./SurveyResult";
+import Payment from "./Payment";
 
 @Entity()
 export default class Event extends BaseEntity {
@@ -67,4 +68,9 @@ export default class Event extends BaseEntity {
     cascade: true
   })
   survey_result: SurveyResult[];
+
+  @OneToMany(type => Payment, payment => payment.event, {
+    cascade: true
+  })
+  payments: Payment[];
 }

@@ -1,8 +1,8 @@
 import Payment from "../entity/Payment";
 import connectORM from "./../connection";
 import UserProfile from "../entity/UserProfile";
-import Event from "../entity/Event";
 import EventParticipant from "../entity/EventParticipant";
+import Event from "../entity/Event";
 
 export async function createPayment(
   event_id: number,
@@ -18,9 +18,14 @@ export async function createPayment(
   const eventParticipant: any = await connectORM
     .getRepository(EventParticipant)
     .findOne(event_participant_id, { relations: ["payments"] });
+  const event: any = await connectORM
+    .getRepository(Event)
+    .findOne(event_id, { relations: ["payments"] });
   if (eventParticipant) {
     eventParticipant.payments.push(payment);
+    event.payments.push(payment);
     await connectORM.getRepository(EventParticipant).save(eventParticipant);
+    await connectORM.getRepository(Event).save(event);
   }
   return payment;
 }
@@ -28,7 +33,7 @@ export async function createPayment(
 export function getPaymentInformationByEventId(event_id: number) {
   return connectORM
     .getRepository(Payment)
-    .find({ event_id: event_id, relations: ["event_participant"] })
+    .find({ event_id: event_id })
     .then(payments => {
       return payments;
     })

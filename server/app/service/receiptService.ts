@@ -38,7 +38,7 @@ export function deleteReceipt(id: number) {
 export function getReceiptsByEventId(event_id: number) {
   return connectORM
     .getRepository(Receipt)
-    .find({ event_id: event_id, relations: ["event"] })
+    .find({ event_id: event_id })
     .then(receipts => {
       return receipts;
     })

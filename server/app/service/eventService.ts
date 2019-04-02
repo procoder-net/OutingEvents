@@ -1,7 +1,6 @@
 import Event from "../entity/Event";
 import connectORM from "./../connection";
 import * as EventParticipant from "./eventParticipantService";
-import SurveyQuestion from "../entity/SurveyQuestion";
 const sendSurveyEmail = require("../mail").sendSurveyEmail;
 // get events
 export function getAllEvents() {

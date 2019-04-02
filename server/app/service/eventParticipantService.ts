@@ -45,8 +45,7 @@ export function getEventParticipants(event_id: number) {
   return connectORM
     .getRepository(EventParticipant)
     .find({
-      event_id: event_id,
-      relations: ["event", "survey_results", "payments"]
+      event_id: event_id
     })
     .then(eventParticipants => {
       return eventParticipants;
