@@ -115,6 +115,7 @@ type User{
 
 type Query {
     allEvents: [Event]
+    allEventsByUser(user: String!): [Event]
     event(eventId: Int!): Event
     eventParticipants(eventId: Int!): [EventParticipant]
     eventParticipantsByUser(user: String!): [EventParticipant]

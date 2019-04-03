@@ -166,7 +166,7 @@ function EventFinalDetail(props) {
           <Grid container spacing={4} className={classes.cardGrid}>
             {invitees.map(invitee => (
               <Grid item key={invitee.name} xs={12} md={2}>
-                <CardActionArea component="a" href="#">
+                <CardActionArea>
                   <Card className={classes.card}>
                     <div className={classes.cardDetails}>
                       <CardContent align="center">

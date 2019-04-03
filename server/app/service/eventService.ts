@@ -3,6 +3,7 @@ import connectORM from "./../connection";
 import * as EventParticipant from "./eventParticipantService";
 import { getSurveyQuestionsBySurveyId } from "./surveyQuestionService";
 const sendSurveyEmail = require("../mail").sendSurveyEmail;
+import { In } from "typeorm";
 const populate = ["survey", "event_participants", "survey_results"];
 // get events
 export async function getAllEvents(populateRelations = true) {
@@ -13,19 +14,39 @@ export async function getAllEvents(populateRelations = true) {
   return events;
 }
 
+export async function getAllEventsByUser(
+  user: string,
+  populateRelations = true
+) {
+  let relations = populateRelations ? populate : [];
+  let participatingEvents = await EventParticipant.getEventParticipantsByUser(
+    user,
+    true
+  );
+  let eventIds = participatingEvents
+    .map((pe: any) => pe.event)
+    .map((event: any) => event.id);
+  return await getEventByEventId(eventIds);
+}
+
 // get events by event id
 export async function getEventByEventId(
-  eventId?: number,
+  eventId?: any,
   populateRelations = true
 ): Promise<any> {
+  eventId = eventId instanceof Array ? eventId : [eventId];
   let relations = populateRelations ? populate : [];
-  let find = eventId ? { id: eventId } : {};
+  let find: any = {
+    where: {
+      id: In(eventId)
+    }
+  };
+  if (populateRelations) {
+    find.relations = relations;
+  }
   let event = await connectORM
     .getRepository(Event)
-    .find({
-      relations: relations,
-      id: eventId
-    })
+    .find(find)
     .then(events => {
       return events;
     })

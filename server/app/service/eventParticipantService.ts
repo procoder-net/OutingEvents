@@ -61,6 +61,29 @@ export function getEventParticipants(
     });
 }
 
+export function getEventParticipantsByUser(
+  user: string,
+  populateRelations = true
+): any {
+  let find: any = {
+    where: {
+      user: user
+    }
+  };
+  if (populateRelations) {
+    find.relations = populate;
+  }
+  return connectORM
+    .getRepository(EventParticipant)
+    .find(find)
+    .then(eventParticipants => {
+      return eventParticipants;
+    })
+    .catch(err => {
+      throw err;
+    });
+}
+
 export function updateEventParticipantStatus(
   participant_id: number,
   updatedData: any
