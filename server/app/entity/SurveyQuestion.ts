@@ -16,10 +16,7 @@ export default class SurveyQuestion extends BaseEntity {
   id: number;
 
   @Column()
-  name: string;
-
-  @OneToMany(type => SurveyResult, result => result.survey_question)
-  survey_results: SurveyResult[];
+  user: string;
 
   @Column("json", { nullable: false })
   questions: string;

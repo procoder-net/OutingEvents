@@ -1,18 +1,29 @@
 import Event from "../entity/Event";
 import connectORM from "./../connection";
 import * as EventParticipant from "./eventParticipantService";
+import { getSurveyQuestionsBySurveyId } from "./surveyQuestionService";
 const sendSurveyEmail = require("../mail").sendSurveyEmail;
+const populate = ["survey", "event_participants", "survey_results"];
 // get events
-export async function getAllEvents() {
-  await getEventByEventId();
+export async function getAllEvents(populateRelations = true) {
+  let relations = populateRelations ? populate : [];
+  let events = await await connectORM
+    .getRepository(Event)
+    .find({ relations: relations });
+  return events;
 }
 
 // get events by event id
-export function getEventByEventId(eventId: number): Promise<any> {
+export async function getEventByEventId(
+  eventId?: number,
+  populateRelations = true
+): Promise<any> {
+  let relations = populateRelations ? populate : [];
   let find = eventId ? { id: eventId } : {};
-  return connectORM
+  let event = await connectORM
     .getRepository(Event)
-    .findOne({
+    .find({
+      relations: relations,
       id: eventId
     })
     .then(events => {
@@ -21,6 +32,7 @@ export function getEventByEventId(eventId: number): Promise<any> {
     .catch(err => {
       throw err;
     });
+  return event;
 }
 
 // create event
@@ -43,7 +55,7 @@ export async function addEvent(
   event.event_date = event_date;
   event.deadline_date = deadline_date;
   event.description = description;
-  event.survey_id = survey_id;
+  event.survey = await getSurveyQuestionsBySurveyId(survey_id);
   var createdEvent = await connectORM.getRepository(Event).save(event);
   invites.forEach(async invite => {
     await EventParticipant.addEventParticipant(
@@ -83,3 +95,6 @@ export function deleteEventById(id: number) {
       throw err;
     });
 }
+
+// tested get and add
+// need to test update and delete

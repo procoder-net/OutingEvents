@@ -71,7 +71,7 @@ router.post("/api/event/:eventId/surveyQuestion", (req: any, res: any) => {
 
 router.get("/api/event/:eventId/surveyQuestion", (req: any, res: any) => {
   surveyQuestionService
-    .getSurveyQuestionsByEventId(req.params.eventId)
+    .getSurveyQuestionsBySurveyId(req.params.eventId)
     .then((surveyQuestions: any) => {
       res.status(200);
       res.send(surveyQuestions);

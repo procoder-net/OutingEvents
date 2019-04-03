@@ -40,13 +40,11 @@ export default class Event extends BaseEntity {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   deadline_date: Date;
 
-  @OneToOne(type => Receipt, receipt => receipt.event, {
-    cascade: true
+  @ManyToOne(type => SurveyQuestion, surveyq => surveyq.id, {
+    cascade: true,
+    nullable: true
   })
-  @JoinColumn({ name: "receipt_id" })
-  receipt: Receipt;
-
-  survey_id: number;
+  survey: SurveyQuestion;
 
   @OneToMany(
     type => EventParticipant,
@@ -61,7 +59,7 @@ export default class Event extends BaseEntity {
   @OneToMany(type => SurveyResult, survey_result => survey_result.event, {
     cascade: true
   })
-  survey_result: SurveyResult[];
+  survey_results: SurveyResult[];
 
   @OneToMany(type => Payment, payment => payment.event, {
     cascade: true

@@ -17,30 +17,26 @@ export default class SurveyResult extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => SurveyQuestion, question => question.survey_results, {
-    onDelete: "CASCADE"
-  })
-  @JoinColumn({ name: "survey_id" })
-  survey_question: SurveyQuestion;
+  @Column()
+  survey_question: number;
 
-  @ManyToOne(
+  @OneToOne(
     type => EventParticipant,
-    participant => participant.survey_results,
+    participant => participant.survey_result,
     {
       onDelete: "CASCADE"
     }
   )
-  @JoinColumn({ name: "participant_id" })
+  @JoinColumn({ name: "participant" })
   event_participant: EventParticipant;
 
-  @ManyToOne(type => Event, event => event.survey_result, {
+  @ManyToOne(type => Event, event => event.survey_results, {
     onDelete: "CASCADE"
   })
-  @JoinColumn({ name: "event_id" })
   event: Event;
 
   @Column()
-  useremail: string;
+  user: string;
 
   @Column("json", { nullable: false })
   response: string;

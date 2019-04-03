@@ -2,16 +2,20 @@ import SurveyQuestion from "../entity/SurveyQuestion";
 import SurveyResult from "../entity/SurveyResult";
 import connectORM from "./../connection";
 import { default as Event } from "../entity/Event";
+import { getEventByEventId } from "./eventService";
+import { getEventParticipants } from "./eventParticipantService";
 import EventParticipant from "../entity/EventParticipant";
 
 export async function createSurveyQuestion(
-  name: string,
+  user: string,
   formattedquestion: any,
   questions: any
 ) {
   const surveyQuestion = new SurveyQuestion();
-  surveyQuestion.name = name;
-  surveyQuestion.formattedquestion = formattedquestion;
+  surveyQuestion.user = user;
+  if (formattedquestion !== "null") {
+    surveyQuestion.formattedquestion = formattedquestion;
+  }
   surveyQuestion.questions = questions;
   let surveyq = await connectORM
     .getRepository(SurveyQuestion)
@@ -19,19 +23,15 @@ export async function createSurveyQuestion(
   return surveyq;
 }
 
-export async function updateSurveyQuestionbyEventId(
+export async function updateSurveyQuestionbyId(
   id: any,
   formattedquestion: any
 ) {
   await connectORM
     .getRepository(SurveyQuestion)
-    .findOne({ event: id })
+    .findOne({ id: id })
     .then((surveyq: any) => {
-      console.log(id);
-      console.log(formattedquestion);
-      console.log(surveyq);
       if (!surveyq.formattedquestion) {
-        console.log(surveyq);
         surveyq.formattedquestion = formattedquestion;
         return connectORM.getRepository(SurveyQuestion).save(surveyq);
       }
@@ -51,77 +51,84 @@ export function deleteSurveyQuestion(questionId: number) {
     });
 }
 
-export function getSurveyQuestionsByEventId(eventId: number) {
+export function getAllSurveyQuestions() {
+  return getSurveyQuestionsBySurveyId();
+}
+export function getSurveyQuestionsBySurveyId(surveyId?: number) {
+  let find = surveyId ? { id: surveyId } : {};
   return connectORM
     .getRepository(SurveyQuestion)
-    .find({ event_id: eventId, relations: ["survey_results"] })
+    .find(find)
     .then((surveyQuestions: any) => {
-      /* surveyQuestions.forEach(function (obj: any) {
-                            let questionString: string = obj.questions;
-                            obj.questions = JSON.parse(questionString);
-                        }); */
-      let responseSurvey = surveyQuestions[0];
-      responseSurvey.questions = JSON.stringify(responseSurvey.questions);
-      responseSurvey.formattedquestion = JSON.stringify(
-        responseSurvey.formattedquestion
-      );
-      console.log(responseSurvey);
-      return responseSurvey;
+      let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
+        sq.questions = JSON.stringify(sq.questions);
+        sq.formattedquestion = JSON.stringify(sq.formattedquestion);
+        return sq;
+      });
+      return surveyq;
     })
     .catch(err => {
       throw err;
     });
+}
+
+export async function getSurveyQuestionsByEventId(eventId: number) {
+  let events: any = await getEventByEventId(eventId);
+  return [events[0].survey];
 }
 
 export async function createSurveyResult(
   eventId: any,
   surveyId: number,
-  useremail: string,
+  user: string,
   participantId: number,
   result: any
 ) {
   const surveyResult = new SurveyResult();
-  // /event instanceof Event ? event : await getEventByEventId(event);
-  surveyResult.useremail = useremail;
-  const event: any = await connectORM
-    .getRepository(Event)
-    .findOne({ id: eventId, relations: ["survey_result"] });
-  const survey_question: any = await connectORM
-    .getRepository(SurveyQuestion)
-    .findOne({ id: surveyId, relations: ["survey_results"] });
-  const event_participant: any = await connectORM
-    .getRepository(EventParticipant)
-    .findOne({ id: surveyId, relations: ["survey_results"] });
+  surveyResult.user = user;
+  surveyResult.event = await getEventByEventId(eventId, false);
+  surveyResult.event_participant = await getEventParticipants(
+    eventId,
+    participantId
+  );
   surveyResult.response = result;
-  surveyResult.event = event;
-  surveyResult.survey_question = survey_question;
-  event.survey_result.push(surveyResult);
-  survey_question.survey_results.push(surveyResult);
-  event_participant.survey_results.push(surveyResult);
-  await connectORM.getRepository(SurveyQuestion).save(survey_question);
-  await connectORM.getRepository(EventParticipant).save(event_participant);
-  await connectORM.getRepository(Event).save(event);
-  return surveyResult;
+  surveyResult.survey_question = surveyId;
+
+  let surveyResultResp = await connectORM
+    .getRepository(SurveyResult)
+    .save(surveyResult)
+    .catch(err => {
+      throw err;
+    });
+  return surveyResultResp;
 }
 
-export function getSurveyResultByQuestionId(survey_question_id: number) {
+const populateSurveyResults = ["event_participant", "event"];
+export function getSurveyResultsByEvent(
+  event_id: number,
+  partipant_id?: number,
+  populateRelations = true
+) {
+  let find: any = { event_id: event_id };
+  if (partipant_id) {
+    find.participant_id = partipant_id;
+  }
+  if (populateRelations) {
+    find.relations = populateSurveyResults;
+  }
   return connectORM
     .getRepository(SurveyResult)
-    .find({
-      survey_question_id: survey_question_id
-    })
-    .then(surveyQuestionResults => {
-      surveyQuestionResults.forEach((obj: any) => {
-        obj.response = JSON.stringify(obj.response);
+    .find(find)
+    .then((surveyResults: any) => {
+      return surveyResults.map((sr: SurveyResult) => {
+        sr.response = JSON.stringify(sr.response);
+        return sr;
       });
-      return surveyQuestionResults;
     })
     .catch(err => {
       throw err;
     });
 }
 
-export function getSurveyResultsByEvent(event_id: number) {
-  //TODO: will do this after writing base for all services
-  return {};
-}
+// tested get and add
+// need to test update and delete
