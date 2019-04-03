@@ -2,16 +2,8 @@ import React from "react";
 import NavBar from "./Component/NavBar";
 import SurveyDisplay from "./Component/Survey";
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
-
-const ADD_SURVEY_RESULT = gql`
-  mutation sendSurvey($survey: SurveyResultInput) {
-    createSurveyResponse(survey: $survey) {
-      event
-    }
-  }
-`;
-
+import { Query, Mutation } from "react-apollo";
+import { ADD_SURVEY_RESULT, GET_SURVEY_QUESTION } from "./queries";
 class SurveyPage extends React.Component {
   constructor(props) {
     super(props);
@@ -22,8 +14,8 @@ class SurveyPage extends React.Component {
     var i = {
       survey: {
         surveyquestion: JSON.stringify(data.questions),
-        eventId: 2,
-        surveyId: 2,
+        eventId: 1,
+        surveyId: 1,
         useremail: "abc@abc.com",
         response: JSON.stringify(data.answer)
       }
@@ -31,17 +23,29 @@ class SurveyPage extends React.Component {
     await mutate({ variables: i });
   };
   render() {
+    console.log(GET_SURVEY_QUESTION);
     return (
       <div>
-        <Mutation mutation={ADD_SURVEY_RESULT}>
-          {(addSurvey, { data }) => (
-            <SurveyDisplay
-              json={this.surveyJson}
-              submitSurvey={this.submitSurvey}
-              surveyMutation={addSurvey}
-            />
-          )}
-        </Mutation>
+        <Query query={GET_SURVEY_QUESTION} variables={{ id: 1 }}>
+          {({ data, loading, error }) => {
+            if (loading) return <div>Loading.....</div>;
+            if (error) return <div>Error...</div>;
+            let surveyq = data;
+            return (
+              <Mutation mutation={ADD_SURVEY_RESULT}>
+                {(addSurvey, { data }) => (
+                  <SurveyDisplay
+                    json={JSON.parse(
+                      surveyq.getSurveyQuestionsByEventId.questions
+                    )}
+                    submitSurvey={this.submitSurvey}
+                    surveyMutation={addSurvey}
+                  />
+                )}
+              </Mutation>
+            );
+          }}
+        </Query>
       </div>
     );
   }

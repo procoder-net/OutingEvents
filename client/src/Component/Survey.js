@@ -28,9 +28,9 @@ class SurveyDisplay extends React.Component {
       });
     });
     /*Object.keys(response).forEach(key => {
-            let choices = questions.filter(q => q.id == key)[0];
-            response[key] = response[key].map(val => choices.answer[val]);
-        });*/
+                let choices = questions.filter(q => q.id == key)[0];
+                response[key] = response[key].map(val => choices.answer[val]);
+            });*/
     return {
       questions,
       answer: response
@@ -41,13 +41,12 @@ class SurveyDisplay extends React.Component {
     var i = {
       survey: {
         surveyquestion: JSON.stringify(formattedResp.questions),
-        eventId: 2,
-        surveyId: 2,
+        eventId: 1,
+        surveyId: 1,
         useremail: "abc@abc.com",
         response: JSON.stringify(formattedResp.answer)
       }
     };
-    /* let done = await this.props.surveyMutation({ variables: i }); */
     this.props.submitSurvey(this.props.surveyMutation, formattedResp);
   }
   render() {

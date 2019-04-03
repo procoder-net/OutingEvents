@@ -9,14 +9,14 @@ input DateInput {
 }
 
 type EventParticipant{
-    id: Int
-    event: Event
-    useremail: String!
+    id: Int!
+    user: String!
     is_organizer: Boolean
     confirmed: Boolean
     attended: Boolean
-    payments: [Payment]
-    survey_results: [SurveyResult]
+    event: Event,
+    payment: Payment,
+    surveyResult: SurveyResult
 }
 
 input EventParticipantInput{
@@ -30,15 +30,16 @@ input EventParticipantInput{
 type Event{
     id: Int
     name: String
-    event: Event
-    questions: String
     type: String
     description: String
-    eventDate: String
-    deadlineDate: String
+    event_date: String
+    deadline_date: String
     location: String
-    invites: [EventParticipant]
-    organizer: [String]
+    survey: [SurveyQuestion]
+    event_participants: [EventParticipant]
+    survey_result:[SurveyResult]
+    receipts: [Receipt]
+    payments: [Payment]
 }
 
 input EventInput{
@@ -47,22 +48,23 @@ input EventInput{
     description: String
     eventDateTime: DateInput!
     deadlineDatetime: DateInput!,
-    surveyId: Int!
+    survey: Int!
     location: String!
     invited: [String]
     organizer: [String]
 }
 
+input SurveyQuestionInput{
+    user: String
+    questions: String!
+    formattedquestions: String
+}
+
 type SurveyQuestion{
     id: Int
-    is_organizer: Boolean
-    notified: Boolean
-    confirmed: Boolean
-    user: User
-    name: String
-    event: Event
-    survey_results: [SurveyResult]
-    questions: String
+    user: String
+    questions: String!
+    formattedquestions: String
 }
 
 type Receipt{
@@ -84,20 +86,20 @@ type Payment{
 }
 
 input SurveyResultInput{
+    event_id: Int!
+    survey_id: Int!
+    participant_id: Int!
+    user: String!
     surveyquestion: String!
-    eventId: Int!
-    surveyId: Int!
-    participantId: Int!
-    useremail: String!
     response: String!
 }
 
 type SurveyResult{
-    useremail: String!
     id: Int
-    survey_question: SurveyQuestion
-    event: Event
-    event_participant: EventParticipant
+    user: String!
+    survey_id: SurveyQuestion
+    event_id: Event
+    event_participants: EventParticipant
     response: String
 }
 
@@ -112,6 +114,15 @@ type User{
 }
 
 type Query {
+    allEvents: [Event]
+    event(eventId: Int!): Event
+    eventParticipants(eventId: Int!): [EventParticipant]
+    eventParticipantsByUser(user: String!): [EventParticipant]
+    allSurvey: [SurveyQuestion]
+    survey(surveyId: Int!): SurveyQuestion
+    surveyResults(eventId: Int!, participant_id: Int): [SurveyResult]
+    payments(eventId: Int): [Payment]
+    receipt(eventId: Int): [Receipt]
     getAllEvents: [Event]
     getEventByEventId(event_id: Int): Event
     getAllSurveyQuestions(event_id: Int): [SurveyQuestion]
@@ -125,6 +136,8 @@ type Query {
 
 type Mutation {
     addEvent(event: EventInput) : Event
+    addSurvey(question: SurveyQuestionInput): SurveyQuestion
+    addSurveyResult(survey: SurveyResultInput): SurveyResult
     updateEventNameByEventId( id: Int, name: String!) : Event
     deleteEventById(id: Int):Event
     sendSurveyEmail(eventId: String!, eventName: String!, surveyId: String!, emailList:[String!]): String   
@@ -137,7 +150,6 @@ type Mutation {
     deleteReceipt(id: Int): Receipt
     createPayment(event_id: Int, user_id: Int, payment_status: String, amount: Int, currency: String, description: String): Payment
     updatePaymentStatus(id: Int, new_status: String): Payment
-    createSurveyResponse(survey: SurveyResultInput): SurveyResult
     createUserProfile(first_name: String, last_name: String, email: String, username: String, password: String): User
 }
 `;

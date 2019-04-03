@@ -4,7 +4,8 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  OneToOne
 } from "typeorm";
 import Event from "./Event";
 import SurveyResult from "./SurveyResult";
@@ -15,14 +16,13 @@ export default class EventParticipant {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(type => Event, event => event.event_participants, {
-    onDelete: "CASCADE"
+  @ManyToOne(type => Event, event => event.id, {
+    nullable: true
   })
-  @JoinColumn({ name: "event_id" })
   event: Event;
 
   @Column()
-  useremail: string;
+  user: string;
 
   @Column()
   is_organizer: boolean;
@@ -37,15 +37,15 @@ export default class EventParticipant {
   })
   attended: boolean;
 
-  @OneToMany(
+  @OneToOne(
     type => SurveyResult,
     surveyResult => surveyResult.event_participant,
     { cascade: true }
   )
-  survey_results: SurveyResult[];
+  survey_result: SurveyResult;
 
-  @OneToMany(type => Payment, payment => payment.event_participant, {
+  @OneToOne(type => Payment, payment => payment.event_participant, {
     cascade: true
   })
-  payments: Payment[];
+  payments: Payment;
 }
