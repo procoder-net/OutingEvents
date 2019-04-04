@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
-    "start": "tsc && nodemon ./build/app.js",
+    "start": "tsc && node --max_old_space_size=8192 ./build/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -31,7 +31,7 @@ const ormConfig: ConnectionOptions = {
     UserProfile
   ],
   synchronize: true,
-  logging: false
+  logging: true
 };
 
 console.log(JSON.stringify(ormConfig, null, 4));

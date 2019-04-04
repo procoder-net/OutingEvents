@@ -13,18 +13,9 @@ const corsOptions = {
   origin: "http://localhost:1234",
   credentials: true
 };
-const ormConfig: ConnectionOptions = {
-  type: "postgres",
-  host: process.env.PGHOST,
-  port: 5432,
-  username: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
-  entities: [Event],
-  synchronize: true,
-  logging: false
-};
 app.use(cors());
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.use(bodyParser.json({ limit: "50mb" }));
 connectORM
   .connect()
   .then(async connection => {

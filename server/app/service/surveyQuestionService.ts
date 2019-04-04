@@ -55,7 +55,13 @@ export function getAllSurveyQuestions() {
   return getSurveyQuestionsBySurveyId();
 }
 export function getSurveyQuestionsBySurveyId(surveyId?: number) {
-  let find = surveyId ? { id: surveyId } : {};
+  let find: any = surveyId
+    ? {
+        where: {
+          id: surveyId
+        }
+      }
+    : {};
   return connectORM
     .getRepository(SurveyQuestion)
     .find(find)
@@ -109,9 +115,13 @@ export function getSurveyResultsByEvent(
   partipant_id?: number,
   populateRelations = true
 ) {
-  let find: any = { event_id: event_id };
+  let find: any = {
+    where: {
+      event_id: event_id
+    }
+  };
   if (partipant_id) {
-    find.participant_id = partipant_id;
+    find.where.participant_id = partipant_id;
   }
   if (populateRelations) {
     find.relations = populateSurveyResults;

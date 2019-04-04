@@ -28,6 +28,9 @@ export default class Event extends BaseEntity {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  image: string;
+
   @Column()
   location: string;
 
