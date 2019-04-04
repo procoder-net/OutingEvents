@@ -14,9 +14,10 @@ class SurveyPage extends React.Component {
     var i = {
       survey: {
         surveyquestion: JSON.stringify(data.questions),
-        eventId: 1,
-        surveyId: 1,
-        useremail: "abc@abc.com",
+        event_id: 1,
+        survey_id: 1,
+        participant_id: 1,
+        user: "abc@abc.com",
         response: JSON.stringify(data.answer)
       }
     };
@@ -35,9 +36,7 @@ class SurveyPage extends React.Component {
               <Mutation mutation={ADD_SURVEY_RESULT}>
                 {(addSurvey, { data }) => (
                   <SurveyDisplay
-                    json={JSON.parse(
-                      surveyq.getSurveyQuestionsByEventId.questions
-                    )}
+                    json={JSON.parse(surveyq.survey.questions)}
                     submitSurvey={this.submitSurvey}
                     surveyMutation={addSurvey}
                   />

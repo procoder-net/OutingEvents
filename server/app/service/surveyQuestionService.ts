@@ -56,36 +56,33 @@ export function getAllSurveyQuestions() {
     .getRepository(SurveyQuestion)
     .find()
     .then((surveyQuestions: any) => {
-      let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
-        sq.questions = JSON.stringify(sq.questions);
-        sq.formattedquestion = JSON.stringify(sq.formattedquestion);
-        return sq;
-      });
-      console.log(surveyq);
-      return surveyq;
+      /* let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
+              sq.questions = JSON.stringify(sq.questions);
+              sq.formattedquestion = JSON.stringify(sq.formattedquestion);
+              return sq;
+            });*/
+      return surveyQuestions;
     })
     .catch(err => {
       throw err;
     });
 }
-export function getSurveyQuestionsBySurveyId(surveyId?: number) {
-  let find: any = surveyId
-    ? {
-        where: {
-          id: surveyId
-        }
-      }
-    : {};
+export function getSurveyQuestionsBySurveyId(surveyId: number) {
+  let find: any = {
+    where: {
+      id: surveyId
+    }
+  };
   return connectORM
     .getRepository(SurveyQuestion)
     .find(find)
     .then((surveyQuestions: any) => {
-      let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
-        sq.questions = JSON.stringify(sq.questions);
-        sq.formattedquestion = JSON.stringify(sq.formattedquestion);
-        return sq;
-      });
-      return surveyq;
+      /*let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
+                sq.questions = JSON.stringify(sq.questions);
+                sq.formattedquestion = JSON.stringify(sq.formattedquestion);
+                return sq;
+            });*/
+      return surveyQuestions;
     })
     .catch(err => {
       throw err;
@@ -106,11 +103,14 @@ export async function createSurveyResult(
 ) {
   const surveyResult = new SurveyResult();
   surveyResult.user = user;
-  surveyResult.event = await getEventByEventId(eventId, false);
-  surveyResult.event_participant = await getEventParticipants(
+  let event = await getEventByEventId(eventId, false);
+  surveyResult.event = event[0];
+  let event_participant = await getEventParticipants(
     eventId,
-    participantId
+    participantId,
+    false
   );
+  surveyResult.event_participant = event_participant[0];
   surveyResult.response = result;
   surveyResult.survey_question = surveyId;
 
@@ -144,10 +144,11 @@ export function getSurveyResultsByEvent(
     .getRepository(SurveyResult)
     .find(find)
     .then((surveyResults: any) => {
-      return surveyResults.map((sr: SurveyResult) => {
-        sr.response = JSON.stringify(sr.response);
-        return sr;
-      });
+      /* return surveyResults.map((sr: SurveyResult) => {
+                sr.response = JSON.stringify(sr.response);
+                return sr;
+            }); */
+      return surveyResults;
     })
     .catch(err => {
       throw err;
@@ -156,7 +157,7 @@ export function getSurveyResultsByEvent(
 
 export function getCountedSurveyResultsByEvent(event_id: number) {
   var surveyRecord: any;
-
+  console.log("counting starts");
   class Question {
     question: string;
     answers: string[] = [];

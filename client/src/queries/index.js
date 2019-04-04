@@ -11,8 +11,8 @@ export const GET_ALL_EVENTS = gql`
 
 export const ADD_SURVEY_RESULT = gql`
   mutation sendSurvey($survey: SurveyResultInput) {
-    createSurveyResponse(survey: $survey) {
-      event
+    addSurveyResult(survey: $survey) {
+      id
     }
   }
 `;
@@ -28,11 +28,10 @@ export const ADD_EVENT = gql`
 `;
 
 export const GET_SURVEY_QUESTION = gql`
-  query getSurveyQuestion($id: Int) {
-    getSurveyQuestionsByEventId(event_id: $id) {
+  query getSurveyQuestion($id: Int!) {
+    survey(surveyId: $id) {
       id
-      name
-      event
+      user
       questions
     }
   }

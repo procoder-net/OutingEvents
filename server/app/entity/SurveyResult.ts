@@ -38,6 +38,6 @@ export default class SurveyResult extends BaseEntity {
   @Column()
   user: string;
 
-  @Column("json", { nullable: false })
+  @Column({ nullable: false })
   response: string;
 }
