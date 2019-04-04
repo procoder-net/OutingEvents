@@ -2,9 +2,10 @@
   "name": "client1",
   "version": "0.1.0",
   "description": "",
+  "proxy": "http://localhost:3000",
   "scripts": {
-    "start": "parcel index.html ",
-    "build": "parcel build index.html"
+    "start": "node app.js",
+    "build": "node app.js"
   },
   "license": "MIT",
   "dependencies": {
@@ -17,8 +18,10 @@
     "apollo-client": "^2.5.1",
     "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
+    "express": "^4.16.4",
     "google-map-react": "^1.1.2",
     "graphql": "^14.1.1",
+    "http-proxy-middleware": "^0.19.1",
     "markdown-to-jsx": "^6.9.3",
     "material-ui": "^0.20.2",
     "prop-types": "^15.7.2",
