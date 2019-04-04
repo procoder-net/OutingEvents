@@ -66,7 +66,8 @@ export async function addEvent(
   description: string,
   event_date: Date,
   deadline_date: Date,
-  invites: [string]
+  invites: [string],
+  image: string
 ) {
   const event = new Event();
   event.type = type;
@@ -76,12 +77,19 @@ export async function addEvent(
   event.event_date = event_date;
   event.deadline_date = deadline_date;
   event.description = description;
-  event.survey = await getSurveyQuestionsBySurveyId(survey_id);
-  var createdEvent = await connectORM.getRepository(Event).save(event);
+  event.image = image;
+  let survey = await getSurveyQuestionsBySurveyId(survey_id);
+  event.survey = survey instanceof Array ? survey[0] : survey;
+  var createdEvent = await connectORM
+    .getRepository(Event)
+    .save(event)
+    .catch(err => {
+      throw err;
+    });
   invites.forEach(async invite => {
     await EventParticipant.addEventParticipant(
       invite,
-      event.id,
+      createdEvent,
       true,
       true,
       false

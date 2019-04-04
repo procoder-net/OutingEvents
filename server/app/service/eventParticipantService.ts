@@ -6,7 +6,7 @@ import { getEventByEventId } from "./eventService";
 const populate = ["event", "survey_result", "payments"];
 export async function addEventParticipant(
   user: string,
-  event_id: number,
+  event_id: any,
   isOrganizer: boolean,
   confirmed: boolean,
   attended: boolean
@@ -18,7 +18,8 @@ export async function addEventParticipant(
   eventParticipant.attended = attended;
   eventParticipant.confirmed = confirmed;
   eventParticipant.user = user;
-  eventParticipant.event = await getEventByEventId(event_id);
+  eventParticipant.event =
+    event_id instanceof Event ? event_id : await getEventByEventId(event_id);
   return await connectORM
     .getRepository(EventParticipant)
     .save(eventParticipant);
@@ -42,10 +43,12 @@ export function getEventParticipants(
   populateRelations = true
 ): any {
   let find: any = {
-    event: event_id
+    where: {
+      event: event_id
+    }
   };
   if (id) {
-    find.id = id;
+    find.where.id = id;
   }
   if (populateRelations) {
     find.relations = populate;

@@ -35,6 +35,7 @@ type Event{
     event_date: String
     deadline_date: String
     location: String
+    image: String
     survey: [SurveyQuestion]
     event_participants: [EventParticipant]
     survey_result:[SurveyResult]
@@ -51,6 +52,7 @@ input EventInput{
     survey: Int!
     location: String!
     invited: [String]
+    image: String
     organizer: [String]
 }
 
