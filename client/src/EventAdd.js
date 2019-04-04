@@ -27,7 +27,7 @@ class EventAdd extends React.Component {
           hour: parseInt(deadlineTime[0]),
           minute: parseInt(deadlineTime[1])
         },
-        survey: 5,
+        survey: 1,
         location: "san jose",
         invited: input.invited.map(invite => invite.value),
         organizer: ["Moyeen"]
