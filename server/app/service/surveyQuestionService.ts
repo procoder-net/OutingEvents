@@ -52,7 +52,21 @@ export function deleteSurveyQuestion(questionId: number) {
 }
 
 export function getAllSurveyQuestions() {
-  return getSurveyQuestionsBySurveyId();
+  return connectORM
+    .getRepository(SurveyQuestion)
+    .find()
+    .then((surveyQuestions: any) => {
+      let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
+        sq.questions = JSON.stringify(sq.questions);
+        sq.formattedquestion = JSON.stringify(sq.formattedquestion);
+        return sq;
+      });
+      console.log(surveyq);
+      return surveyq;
+    })
+    .catch(err => {
+      throw err;
+    });
 }
 export function getSurveyQuestionsBySurveyId(surveyId?: number) {
   let find: any = surveyId
