@@ -57,10 +57,10 @@ export function getAllSurveyQuestions() {
     .find()
     .then((surveyQuestions: any) => {
       /* let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
-              sq.questions = JSON.stringify(sq.questions);
-              sq.formattedquestion = JSON.stringify(sq.formattedquestion);
-              return sq;
-            });*/
+                    sq.questions = JSON.stringify(sq.questions);
+                    sq.formattedquestion = JSON.stringify(sq.formattedquestion);
+                    return sq;
+                  });*/
       return surveyQuestions;
     })
     .catch(err => {
@@ -78,10 +78,10 @@ export function getSurveyQuestionsBySurveyId(surveyId: number) {
     .find(find)
     .then((surveyQuestions: any) => {
       /*let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
-                sq.questions = JSON.stringify(sq.questions);
-                sq.formattedquestion = JSON.stringify(sq.formattedquestion);
-                return sq;
-            });*/
+                      sq.questions = JSON.stringify(sq.questions);
+                      sq.formattedquestion = JSON.stringify(sq.formattedquestion);
+                      return sq;
+                  });*/
       return surveyQuestions;
     })
     .catch(err => {
@@ -145,9 +145,9 @@ export function getSurveyResultsByEvent(
     .find(find)
     .then((surveyResults: any) => {
       /* return surveyResults.map((sr: SurveyResult) => {
-                sr.response = JSON.stringify(sr.response);
-                return sr;
-            }); */
+                      sr.response = JSON.stringify(sr.response);
+                      return sr;
+                  }); */
       return surveyResults;
     })
     .catch(err => {
@@ -185,6 +185,7 @@ export function getCountedSurveyResultsByEvent(event_id: number) {
       for (let surveyRecord_i of eventSurveyResults) {
         //console.log("SurveyResult : " + surveyNo);
         surveyRecord = surveyRecord_i;
+        surveyRecord.response = JSON.parse(surveyRecord.response);
         questionKeys = Object.keys(surveyRecord.response);
         Object.keys(surveyRecord.response).forEach(key => {
           answerValues = surveyRecord.response[key];
