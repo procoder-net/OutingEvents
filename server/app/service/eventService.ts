@@ -6,12 +6,24 @@ const sendSurveyEmail = require("../mail").sendSurveyEmail;
 import { In } from "typeorm";
 const populate = ["survey", "event_participants", "survey_results"];
 // get events
+
+function convertDate(events: any) {
+  return events.map((event: any) => {
+    let dd = new Date(event.deadline_date);
+    let ed = new Date(event.event_date);
+    event.deadline_date = dd.toDateString().toString();
+    event.event_date = dd.toDateString().toString();
+    return event;
+  });
+}
+
 export async function getAllEvents(populateRelations = true) {
   let relations = populateRelations ? populate : [];
-  let events = await await connectORM
-    .getRepository(Event)
-    .find({ relations: relations });
-  return events;
+  let events = await await connectORM.getRepository(Event).find({
+    relations: relations
+  });
+
+  return convertDate(events);
 }
 
 export async function getAllEventsByUser(
@@ -53,7 +65,7 @@ export async function getEventByEventId(
     .catch(err => {
       throw err;
     });
-  return event;
+  return convertDate(event);
 }
 
 // create event
