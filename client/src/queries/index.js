@@ -2,9 +2,33 @@ import { gql } from "apollo-boost";
 
 export const GET_ALL_EVENTS = gql`
   query {
-    getAllEvents {
+    allEvents {
+      id
       name
       description
+      image
+      event_date
+    }
+  }
+`;
+
+export const GET_EVENT = gql`
+  query getEvent($event: Int!) {
+    event(eventId: $event) {
+      id
+      name
+      description
+      image
+      deadline_date
+      event_date
+      location
+      event_participants {
+        id
+        user
+        is_organizer
+        confirmed
+        attended
+      }
     }
   }
 `;

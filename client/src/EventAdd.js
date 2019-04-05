@@ -30,6 +30,7 @@ class EventAdd extends React.Component {
         survey: 1,
         location: "san jose",
         invited: input.invited.map(invite => invite.value),
+        image: input.image,
         organizer: ["Moyeen"]
       }
     };

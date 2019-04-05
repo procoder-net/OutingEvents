@@ -1,34 +1,51 @@
 import React from "react";
 import { Grid, Paper } from "@material-ui/core";
 import Event from "./Event";
-
-const event = {
-  image:
-    "https://93546-d-c.ooyala.com/content/images/1208/1542184503_3805a158-e563-4eba-a31b-105cf488feaa_636x357.jpg",
-  title: "Ski Event",
-  description: "Ski Trip",
-  details:
-    "## Ski vent detail \
-            \
-            #### April 1, 2020 by [Mike](/) \
-            \
-            Lets go ski ... \
-        "
-};
-const EventList = () => {
+import { withStyles } from "@material-ui/core/styles";
+import { width } from "@material-ui/system/sizing";
+import classNames from "classnames";
+const styles = theme => ({
+  layout: {
+    width: "80%",
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(3),
+    [theme.breakpoints.up(1000 + theme.spacing(3 * 2))]: {
+      width: "80%",
+      marginLeft: "auto",
+      marginRight: "auto"
+    }
+  },
+  cardGrid: {
+    padding: theme.spacing(3)
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(2),
+    [theme.breakpoints.up(1000 + theme.spacing(3 * 2))]: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      padding: theme.spacing(3)
+    }
+  }
+});
+const EventList = data => {
+  let events = data.data.allEvents;
+  events = events.sort(function(a, b) {
+    return new Date(a.event_date) - new Date(b.event_date);
+  });
+  let { classes } = data;
   return (
-    <div>
-      <div>
-        <Grid container spacing={4} style={{ padding: 24 }}>
-          {[0, 1, 2, 3, 4, 5, 6].map(value => (
-            <Grid key={value} item xs={2} sm={3} lg={2} xl={3}>
-              <Event event={event} />
-            </Grid>
-          ))}
-        </Grid>
-      </div>
+    <div className={classNames(classes.layout, classes.cardGrid)}>
+      <Grid container spacing={8}>
+        {events.map(event => (
+          <Grid item key={event.id} xs={8} md={6} lg={3} xl={2}>
+            <Event event={event} />
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 };
 
-export default EventList;
+export default withStyles(styles)(EventList);

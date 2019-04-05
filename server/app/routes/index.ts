@@ -5,6 +5,7 @@ import server from "./graphql";
 import authenticationRequired from "../OktaJwt";
 import * as path from "path";
 const multer = require("multer");
+const publicRelativeUrl = "/api/content/";
 let storage = multer.diskStorage({
   destination: function(req: any, file: any, cb: any) {
     cb(null, path.join(process.cwd(), "public"));
@@ -39,11 +40,9 @@ module.exports = function(app: express.Application) {
     }
   });
 
-  app.post("/upload", upload.single("photo"), (req: any, res: any) => {
-    const host = req.host;
-    const filePath = req.protocol + "://" + host + "/" + req.file.path;
+  app.post("/api/upload", upload.single("photo"), (req: any, res: any) => {
+    const filePath = publicRelativeUrl + req.file.filename;
     if (req.file) {
-      console.log(req.file);
       res.json(filePath);
     } else throw "error";
   });
