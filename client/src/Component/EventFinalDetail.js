@@ -137,7 +137,10 @@ class EventFinalDetail extends React.Component {
             {/* Main featured event */}
             <Paper
               className={classes.mainFeaturedEvent}
-              style={{ backgroundImage: `url(${event.image})` }}
+              style={{
+                backgroundImage: `url(${event.image})`,
+                backgroundSize: "1244px 362px"
+              }}
             >
               {/* Increase the priority of the hero background image */}
               {
