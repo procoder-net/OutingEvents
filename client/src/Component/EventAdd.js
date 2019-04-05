@@ -10,11 +10,14 @@ import {
   Button,
   FormFeedback,
   FormText,
-  Row
+  Row,
+  Media
 } from "reactstrap";
 import Select from "react-select";
 import "./eventAdd.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+const defaultImagePath = "/api/content/default/";
 class DemoForm extends React.Component {
   constructor(props) {
     super(props);
@@ -46,7 +49,10 @@ class DemoForm extends React.Component {
         { value: "Lunch", label: "Lunch" },
         { value: "Bowling", label: "Bowling" }
       ],
-      type: {},
+      type: { value: "Ski", label: "Ski" },
+      image: "",
+      imageUrl: "",
+      imageLoaded: true,
       validate: {
         emailState: ""
       }
@@ -55,6 +61,8 @@ class DemoForm extends React.Component {
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.handleSurveyChange = this.handleSurveyChange.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
+    this.handleDefaultImage = this.handleDefaultImage.bind(this);
   }
 
   handleChange = async event => {
@@ -79,9 +87,74 @@ class DemoForm extends React.Component {
   };
 
   handleTypeChange = async val => {
+    this.setState({
+      imageUrl: "",
+      image: ""
+    });
     await this.setState({
       type: val
     });
+    this.handleDefaultImage();
+  };
+
+  handleImageChange = async e => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("photo", e.target.files[0]);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data"
+      }
+    };
+    axios
+      .post("api/upload", formData, config)
+      .then(response => {
+        this.setState({
+          imageLoaded: true,
+          imageUrl: response.data
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  handleDefaultImage = () => {
+    const defaultImage = {
+      Ski: {
+        1: "ski1.jpg",
+        2: "ski2.jpg",
+        3: "ski3.jpg",
+        4: "ski4.jpg"
+      },
+      Lunch: {
+        1: "lunch1.jpg",
+        2: "lunch2.jpg",
+        3: "lunch3.jpg",
+        4: "lunch4.jpg"
+      },
+      Movie: {
+        1: "Movie1.jpg",
+        2: "Movie2.jpg",
+        3: "Movie3.jpg",
+        4: "Movie4.jpg"
+      },
+      Bowling: {
+        1: "bowling1.jpg",
+        2: "bowling2.jpg",
+        3: "bowling3.jpg",
+        4: "bowling4.jpg"
+      }
+    };
+    if (!this.state.imageUrl) {
+      const a =
+        defaultImagePath +
+        defaultImage[this.state.type.value][Math.floor(Math.random() * 4) + 1];
+      console.log(a);
+      this.setState({
+        imageUrl: a
+      });
+    }
   };
 
   submitForm(e) {
@@ -93,7 +166,8 @@ class DemoForm extends React.Component {
       deadlinetime: this.state.deadlinetime,
       selectedsurvey: this.state.selectedSurvey.value,
       invited: this.state.invited,
-      type: this.state.type
+      type: this.state.type,
+      image: this.state.imageUrl
     };
     this.props.handleSubmit(this.props.addEvent, eventInput);
   }
@@ -109,8 +183,12 @@ class DemoForm extends React.Component {
       surveyOptions,
       selectedSurvey,
       typeList,
-      type
+      type,
+      image,
+      imageUrl,
+      imageLoaded
     } = this.state;
+    this.handleDefaultImage();
     return (
       <Container className="eventForm">
         <h2>Add an Event</h2>
@@ -141,6 +219,28 @@ class DemoForm extends React.Component {
                 name="selectType"
                 onChange={this.handleTypeChange}
                 options={typeList}
+              />
+            </FormGroup>
+          </Col>
+          <Col>
+            <FormGroup>
+              {!imageLoaded ? (
+                <svg width="200" height="200" viewBox="0 0 200 200">
+                  <rect width="200" height="200" rx="10" ry="10" fill="#CCC" />
+                </svg>
+              ) : (
+                <Media object src={imageUrl} className="my_image" />
+              )}
+            </FormGroup>
+          </Col>
+          <Col>
+            <FormGroup>
+              <Label for="inputImage">Event Image</Label>
+              <Input
+                type="file"
+                name="image"
+                id="image"
+                onChange={this.handleImageChange}
               />
             </FormGroup>
           </Col>
