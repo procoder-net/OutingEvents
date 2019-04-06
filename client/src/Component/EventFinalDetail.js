@@ -106,6 +106,7 @@ function handleRSVPChange(value) {
 }
 
 function EventFinalDetail(props) {
+  console.log(props);
   const { classes, user, onRSVPChange, event, invitees } = props;
 
   return (

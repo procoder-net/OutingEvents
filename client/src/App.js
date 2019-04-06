@@ -7,6 +7,8 @@ import Home from "./Home";
 import Login from "./Component/auth/Login";
 import PaymentRec from "./Component/PaymentRec";
 import EventAdd from "./EventAdd";
+import AddPayment from "./Component/AddPayment";
+
 import EventFinalDetail from "./Component/EventFinalDetail";
 import { Security, SecureRoute, ImplicitCallback } from "@okta/okta-react";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -50,6 +52,7 @@ class App extends React.Component {
               path="/eventfinaldetail"
               component={EventFinalDetail}
             />
+            <SecureRoute path="/payments" component={AddPayment} />
           </div>
         </Security>
       </BrowserRouter>
