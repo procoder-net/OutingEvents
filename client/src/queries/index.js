@@ -2,17 +2,41 @@ import { gql } from "apollo-boost";
 
 export const GET_ALL_EVENTS = gql`
   query {
-    getAllEvents {
+    allEvents {
+      id
       name
       description
+      image
+      event_date
+    }
+  }
+`;
+
+export const GET_EVENT = gql`
+  query getEvent($event: Int!) {
+    event(eventId: $event) {
+      id
+      name
+      description
+      image
+      deadline_date
+      event_date
+      location
+      event_participants {
+        id
+        user
+        is_organizer
+        confirmed
+        attended
+      }
     }
   }
 `;
 
 export const ADD_SURVEY_RESULT = gql`
   mutation sendSurvey($survey: SurveyResultInput) {
-    createSurveyResponse(survey: $survey) {
-      event
+    addSurveyResult(survey: $survey) {
+      id
     }
   }
 `;
@@ -28,11 +52,10 @@ export const ADD_EVENT = gql`
 `;
 
 export const GET_SURVEY_QUESTION = gql`
-  query getSurveyQuestion($id: Int) {
-    getSurveyQuestionsByEventId(event_id: $id) {
+  query getSurveyQuestion($id: Int!) {
+    survey(surveyId: $id) {
       id
-      name
-      event
+      user
       questions
     }
   }

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { AppBar, Toolbar, Typography, Link, Button } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 import { withAuth } from "@okta/okta-react";
 import { compose } from "redux";
 import styled from "styled-components";
+import { withRouter } from "react-router-dom";
 
 const StyledButton = styled(Button)`
   background: linear-gradient(45deg, #fe6b8b 30%, #ff8e53 90%);
@@ -18,11 +19,17 @@ let classes;
 class NavBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { authenticated: null };
+    this.state = {
+      authenticated: null,
+      inAddEventPage: false,
+      currentRoute: "/",
+      previousRoute: ""
+    };
     this.checkAuthentication = this.checkAuthentication.bind(this);
     this.checkAuthentication();
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
+    this.gotoEvent = this.gotoEvent.bind(this);
   }
 
   async checkAuthentication() {
@@ -45,24 +52,41 @@ class NavBar extends Component {
     this.props.auth.logout("/");
   }
 
+  async gotoEvent() {
+    this.setState({
+      inAddEventPage: true
+    });
+    this.props.history.push("/addevent");
+  }
+
   render() {
+    const { inAddEventPage } = this.state;
     const isLoggedIn = this.state.authenticated;
     return (
       <div>
-        <AppBar position="static">
+        <AppBar position="static" position="relative">
           <Toolbar>
-            <Typography variant="subtitle1" color="inherit" style={{ flex: 1 }}>
+            <Typography variant="h6" color="inherit" noWrap>
               Orgo Events
             </Typography>
-            {isLoggedIn ? (
-              <StyledButton onClick={this.logout} color="inherit">
-                Logout
+            <div style={{ marginLeft: "auto" }}>
+              {isLoggedIn && !inAddEventPage && (
+                <StyledButton
+                  onClick={this.gotoEvent}
+                  color="inherit"
+                  style={{ marginRight: "10px" }}
+                >
+                  Add Event
+                </StyledButton>
+              )}
+              <StyledButton
+                onClick={isLoggedIn ? this.logout : this.login}
+                color="inherit"
+                style={{ marginRight: "10px" }}
+              >
+                {isLoggedIn ? "Logout" : "Login"}
               </StyledButton>
-            ) : (
-              <StyledButton onClick={this.login} color="inherit">
-                Login
-              </StyledButton>
-            )}
+            </div>
           </Toolbar>
         </AppBar>
       </div>
@@ -70,4 +94,7 @@ class NavBar extends Component {
   }
 }
 
-export default compose(withAuth)(NavBar);
+export default compose(
+  withAuth,
+  withRouter
+)(NavBar);

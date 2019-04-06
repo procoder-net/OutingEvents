@@ -12,28 +12,35 @@ var emailSurvey = require("./mail").sendSurveyEmail;
 
 exports.resolvers = {
   Query: {
-    allEvents: (root: any, args: any) => {
-      return eventService.getAllEvents();
+    allEvents: async (root: any, args: any) => {
+      return await eventService.getAllEvents();
     },
-    allEventsByUser: (root: any, args: any) => {
-      return eventService.getAllEventsByUser(args.user);
+    allEventsByUser: async (root: any, args: any) => {
+      return await eventService.getAllEventsByUser(args.user);
     },
-    event: (root: any, args: any) => {
-      return eventService.getEventByEventId(args.eventId);
+    event: async (root: any, args: any) => {
+      let events: any = await eventService.getEventByEventId(args.eventId);
+      return events[0];
     },
-    eventParticipants: (root: any, args: any) => {
-      return eventParticipantService.getEventParticipants(args.eventId);
+    eventParticipants: async (root: any, args: any) => {
+      return await eventParticipantService.getEventParticipants(args.eventId);
     },
-    eventParticipantsByUser: (root: any, args: any) => {
-      return eventParticipantService.getEventParticipantsByUser(args.user);
+    eventParticipantsByUser: async (root: any, args: any) => {
+      return await eventParticipantService.getEventParticipantsByUser(
+        args.user
+      );
     },
-    allSurvey: (root: any, args: any) => {
-      return surveyQuestionService.getAllSurveyQuestions();
+    allSurvey: async (root: any, args: any) => {
+      return await surveyQuestionService.getAllSurveyQuestions();
     },
     survey: async (root: any, args: any) => {
-      return await surveyQuestionService.getSurveyQuestionsBySurveyId(
+      let surveys = await surveyQuestionService.getSurveyQuestionsBySurveyId(
         args.surveyId
       );
+      console.log("counting starts");
+      let abc = await surveyQuestionService.getCountedSurveyResultsByEvent(1);
+      console.log(JSON.stringify(abc));
+      return surveys[0];
     },
     surveyResults: async (root: any, args: any) => {
       return await surveyQuestionService.getSurveyResultsByEvent(
@@ -51,8 +58,8 @@ exports.resolvers = {
     },
 
     /* getSurveyQuestionsByEventId: (root: any, args: any) => {
-                     return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
-                 }, */
+                         return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
+                     }, */
     getAllEventParticipants: (root: any, args: any) => {
       return eventParticipantService.getEventParticipants(args.event_id);
     },
@@ -64,8 +71,8 @@ exports.resolvers = {
     },
     getSurveyResponsesByQuestionId: (root: any, args: any) => {
       /*return surveyQuestionService.getSurveyResultByQuestionId(
-                            args.survey_question_id
-                        ); */
+                                  args.survey_question_id
+                              ); */
     },
     getAllUserProfiles: (root: any, args: any) => {
       return userService.getAllUserProfiles();
@@ -172,15 +179,15 @@ exports.resolvers = {
       return response;
     },
     /*  updateEventNameByEventId: (root: any, args: any) => {
-                                          return eventService.updateEventNameByEventId(
-                                              {
-                                                  id: args.id,
-                                                  name: args.name
-                                              },
-                                              { id: args.id, name: args.name }
-                                          );
-                                          console.log(args);
-                                      }, */
+                                              return eventService.updateEventNameByEventId(
+                                                  {
+                                                      id: args.id,
+                                                      name: args.name
+                                                  },
+                                                  { id: args.id, name: args.name }
+                                              );
+                                              console.log(args);
+                                          }, */
 
     deleteEventById: (root: any, args: any) => {
       return eventService.deleteEventById(args.id);
@@ -195,19 +202,19 @@ exports.resolvers = {
         args.question
       );
       /*    return surveyQuestionService.createSurveyQuestion(
-                                                  { name: args.name, questions: args.questions },
-                                                  { event_id: args.event_id }
-                                              );*/
+                                                        { name: args.name, questions: args.questions },
+                                                        { event_id: args.event_id }
+                                                    );*/
     },
     deleteSurveyQuestion: (root: any, args: any) => {
       return surveyQuestionService.deleteSurveyQuestion(args.id);
     },
     addEventParticipant: (root: any, args: any) => {
       /*return eventParticipantService.addEventParticipant(
-                                                          args.usernemail,
-                                                          args.event_id,
-                                                          args.is_organizer
-                                                      );*/
+                                                                args.usernemail,
+                                                                args.event_id,
+                                                                args.is_organizer
+                                                            );*/
     },
     updateEventParticipant: (root: any, args: any) => {
       const updatedStatus = {

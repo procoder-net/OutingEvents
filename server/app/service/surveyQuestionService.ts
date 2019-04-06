@@ -56,36 +56,33 @@ export function getAllSurveyQuestions() {
     .getRepository(SurveyQuestion)
     .find()
     .then((surveyQuestions: any) => {
-      let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
-        sq.questions = JSON.stringify(sq.questions);
-        sq.formattedquestion = JSON.stringify(sq.formattedquestion);
-        return sq;
-      });
-      console.log(surveyq);
-      return surveyq;
+      /* let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
+                    sq.questions = JSON.stringify(sq.questions);
+                    sq.formattedquestion = JSON.stringify(sq.formattedquestion);
+                    return sq;
+                  });*/
+      return surveyQuestions;
     })
     .catch(err => {
       throw err;
     });
 }
-export function getSurveyQuestionsBySurveyId(surveyId?: number) {
-  let find: any = surveyId
-    ? {
-        where: {
-          id: surveyId
-        }
-      }
-    : {};
+export function getSurveyQuestionsBySurveyId(surveyId: number) {
+  let find: any = {
+    where: {
+      id: surveyId
+    }
+  };
   return connectORM
     .getRepository(SurveyQuestion)
     .find(find)
     .then((surveyQuestions: any) => {
-      let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
-        sq.questions = JSON.stringify(sq.questions);
-        sq.formattedquestion = JSON.stringify(sq.formattedquestion);
-        return sq;
-      });
-      return surveyq;
+      /*let surveyq = surveyQuestions.map((sq: SurveyQuestion) => {
+                      sq.questions = JSON.stringify(sq.questions);
+                      sq.formattedquestion = JSON.stringify(sq.formattedquestion);
+                      return sq;
+                  });*/
+      return surveyQuestions;
     })
     .catch(err => {
       throw err;
@@ -106,11 +103,14 @@ export async function createSurveyResult(
 ) {
   const surveyResult = new SurveyResult();
   surveyResult.user = user;
-  surveyResult.event = await getEventByEventId(eventId, false);
-  surveyResult.event_participant = await getEventParticipants(
+  let event = await getEventByEventId(eventId, false);
+  surveyResult.event = event[0];
+  let event_participant = await getEventParticipants(
     eventId,
-    participantId
+    participantId,
+    false
   );
+  surveyResult.event_participant = event_participant[0];
   surveyResult.response = result;
   surveyResult.survey_question = surveyId;
 
@@ -144,21 +144,23 @@ export function getSurveyResultsByEvent(
     .getRepository(SurveyResult)
     .find(find)
     .then((surveyResults: any) => {
-      return surveyResults.map((sr: SurveyResult) => {
-        sr.response = JSON.stringify(sr.response);
-        return sr;
-      });
+      /* return surveyResults.map((sr: SurveyResult) => {
+                      sr.response = JSON.stringify(sr.response);
+                      return sr;
+                  }); */
+      return surveyResults;
     })
     .catch(err => {
       throw err;
     });
 }
 
-export function getCountedSurveyResultsByEvent(event_id: number) {
+export async function getCountedSurveyResultsByEvent(event_id: number) {
   var surveyRecord: any;
-
+  console.log("counting starts");
   class Question {
     question: string;
+    survey: number;
     answers: string[] = [];
     counts: number[] = [];
   }
@@ -171,7 +173,7 @@ export function getCountedSurveyResultsByEvent(event_id: number) {
   return connectORM
     .getRepository(SurveyResult)
     .find({ event: event_id })
-    .then(eventSurveyResults => {
+    .then(async eventSurveyResults => {
       var surveyNo: number = 0;
       var questionNo: number = 0;
       var questionKeys: string[];
@@ -181,9 +183,12 @@ export function getCountedSurveyResultsByEvent(event_id: number) {
       var firstpass: number = 0;
       var answerIndex: number;
       var newQuestion: boolean;
+      var surveyId: number;
       for (let surveyRecord_i of eventSurveyResults) {
         //console.log("SurveyResult : " + surveyNo);
         surveyRecord = surveyRecord_i;
+        surveyRecord.response = JSON.parse(surveyRecord.response);
+        surveyId = surveyRecord.survey_question;
         questionKeys = Object.keys(surveyRecord.response);
         Object.keys(surveyRecord.response).forEach(key => {
           answerValues = surveyRecord.response[key];
@@ -193,6 +198,7 @@ export function getCountedSurveyResultsByEvent(event_id: number) {
             let question_i = new Question();
             question_i.question = questionKeys[questionNo];
             question_i.answers = answerValues;
+            question_i.survey = surveyId;
             for (let answer_j in answerValues) {
               countarray.push(1);
             }
@@ -204,9 +210,11 @@ export function getCountedSurveyResultsByEvent(event_id: number) {
             for (let j in questions) {
               let question_j = new Question();
               question_j = questions[j];
-              if (questionKeys[questionNo] == question_j.question) {
+              if (
+                questionKeys[questionNo] == question_j.question &&
+                surveyId == question_j.survey
+              ) {
                 for (let answer of answerValues) {
-                  console.log(answer);
                   answerIndex = question_j.answers.indexOf(answer);
                   if (answerIndex > -1) {
                     question_j.counts[answerIndex] += 1;
@@ -226,6 +234,7 @@ export function getCountedSurveyResultsByEvent(event_id: number) {
               let question_j = new Question();
               question_j.question = questionKeys[questionNo];
               question_j.answers = answerValues;
+              question_j.survey = surveyId;
               for (let answer_k in answerValues) {
                 countarray.push(1);
               }
@@ -234,7 +243,6 @@ export function getCountedSurveyResultsByEvent(event_id: number) {
               questions.push(question_j);
             }
           }
-
           questionNo += 1;
         });
 
@@ -243,28 +251,40 @@ export function getCountedSurveyResultsByEvent(event_id: number) {
         firstpass = 1;
       }
 
-      //console.log("here are the question counts");
-      //console.log(questions);
+      // Change the return format and add actual texts
 
-      // Change the return format
-
-      var newFormuestions: newFormQuestion[] = [];
+      var newFormQuestions: newFormQuestion[] = [];
+      var surveyQuestions: any;
+      surveyId = -1;
 
       for (let i in questions) {
         let question_i = new newFormQuestion();
         question_i.question = questions[i].question;
+        if (surveyId != questions[i].survey) {
+          surveyId = questions[i].survey;
+          surveyQuestions = await getSurveyQuestionsBySurveyId(surveyId);
+          surveyQuestions[0].formattedquestion = JSON.parse(
+            surveyQuestions[0].formattedquestion
+          );
+        }
+        var storedQuestions = surveyQuestions[0].formattedquestion;
+        var questionTexts = storedQuestions.find(
+          (q: any) => q.id === question_i.question
+        );
+        question_i.question = questionTexts.question;
+        var answerTexts = questionTexts.answer;
         for (let answer_j in questions[i].answers) {
           question_i.answers.push({
-            answer: questions[i].answers[answer_j],
+            answer: answerTexts[questions[i].answers[answer_j]],
             count: questions[i].counts[answer_j]
           });
         }
-        newFormuestions.push(question_i);
+        newFormQuestions.push(question_i);
       }
 
-      console.log(newFormuestions);
+      // console.log(newFormQuestions);
 
-      return newFormuestions;
+      return newFormQuestions;
     })
     .catch(err => {
       console.log("No results found for event: " + event_id);
