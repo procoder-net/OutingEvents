@@ -3,7 +3,8 @@ import connectORM from "./../connection";
 import * as EventParticipant from "./eventParticipantService";
 import { getSurveyQuestionsBySurveyId } from "./surveyQuestionService";
 const sendSurveyEmail = require("../mail").sendSurveyEmail;
-import { In } from "typeorm";
+import { In, Between } from "typeorm";
+
 const populate = ["survey", "event_participants", "survey_results"];
 // get events
 
@@ -22,7 +23,6 @@ export async function getAllEvents(populateRelations = true) {
   let events = await await connectORM.getRepository(Event).find({
     relations: relations
   });
-
   return convertDate(events);
 }
 
@@ -39,6 +39,28 @@ export async function getAllEventsByUser(
     .map((pe: any) => pe.event)
     .map((event: any) => event.id);
   return await getEventByEventId(eventIds);
+}
+
+export async function getAllEventsByDeadlineDate() {
+  let startDate = new Date(Date.now());
+  startDate.setHours(0, 0, 0, 0);
+  let endDate = new Date(Date.now());
+  endDate.setDate(startDate.getDate() + 1);
+  let find: any = {
+    where: {
+      state: "Survey",
+      deadline_date: Between(startDate, endDate)
+    }
+  };
+  return await connectORM
+    .getRepository(Event)
+    .find(find)
+    .then(events => {
+      return events;
+    })
+    .catch(err => {
+      throw err;
+    });
 }
 
 // get events by event id
@@ -112,13 +134,17 @@ export async function addEvent(
 }
 
 // update event name value by event id
-export function updateEventNameByEventId(body: any, paramas: any) {
+export function updateEventNameByEventId(id: number, params: any) {
+  let update: any = {};
+  if (params.name) update.name = params.name;
+  if (params.state) update.state = params.state;
+  if (params.type) update.type = params.type;
+  if (params.image) update.type = params.image;
+  if (params.location) update.location = params.location;
+  if (params.description) update.description = params.description;
   return connectORM
     .getRepository(Event)
-    .update({ id: paramas.id }, { name: paramas.name })
-    .then(result => {
-      return connectORM.getRepository(Event).findOne(paramas.id);
-    })
+    .update({ id: id }, update)
     .catch(err => {
       throw err;
     });
