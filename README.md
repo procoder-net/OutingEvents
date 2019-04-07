@@ -59,3 +59,9 @@ GET https://localhost:3000/event
 ```
 
 You should get back elements in the database.
+
+To display the Survey Results Bar Charts, you need to install Chartkick:
+
+```
+yarn add react-chartkick chart.js
+```

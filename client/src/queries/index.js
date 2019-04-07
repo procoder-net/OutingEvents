@@ -60,3 +60,15 @@ export const GET_SURVEY_QUESTION = gql`
     }
   }
 `;
+
+export const GET_COUNTED_SURVEYS = gql`
+  query getCountedSurveys($eventId: Int!) {
+    getCountedSurveyResultsByEvent(event_id: $eventId) {
+      question
+      answers {
+        answer
+        count
+      }
+    }
+  }
+`;
