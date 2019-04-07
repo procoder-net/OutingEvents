@@ -31,14 +31,20 @@ export async function getAllEventsByUser(
   populateRelations = true
 ) {
   let relations = populateRelations ? populate : [];
+  console.log(user);
   let participatingEvents = await EventParticipant.getEventParticipantsByUser(
     user,
+    null,
     true
   );
+
   let eventIds = participatingEvents
     .map((pe: any) => pe.event)
     .map((event: any) => event.id);
-  return await getEventByEventId(eventIds);
+  if (eventIds.length > 0) {
+    return await getEventByEventId(eventIds);
+  }
+  return [];
 }
 
 export async function getAllEventsByDeadlineDate() {

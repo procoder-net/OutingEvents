@@ -191,7 +191,6 @@ class DemoForm extends React.Component {
     this.handleDefaultImage();
     return (
       <Container className="eventForm">
-        <h2>Add an Event</h2>
         <Form className="form" onSubmit={e => this.submitForm(e)}>
           <Col>
             <FormGroup>

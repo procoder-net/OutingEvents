@@ -30,7 +30,8 @@ const styles = theme => ({
   }
 });
 const EventList = data => {
-  let events = data.data.allEvents;
+  let events = data.data;
+  console.log(events);
   events = events.sort(function(a, b) {
     return new Date(a.event_date) - new Date(b.event_date);
   });

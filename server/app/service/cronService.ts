@@ -10,17 +10,16 @@ export async function CheckforEventDeadline() {
   let events = await getAllEventsByDeadlineDate();
   events.forEach(async (event: any) => {
     if (event.deadline_date > startDate && event.deadline_date <= endDate) {
-      let update = await updateEventNameByEventId(event.id, {
+      await updateEventNameByEventId(event.id, {
         state: "Active"
       });
-      console.log(update);
     }
   });
   return;
   /*let deadlineReachedEvent = events.each((event: any) => {
-if (startDate > event.deadline_date && endDate <= event.deadline_date) {
-console.log(event.deadline_date);
-}
-});*/
+  if (startDate > event.deadline_date && endDate <= event.deadline_date) {
+  console.log(event.deadline_date);
+  }
+  });*/
   //console.log(deadlineReachedEvent);
 }

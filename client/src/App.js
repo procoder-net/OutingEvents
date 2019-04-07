@@ -12,6 +12,7 @@ import { Security, SecureRoute, ImplicitCallback } from "@okta/okta-react";
 import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
 import SurveyPage from "./SurveyPage";
+import UserList from "./testProfile";
 function onAuthRequired({ history }) {
   history.push("/login");
 }
@@ -22,6 +23,27 @@ const config = {
 };
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    const email = [
+      {
+        name: "Mohammed Moyeen",
+        email: "procoder.net@gmail.com"
+      },
+      {
+        name: "Hari Krisha",
+        email: "hari@gmail.com"
+      },
+      {
+        name: "Moyeen Avaram",
+        email: "mohammed.moyeen@gmail.com"
+      }
+    ];
+    localStorage.setItem(
+      "user",
+      JSON.stringify(email[Math.floor(Math.random() * 3)])
+    );
+  }
   render() {
     return (
       <BrowserRouter>
@@ -43,6 +65,7 @@ class App extends React.Component {
             />
             <Route path="/implicit/callback" component={ImplicitCallback} />
             <SecureRoute exact path="/events" component={HomePage} />
+            <SecureRoute path="/user" component={UserList} />
             <SecureRoute path="/survey" component={SurveyPage} />
             <SecureRoute path="/addevent" component={EventAdd} />
             <SecureRoute path="/paymentRec" component={PaymentRec} />

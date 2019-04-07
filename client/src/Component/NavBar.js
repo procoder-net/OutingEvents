@@ -23,7 +23,8 @@ class NavBar extends Component {
       authenticated: null,
       inAddEventPage: false,
       currentRoute: "/",
-      previousRoute: ""
+      previousRoute: "",
+      userInfo: null
     };
     this.checkAuthentication = this.checkAuthentication.bind(this);
     this.checkAuthentication();
@@ -36,10 +37,16 @@ class NavBar extends Component {
     const authenticated = await this.props.auth.isAuthenticated();
     if (authenticated !== this.state.authenticated) {
       this.setState({ authenticated });
+      if (authenticated && !this.state.userinfo) {
+        const userinfo = await this.props.auth.getUser();
+        this.setState({ authenticated, userinfo });
+      } else {
+        this.setState({ authenticated });
+      }
     }
   }
-  componentDidUpdate() {
-    this.checkAuthentication();
+  async componentDidUpdate() {
+    await this.checkAuthentication();
   }
 
   async login() {
@@ -49,12 +56,14 @@ class NavBar extends Component {
 
   async logout() {
     // Redirect to '/' after logout
+    localStorage.removeItem("user");
     this.props.auth.logout("/");
   }
 
   async gotoEvent() {
     this.setState({
-      inAddEventPage: true
+      inAddEventPage: true,
+      currentRoute: "/addevent"
     });
     this.props.history.push("/addevent");
   }

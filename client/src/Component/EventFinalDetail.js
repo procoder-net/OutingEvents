@@ -109,6 +109,8 @@ class EventFinalDetail extends React.Component {
     super(props);
     this.state = props.data;
     this.state.classes = props.classes;
+    let user = JSON.parse(localStorage.getItem("user"));
+    this.state.user = user;
   }
   render() {
     const { classes, user, onRSVPChange, event, invitees } = this.state;
@@ -236,9 +238,7 @@ class EventFinalDetail extends React.Component {
                       <div className={classes.cardDetails}>
                         <CardContent align="center">
                           <Avatar className={classes.avatar}>
-                            {/*invitees[event.organizerid].name.match(/\b\w/g) ||
-                                                            "??"*/
-                            invitees[0].name.charAt(0)}
+                            {this.state.user.name.match(/\b\w/g) || "??"}
                           </Avatar>
                           <Typography
                             component="h2"
@@ -247,7 +247,7 @@ class EventFinalDetail extends React.Component {
                           >
                             {
                               /*invitees[event.organizerid].name*/
-                              invitees[0].name
+                              this.state.user.name
                             }
                           </Typography>
                           <Typography
