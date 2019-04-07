@@ -22,6 +22,7 @@ import Markdown from "./Markdown";
 import EventDetail from "./event-detail.md";
 import InvitationDecision from "./InvitationDecision";
 import { sizing } from "@material-ui/system";
+import { Link as RouterLink } from "react-router-dom";
 
 const styles = theme => ({
   "@global": {
@@ -104,6 +105,7 @@ const social = ["GitHub", "Twitter", "Facebook"];
 function handleRSVPChange(value) {
   console.log("handleRSVPChange ==>", value);
 }
+
 class EventFinalDetail extends React.Component {
   constructor(props) {
     super(props);
@@ -112,9 +114,9 @@ class EventFinalDetail extends React.Component {
     let user = JSON.parse(localStorage.getItem("user"));
     this.state.user = user;
   }
+
   render() {
     const { classes, user, onRSVPChange, event, invitees } = this.state;
-    console.log(event);
     return (
       <React.Fragment>
         <CssBaseline />
@@ -130,10 +132,23 @@ class EventFinalDetail extends React.Component {
             >
               Event Final Detail
             </Typography>
-            {/*  <InvitationDecision
-                            rsvp={invitees[user.inviteeid].rsvp}
-                            onChange={handleRSVPChange}
-                        /> */}
+            <RouterLink
+              style={{ paddingRight: "15px" }}
+              to={{ pathname: "/payments", state: this.state }}
+            >
+              Complete Event
+            </RouterLink>
+            <Button
+              href="/surveyCounts"
+              style={{
+                paddingRight: "15px",
+                border: "2px",
+                borderStyle: "dotted"
+              }}
+            >
+              Survey Results
+            </Button>
+            <InvitationDecision rsvp={"going"} onChange={handleRSVPChange} />
           </Toolbar>
           <main>
             {/* Main featured event */}
@@ -191,9 +206,12 @@ class EventFinalDetail extends React.Component {
                             component="h5"
                             variant="h5"
                             align="center"
-                            style={{ fontSize: "15px" }}
+                            style={{ fontSize: "15px", fontWeight: "bold" }}
                           >
-                            {invitee.name}
+                            {invitee.name.substring(
+                              0,
+                              invitee.name.lastIndexOf("@")
+                            )}
                           </Typography>
                           <Typography
                             variant="subtitle1"

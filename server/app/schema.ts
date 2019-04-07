@@ -80,11 +80,22 @@ type Receipt{
 
 type Payment{
     id: Int
-    event_participant: EventParticipant
+    user: String
     status: String
     description: String
     amount: Int
     currency: String
+    event_id: Int
+}
+
+input PaymentInput{
+    participant_id: Int
+    user: String
+    status: String
+    description: String
+    amount: Int
+    currency: String
+    event_id: Int
 }
 
 input SurveyResultInput{
@@ -115,6 +126,16 @@ type User{
     participated_events: [Event]
 }
 
+type AnswerCount{
+    answer: String
+    count: Int
+}
+
+type SurveyCountResult{
+    question: String
+    answers: [AnswerCount]
+}
+
 type Query {
     allEvents: [Event]
     allEventsByUser(user: String!): [Event]
@@ -133,6 +154,7 @@ type Query {
     getReceiptByEvent(event_id: Int): [Receipt]
     getPaymentByEvent(event_id: Int): [Payment]
     getSurveyResponsesByQuestionId(survey_question_id: Int): [SurveyResult]
+    getCountedSurveyResultsByEvent(event_id: Int): [SurveyCountResult]
     getAllUserProfiles: [User]
     getUserProfile(id: Int): User
 }
@@ -154,5 +176,6 @@ type Mutation {
     createPayment(event_id: Int, user_id: Int, payment_status: String, amount: Int, currency: String, description: String): Payment
     updatePaymentStatus(id: Int, new_status: String): Payment
     createUserProfile(first_name: String, last_name: String, email: String, username: String, password: String): User
+    createPaymentEntry(payments: [PaymentInput]): [Payment]
 }
 `;

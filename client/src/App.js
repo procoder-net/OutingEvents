@@ -7,10 +7,13 @@ import Home from "./Home";
 import Login from "./Component/auth/Login";
 import PaymentRec from "./Component/PaymentRec";
 import EventAdd from "./EventAdd";
+import AddPayment from "./Component/AddPayment";
+
 import EventFinalDetail from "./EventFinalDetail";
 import { Security, SecureRoute, ImplicitCallback } from "@okta/okta-react";
 import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
+import SurveyCountsPage from "./SurveyCountsPage";
 import SurveyPage from "./SurveyPage";
 import UserList from "./testProfile";
 function onAuthRequired({ history }) {
@@ -25,24 +28,6 @@ const config = {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    const email = [
-      {
-        name: "Mohammed Moyeen",
-        email: "procoder.net@gmail.com"
-      },
-      {
-        name: "Hari Krisha",
-        email: "hari@gmail.com"
-      },
-      {
-        name: "Moyeen Avaram",
-        email: "mohammed.moyeen@gmail.com"
-      }
-    ];
-    localStorage.setItem(
-      "user",
-      JSON.stringify(email[Math.floor(Math.random() * 3)])
-    );
   }
   render() {
     return (
@@ -69,7 +54,9 @@ class App extends React.Component {
             <SecureRoute path="/survey" component={SurveyPage} />
             <SecureRoute path="/addevent" component={EventAdd} />
             <SecureRoute path="/paymentRec" component={PaymentRec} />
+            <SecureRoute path="/payments" component={AddPayment} />
             <SecureRoute path="/eventDetail/:id" component={EventFinalDetail} />
+            <SecureRoute path="/surveyCounts" component={SurveyCountsPage} />
           </div>
         </Security>
       </BrowserRouter>

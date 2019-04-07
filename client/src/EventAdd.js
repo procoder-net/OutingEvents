@@ -11,11 +11,11 @@ import { Typography, Paper } from "@material-ui/core";
 import LoadingOverlay from "react-loading-overlay";
 const styles = theme => ({
   layout: {
-    width: "60%",
+    width: "90%",
     marginLeft: theme.spacing(3),
     marginRight: theme.spacing(3),
     [theme.breakpoints.up(1000 + theme.spacing(3 * 2))]: {
-      width: "60%",
+      width: "90%",
       marginLeft: "auto",
       marginRight: "auto"
     }

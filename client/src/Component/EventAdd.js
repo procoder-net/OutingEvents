@@ -27,21 +27,16 @@ class DemoForm extends React.Component {
       deadlinetime: "",
       eventdescription: "",
       invitablelist: [
-        { value: "abc@gmail.com", label: "Moyeen" },
-        { value: "abc2@gmail.com", label: "Shravan" },
+        { value: "procoder.net@gmail.com", label: "Moyeen" },
+        { value: "mohammed.moyeen@gmail.com", label: "Shravan" },
         { value: "abc3@gmail.com", label: "Debbie" },
-        { value: "abc4@gmail.com", label: "Hari" },
+        { value: "hari@gmail.com", label: "Hari" },
         { value: "abc5@gmail.com", label: "Arturo" },
         { value: "abc6@gmail.com", label: "Kyrylo" },
         { value: "abc7@gmail.com", label: "Debbie" }
       ],
       invited: [],
-      surveyOptions: [
-        { value: "survey1", label: "survey1" },
-        { value: "survey2", label: "survey2" },
-        { value: "survey3", label: "survey3" },
-        { value: "survey5", label: "survey4" }
-      ],
+      surveyOptions: [{ value: "survey1", label: "survey1" }],
       selectedSurvey: {},
       typeList: [
         { value: "Ski", label: "Ski" },

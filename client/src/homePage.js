@@ -30,7 +30,7 @@ class HomePage extends React.Component {
             query={GET_ALL_EVENTS}
             variables={{ user: this.state.user.email }}
           >
-            {({ data, loading, error }) => {
+            {({ data, loading, error, refetch }) => {
               // console.log(this.filterData(data));
               if (loading) return <div>Loading.....</div>;
               if (error) return <div>Error...</div>;

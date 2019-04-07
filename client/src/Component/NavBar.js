@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Button, Link } from "@material-ui/core";
 import { withAuth } from "@okta/okta-react";
 import { compose } from "redux";
 import styled from "styled-components";
@@ -57,6 +57,24 @@ class NavBar extends Component {
   async logout() {
     // Redirect to '/' after logout
     localStorage.removeItem("user");
+    const email = [
+      {
+        name: "Mohammed Moyeen",
+        email: "procoder.net@gmail.com"
+      },
+      {
+        name: "Hari Krisha",
+        email: "hari@gmail.com"
+      },
+      {
+        name: "Moyeen Avaram",
+        email: "mohammed.moyeen@gmail.com"
+      }
+    ];
+    localStorage.setItem(
+      "user",
+      JSON.stringify(email[Math.floor(Math.random() * 3)])
+    );
     this.props.auth.logout("/");
   }
 
@@ -76,7 +94,7 @@ class NavBar extends Component {
         <AppBar position="static" position="relative">
           <Toolbar>
             <Typography variant="h6" color="inherit" noWrap>
-              Orgo Events
+              <Link to="/">Orgo Events</Link>
             </Typography>
             <div style={{ marginLeft: "auto" }}>
               {isLoggedIn && !inAddEventPage && (
