@@ -23,12 +23,14 @@
     "url": "https://github.com/procoder-net/OutingEvents/issues"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1",
+    "concurrently": "^4.1.0",
     "nodemon": "1.18.10"
   },
   "homepage": "https://github.com/procoder-net/OutingEvents#readme",
   "dependencies": {
+    "chart.js": "^2.8.0",
     "graphql": "^14.1.1",
+    "react-chartkick": "^0.3.0",
     "reflect-metadata": "^0.1.10",
     "typeorm": "0.2.15"
   }

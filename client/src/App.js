@@ -13,6 +13,7 @@ import EventFinalDetail from "./EventFinalDetail";
 import { Security, SecureRoute, ImplicitCallback } from "@okta/okta-react";
 import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
+import SurveyCountsPage from "./SurveyCountsPage";
 import SurveyPage from "./SurveyPage";
 function onAuthRequired({ history }) {
   history.push("/login");
@@ -50,6 +51,7 @@ class App extends React.Component {
             <SecureRoute path="/paymentRec" component={PaymentRec} />
             <SecureRoute path="/payments" component={AddPayment} />
             <SecureRoute path="/eventDetail/:id" component={EventFinalDetail} />
+            <SecureRoute path="/surveyCounts" component={SurveyCountsPage} />
           </div>
         </Security>
       </BrowserRouter>

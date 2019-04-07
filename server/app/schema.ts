@@ -126,6 +126,16 @@ type User{
     participated_events: [Event]
 }
 
+type AnswerCount{
+    answer: String
+    count: Int
+}
+
+type SurveyCountResult{
+    question: String
+    answers: [AnswerCount]
+}
+
 type Query {
     allEvents: [Event]
     allEventsByUser(user: String!): [Event]
@@ -144,6 +154,7 @@ type Query {
     getReceiptByEvent(event_id: Int): [Receipt]
     getPaymentByEvent(event_id: Int): [Payment]
     getSurveyResponsesByQuestionId(survey_question_id: Int): [SurveyResult]
+    getCountedSurveyResultsByEvent(event_id: Int): [SurveyCountResult]
     getAllUserProfiles: [User]
     getUserProfile(id: Int): User
 }
