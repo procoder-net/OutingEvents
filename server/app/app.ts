@@ -2,11 +2,11 @@ import "reflect-metadata";
 const express = require("express");
 require("dotenv").config({ path: "variables.env" });
 import Event from "./entity/Event";
-
+const cron = require("node-cron");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 import connectORM from "./connection";
-import { getConnection, createConnection, ConnectionOptions } from "typeorm";
+import { CheckforEventDeadline } from "./service/cronService";
 
 const app = express();
 const corsOptions = {
@@ -14,6 +14,11 @@ const corsOptions = {
   credentials: true
 };
 app.use(cors());
+
+cron.schedule("* * * * *", function() {
+  CheckforEventDeadline();
+});
+
 connectORM
   .connect()
   .then(async connection => {

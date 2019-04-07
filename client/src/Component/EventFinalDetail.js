@@ -22,6 +22,7 @@ import Markdown from "./Markdown";
 import EventDetail from "./event-detail.md";
 import InvitationDecision from "./InvitationDecision";
 import { sizing } from "@material-ui/system";
+import { Link as RouterLink } from "react-router-dom";
 
 const styles = theme => ({
   "@global": {
@@ -104,15 +105,16 @@ const social = ["GitHub", "Twitter", "Facebook"];
 function handleRSVPChange(value) {
   console.log("handleRSVPChange ==>", value);
 }
+
 class EventFinalDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = props.data;
     this.state.classes = props.classes;
   }
+
   render() {
     const { classes, user, onRSVPChange, event, invitees } = this.state;
-    console.log(event);
     return (
       <React.Fragment>
         <CssBaseline />
@@ -137,7 +139,10 @@ class EventFinalDetail extends React.Component {
             {/* Main featured event */}
             <Paper
               className={classes.mainFeaturedEvent}
-              style={{ backgroundImage: `url(${event.image})` }}
+              style={{
+                backgroundImage: `url(${event.image})`,
+                backgroundSize: "1244px 362px"
+              }}
             >
               {/* Increase the priority of the hero background image */}
               {
@@ -259,6 +264,12 @@ class EventFinalDetail extends React.Component {
                     </Card>
                   </CardActionArea>
                 </Paper>
+
+                <Button>
+                  <RouterLink to={{ pathname: "/payments", state: this.state }}>
+                    Complete Event
+                  </RouterLink>
+                </Button>
 
                 <Typography
                   variant="h6"

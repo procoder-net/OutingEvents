@@ -65,8 +65,8 @@ exports.resolvers = {
     },
 
     /* getSurveyQuestionsByEventId: (root: any, args: any) => {
-                         return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
-                     }, */
+                             return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
+                         }, */
     getAllEventParticipants: (root: any, args: any) => {
       return eventParticipantService.getEventParticipants(args.event_id);
     },
@@ -78,8 +78,8 @@ exports.resolvers = {
     },
     getSurveyResponsesByQuestionId: (root: any, args: any) => {
       /*return surveyQuestionService.getSurveyResultByQuestionId(
-                                  args.survey_question_id
-                              ); */
+                                        args.survey_question_id
+                                    ); */
     },
     getAllUserProfiles: (root: any, args: any) => {
       return userService.getAllUserProfiles();
@@ -186,15 +186,15 @@ exports.resolvers = {
       return response;
     },
     /*  updateEventNameByEventId: (root: any, args: any) => {
-                                              return eventService.updateEventNameByEventId(
-                                                  {
-                                                      id: args.id,
-                                                      name: args.name
-                                                  },
-                                                  { id: args.id, name: args.name }
-                                              );
-                                              console.log(args);
-                                          }, */
+                                                  return eventService.updateEventNameByEventId(
+                                                      {
+                                                          id: args.id,
+                                                          name: args.name
+                                                      },
+                                                      { id: args.id, name: args.name }
+                                                  );
+                                                  console.log(args);
+                                              }, */
 
     deleteEventById: (root: any, args: any) => {
       return eventService.deleteEventById(args.id);
@@ -209,19 +209,19 @@ exports.resolvers = {
         args.question
       );
       /*    return surveyQuestionService.createSurveyQuestion(
-                                                        { name: args.name, questions: args.questions },
-                                                        { event_id: args.event_id }
-                                                    );*/
+                                                              { name: args.name, questions: args.questions },
+                                                              { event_id: args.event_id }
+                                                          );*/
     },
     deleteSurveyQuestion: (root: any, args: any) => {
       return surveyQuestionService.deleteSurveyQuestion(args.id);
     },
     addEventParticipant: (root: any, args: any) => {
       /*return eventParticipantService.addEventParticipant(
-                                                                args.usernemail,
-                                                                args.event_id,
-                                                                args.is_organizer
-                                                            );*/
+                                                                      args.usernemail,
+                                                                      args.event_id,
+                                                                      args.is_organizer
+                                                                  );*/
     },
     updateEventParticipant: (root: any, args: any) => {
       const updatedStatus = {
@@ -251,19 +251,27 @@ exports.resolvers = {
     deleteReceipt: (root: any, args: any) => {
       return receiptService.deleteReceipt(args.id);
     },
-    createPayment: (root: any, args: any) => {
-      const paymentDetails = {
-        currency: args.currency,
-        description: args.description,
-        amount: args.amount
-      };
-      return paymentService.createPayment(
-        args.event_id,
-        args.user_id,
-        args.payment_status,
-        paymentDetails
-      );
+
+    createPaymentEntry: (root: any, args: any) => {
+      const result: any = [];
+      args.payments.forEach((payment: any) => {
+        const paymentDetails = {
+          currency: payment.currency,
+          description: payment.description || "",
+          amount: payment.amount
+        };
+        result.push(
+          paymentService.createPayment(
+            payment.event_id,
+            payment.participant_id,
+            payment.status,
+            paymentDetails
+          )
+        );
+      });
+      return result;
     },
+
     updatePaymentStatus: (root: any, args: any) => {
       const filter = {
         id: args.id

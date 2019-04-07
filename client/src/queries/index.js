@@ -72,3 +72,11 @@ export const GET_COUNTED_SURVEYS = gql`
     }
   }
 `;
+
+export const ADD_PAYMENT = gql`
+  mutation($payments: [PaymentInput]) {
+    createPaymentEntry(payments: $payments) {
+      event_id
+    }
+  }
+`;

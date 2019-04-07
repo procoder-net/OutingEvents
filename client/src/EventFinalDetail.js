@@ -12,6 +12,7 @@ class EventFinalDetail extends React.Component {
   }
   BuildData = data => {
     let event = {
+      id: data.id,
       title: data.name,
       description: data.description,
       image: data.image,
@@ -26,6 +27,7 @@ class EventFinalDetail extends React.Component {
     };
     let invitees = data.event_participants.map(ep => {
       return {
+        id: ep.id,
         name: ep.user,
         rsvp: ep.confirmed ? "going" : "not going"
       };
