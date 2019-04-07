@@ -22,7 +22,7 @@ export async function createPayment(
     .getRepository(Event)
     .findOne(event_id, { relations: ["payments"] });
   if (eventParticipant) {
-    eventParticipant.payments.push(payment);
+    payment.event_participant = eventParticipant;
     event.payments.push(payment);
     await connectORM.getRepository(EventParticipant).save(eventParticipant);
     await connectORM.getRepository(Event).save(event);

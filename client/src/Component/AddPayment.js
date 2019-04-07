@@ -5,8 +5,6 @@ import Select from "react-select";
 import {
   Input,
   Button,
-  ListGroup,
-  ListGroupItem,
   Row,
   Col,
   Container,
@@ -15,14 +13,15 @@ import {
   FormGroup,
   Form
 } from "reactstrap";
-import ReactDOM from "react-dom";
-const options = [
-  { value: "abc@gmail.com", label: "Moyeen" },
+import { ADD_PAYMENT } from "./../queries";
+import { Mutation } from "react-apollo";
+var options = [
+  /*{ value: "abc@gmail.com", label: "Moyeen" },
   { value: "abc2@gmail.com", label: "Shravan" },
   { value: "abc3@gmail.com", label: "Debbie" },
   { value: "abc4@gmail.com", label: "Hari" },
   { value: "abc5@gmail.com", label: "Arturo" },
-  { value: "abc6@gmail.com", label: "Kyrylo" }
+  { value: "abc6@gmail.com", label: "Kyrylo" }*/
 ];
 
 const boxStyle = {};
@@ -33,17 +32,31 @@ const currencies = [
   { value: "jpy", label: "Japanese Yen" }
 ];
 
+const submitForm = () => {
+  /*return (
+      <Mutation mutation={ADD_PAYMENT}>
+          {(addSurvey, { data }) => (
+              <SurveyDisplay
+                  json={JSON.parse(surveyq.survey.questions)}
+                  submitSurvey={this.submitSurvey}
+                  surveyMutation={addSurvey}
+              />
+          )}
+      </Mutation>
+  );*/
+};
+
 const TableContent = props => {
   return props.payments.map((payment, index) => {
     return (
       <tbody>
         <tr>
           <th scope="row">{index}</th>
-          <td>{payment.name}</td>
+          <td>{payment.user}</td>
           <td>
             {payment.amount} {payment.currency}
           </td>
-          <td>N</td>
+          <td>{payment.status}</td>
         </tr>
       </tbody>
     );
@@ -51,17 +64,47 @@ const TableContent = props => {
 };
 
 class AddPayment extends React.Component {
-  state = {
-    payments: [{ name: "Shravan", amount: 12, currency: "usd" }]
-  };
   constructor(props) {
+    options = props.location.state.invitees;
     super(props);
+    this.state = {
+      payments: [
+        {
+          participant_id: 1,
+          user: "user",
+          amount: 22,
+          currency: "usd",
+          status: "paid",
+          event_id: 1
+        }
+      ],
+      eventId: props.location.state.event.id
+    };
     this.handleChange = this.handleChange.bind(this);
     this.setCurrencyChange = this.setCurrencyChange.bind(this);
-    this.handleSubmitPayment = this.handleSubmitPayment.bind(this);
     this.handleAddPayment = this.handleAddPayment.bind(this);
     this.setCurrencyChange = this.setCurrencyChange.bind(this);
+    this.handlePaidStatus = this.handlePaidStatus.bind(this);
   }
+
+  handleAddPayment = event => {
+    const paymentList = this.state.payments;
+    const paymentInfo = {
+      participant_id: this.state.selectedInvitee.id,
+      user: this.state.selectedInvitee.label,
+      amount: this.state.selectedAmount,
+      currency: this.state.selectedCurrency.label,
+      status: this.state.status,
+      event_id: this.state.eventId
+    };
+    paymentList.push(paymentInfo);
+    this.setState({ payments: paymentList });
+    event.preventDefault();
+  };
+
+  handlePaidStatus = event => {
+    this.setState({ status: event.target.value });
+  };
 
   handleChange = selectedInvitee => {
     this.setState({ selectedInvitee });
@@ -73,23 +116,6 @@ class AddPayment extends React.Component {
   setAmountChange = event => {
     const selectedAmount = parseFloat(event.target.value);
     this.setState({ selectedAmount });
-  };
-
-  handleSubmitPayment = event => {
-    alert("payment was submitted ");
-    event.preventDefault();
-  };
-
-  handleAddPayment = event => {
-    const paymentList = this.state.payments;
-    const paymentInfo = {
-      name: this.state.selectedInvitee.label,
-      amount: this.state.selectedAmount,
-      currency: this.state.selectedCurrency.label
-    };
-    paymentList.push(paymentInfo);
-    this.setState({ payments: paymentList });
-    event.preventDefault();
   };
 
   render() {
@@ -119,7 +145,11 @@ class AddPayment extends React.Component {
                 <Select
                   value={selectedInvitee}
                   onChange={this.handleChange}
-                  options={options}
+                  options={options.map(invitee => ({
+                    label: invitee.name,
+                    value: invitee.name,
+                    id: invitee.id
+                  }))}
                   className="basic-multi-select"
                 />
               </FormGroup>
@@ -149,16 +179,30 @@ class AddPayment extends React.Component {
               </FormGroup>
             </Col>
             <Col>
-              <Label>Already paid?</Label>
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name="paid" /> Yes
-                </Label>
-              </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name="paid" /> No
-                </Label>
+              <FormGroup>
+                <Label>Already paid? </Label>
+                <Col>
+                  <Label check>
+                    <Input
+                      type="radio"
+                      name="paid"
+                      value="yes"
+                      onChange={this.handlePaidStatus}
+                    />
+                    Yes
+                  </Label>
+                </Col>
+                <Col>
+                  <Label check>
+                    <Input
+                      type="radio"
+                      name="paid"
+                      value="no"
+                      onChange={this.handlePaidStatus}
+                    />
+                    No
+                  </Label>
+                </Col>
               </FormGroup>
             </Col>
             <Col>
@@ -168,9 +212,26 @@ class AddPayment extends React.Component {
 
           <Row>
             <Col>
-              <Button onClick={this.handleSubmitPayment}>
-                Submit All Payment(s)
-              </Button>
+              <Mutation mutation={ADD_PAYMENT}>
+                {(addPayment, { data }) => (
+                  <Button
+                    onClick={e => {
+                      e.preventDefault();
+                      addPayment({
+                        variables: {
+                          payments: this.state.payments
+                        }
+                      }).then(() => {
+                        this.props.history.push({
+                          pathname: `/eventDetail/${this.state.eventId}`
+                        });
+                      });
+                    }}
+                  >
+                    Submit All Payments
+                  </Button>
+                )}
+              </Mutation>
             </Col>
           </Row>
         </Form>

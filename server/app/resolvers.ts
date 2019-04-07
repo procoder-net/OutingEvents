@@ -244,18 +244,24 @@ exports.resolvers = {
     deleteReceipt: (root: any, args: any) => {
       return receiptService.deleteReceipt(args.id);
     },
-    createPayment: (root: any, args: any) => {
-      const paymentDetails = {
-        currency: args.currency,
-        description: args.description,
-        amount: args.amount
-      };
-      return paymentService.createPayment(
-        args.event_id,
-        args.user_id,
-        args.payment_status,
-        paymentDetails
-      );
+    createPaymentEntry: (root: any, args: any) => {
+      const result: any = [];
+      args.payments.forEach((payment: any) => {
+        const paymentDetails = {
+          currency: payment.currency,
+          description: payment.description || "",
+          amount: payment.amount
+        };
+        result.push(
+          paymentService.createPayment(
+            payment.event_id,
+            payment.participant_id,
+            payment.status,
+            paymentDetails
+          )
+        );
+      });
+      return result;
     },
     updatePaymentStatus: (root: any, args: any) => {
       const filter = {

@@ -60,3 +60,11 @@ export const GET_SURVEY_QUESTION = gql`
     }
   }
 `;
+
+export const ADD_PAYMENT = gql`
+  mutation($payments: [PaymentInput]) {
+    createPaymentEntry(payments: $payments) {
+      event_id
+    }
+  }
+`;
