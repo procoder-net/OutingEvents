@@ -10,7 +10,7 @@ const styles = theme => ({
     width: "80%",
     marginLeft: theme.spacing(3),
     marginRight: theme.spacing(3),
-    [theme.breakpoints.up(1000 + theme.spacing(3 * 2))]: {
+    [theme.breakpoints.up(600 + theme.spacing(3 * 2))]: {
       width: "80%",
       marginLeft: "auto",
       marginRight: "auto"
@@ -23,7 +23,7 @@ const styles = theme => ({
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
     padding: theme.spacing(2),
-    [theme.breakpoints.up(1000 + theme.spacing(3 * 2))]: {
+    [theme.breakpoints.up(600 + theme.spacing(3 * 2))]: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
       padding: theme.spacing(3)
@@ -35,10 +35,10 @@ const SurveyCounts = data => {
   let { classes } = data;
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
-      <Grid container spacing={8}>
+      <Grid container spacing={4}>
         {questions.map(question => (
           // <Grid item key={event.id} xs={8} md={6} lg={3} xl={2}>
-          <Grid item key={question.question} xs={12}>
+          <Grid item key={question.question} xs={6}>
             <QuestionCount question={question} />
           </Grid>
         ))}

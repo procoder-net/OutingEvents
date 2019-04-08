@@ -111,10 +111,13 @@ class EventFinalDetail extends React.Component {
     super(props);
     this.state = props.data;
     this.state.classes = props.classes;
+    let user = JSON.parse(localStorage.getItem("user"));
+    this.state.user = user;
   }
 
   render() {
     const { classes, user, onRSVPChange, event, invitees } = this.state;
+    const surveyResultUrl = "/surveyCounts/" + event.id;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -130,10 +133,23 @@ class EventFinalDetail extends React.Component {
             >
               Event Final Detail
             </Typography>
-            {/*  <InvitationDecision
-                            rsvp={invitees[user.inviteeid].rsvp}
-                            onChange={handleRSVPChange}
-                        /> */}
+            <RouterLink
+              style={{ paddingRight: "15px" }}
+              to={{ pathname: "/payments", state: this.state }}
+            >
+              Complete Event
+            </RouterLink>
+            <Button
+              href={surveyResultUrl}
+              style={{
+                paddingRight: "15px",
+                border: "2px",
+                borderStyle: "dotted"
+              }}
+            >
+              Survey Results
+            </Button>
+            <InvitationDecision rsvp={"going"} onChange={handleRSVPChange} />
           </Toolbar>
           <main>
             {/* Main featured event */}
@@ -191,9 +207,12 @@ class EventFinalDetail extends React.Component {
                             component="h5"
                             variant="h5"
                             align="center"
-                            style={{ fontSize: "15px" }}
+                            style={{ fontSize: "15px", fontWeight: "bold" }}
                           >
-                            {invitee.name}
+                            {invitee.name.substring(
+                              0,
+                              invitee.name.lastIndexOf("@")
+                            )}
                           </Typography>
                           <Typography
                             variant="subtitle1"
@@ -238,9 +257,7 @@ class EventFinalDetail extends React.Component {
                       <div className={classes.cardDetails}>
                         <CardContent align="center">
                           <Avatar className={classes.avatar}>
-                            {/*invitees[event.organizerid].name.match(/\b\w/g) ||
-                                                            "??"*/
-                            invitees[0].name.charAt(0)}
+                            {this.state.user.name.match(/\b\w/g) || "??"}
                           </Avatar>
                           <Typography
                             component="h2"
@@ -249,7 +266,7 @@ class EventFinalDetail extends React.Component {
                           >
                             {
                               /*invitees[event.organizerid].name*/
-                              invitees[0].name
+                              this.state.user.name
                             }
                           </Typography>
                           <Typography
@@ -264,12 +281,6 @@ class EventFinalDetail extends React.Component {
                     </Card>
                   </CardActionArea>
                 </Paper>
-
-                <Button>
-                  <RouterLink to={{ pathname: "/payments", state: this.state }}>
-                    Complete Event
-                  </RouterLink>
-                </Button>
 
                 <Typography
                   variant="h6"

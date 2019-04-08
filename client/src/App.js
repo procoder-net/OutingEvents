@@ -15,6 +15,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import "./App.css";
 import SurveyCountsPage from "./SurveyCountsPage";
 import SurveyPage from "./SurveyPage";
+import UserList from "./testProfile";
 function onAuthRequired({ history }) {
   history.push("/login");
 }
@@ -25,6 +26,9 @@ const config = {
 };
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <BrowserRouter>
@@ -46,12 +50,16 @@ class App extends React.Component {
             />
             <Route path="/implicit/callback" component={ImplicitCallback} />
             <SecureRoute exact path="/events" component={HomePage} />
-            <SecureRoute path="/survey" component={SurveyPage} />
+            <SecureRoute path="/user" component={UserList} />
+            <SecureRoute path="/survey/:id" component={SurveyPage} />
             <SecureRoute path="/addevent" component={EventAdd} />
             <SecureRoute path="/paymentRec" component={PaymentRec} />
             <SecureRoute path="/payments" component={AddPayment} />
             <SecureRoute path="/eventDetail/:id" component={EventFinalDetail} />
-            <SecureRoute path="/surveyCounts" component={SurveyCountsPage} />
+            <SecureRoute
+              path="/surveyCounts/:id"
+              component={SurveyCountsPage}
+            />
           </div>
         </Security>
       </BrowserRouter>

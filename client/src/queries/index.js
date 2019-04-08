@@ -1,13 +1,20 @@
 import { gql } from "apollo-boost";
 
 export const GET_ALL_EVENTS = gql`
-  query {
-    allEvents {
+  query allEventsByUser($user: String!) {
+    allEventsByUser(user: $user) {
       id
       name
       description
       image
       event_date
+      event_participants {
+        user
+        id
+        is_organizer
+        confirmed
+        attended
+      }
     }
   }
 `;
@@ -53,10 +60,14 @@ export const ADD_EVENT = gql`
 
 export const GET_SURVEY_QUESTION = gql`
   query getSurveyQuestion($id: Int!) {
-    survey(surveyId: $id) {
+    event(eventId: $id) {
       id
-      user
-      questions
+      name
+      survey {
+        id
+        formattedquestions
+        questions
+      }
     }
   }
 `;

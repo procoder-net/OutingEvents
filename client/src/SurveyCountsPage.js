@@ -9,10 +9,20 @@ import { GET_ALL_EVENTS } from "./queries";
 import { GET_COUNTED_SURVEYS } from "./queries";
 
 class SurveyCountsDisplay extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: props.match.params.id
+    };
+  }
   render() {
+    const { id } = this.state;
     return (
       <div className="App">
-        <Query query={GET_COUNTED_SURVEYS} variables={{ eventId: 1 }}>
+        <Query
+          query={GET_COUNTED_SURVEYS}
+          variables={{ eventId: parseInt(id) }}
+        >
           {({ data, loading, error }) => {
             if (loading) return <div>Loading.....</div>;
             if (error) return <div>Error...</div>;

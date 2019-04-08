@@ -27,6 +27,12 @@ function authenticationRequired(req: any, res: any, next: any) {
     .verifyAccessToken(accessToken)
     .then((jwt: any) => {
       req.jwt = jwt;
+      req.user = {
+        email: jwt.claims.sub,
+        oauthId: jwt.claims.uid
+      };
+      // check if user exists in Db
+      console.log(req);
       next();
     })
     .catch((err: any) => {

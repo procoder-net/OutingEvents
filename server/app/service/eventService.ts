@@ -33,12 +33,17 @@ export async function getAllEventsByUser(
   let relations = populateRelations ? populate : [];
   let participatingEvents = await EventParticipant.getEventParticipantsByUser(
     user,
+    null,
     true
   );
+
   let eventIds = participatingEvents
     .map((pe: any) => pe.event)
     .map((event: any) => event.id);
-  return await getEventByEventId(eventIds);
+  if (eventIds.length > 0) {
+    return await getEventByEventId(eventIds);
+  }
+  return [];
 }
 
 export async function getAllEventsByDeadlineDate() {
@@ -101,7 +106,8 @@ export async function addEvent(
   event_date: Date,
   deadline_date: Date,
   invites: [string],
-  image: string
+  image: string,
+  emailHost: string
 ) {
   const event = new Event();
   event.type = type;
@@ -129,7 +135,13 @@ export async function addEvent(
       false
     );
   });
-  await sendSurveyEmail(createdEvent.id, createdEvent.name, survey_id, invites);
+  await sendSurveyEmail(
+    createdEvent.id,
+    createdEvent.name,
+    survey_id,
+    invites,
+    emailHost
+  );
   return createdEvent;
 }
 

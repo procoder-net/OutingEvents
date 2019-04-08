@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { blue } from "@material-ui/core/colors";
 const descriptionLen = 100;
 const titleLen = 20;
+import "./event.css";
 
 const styles = theme => ({
   card: {
@@ -67,7 +68,7 @@ class Event extends React.Component {
               <CardHeader
                 avatar={
                   <Avatar aria-label="Recipe" className={classes.avatar}>
-                    R
+                    {name.charAt(0).toUpperCase()}
                   </Avatar>
                 }
                 action={

@@ -5,7 +5,10 @@ const { resolvers } = require("../resolvers");
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: ({ req }: any) => ({
+    req
+  })
 });
 
 export default server;

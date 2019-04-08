@@ -32,12 +32,13 @@ module.exports = function(app: express.Application) {
       `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
     )
   );
-  app.get("/", authenticationRequired, (req: any, res: any) => {
-    if (req.userContext.userinfo) {
-      res.send(`Hi ${req.userContext.userinfo.name}!`);
-    } else {
-      res.send("Hi!");
-    }
+  app.get("/api/auth", authenticationRequired, (req: any, res: any) => {
+    console.log(req);
+    /* if (req.userContext.userinfo) {
+            res.send(`Hi ${req.userContext.userinfo.name}!`);
+        } else {
+            res.send("Hi!");
+        } */
   });
 
   app.post("/api/upload", upload.single("photo"), (req: any, res: any) => {

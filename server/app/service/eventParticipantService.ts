@@ -39,7 +39,7 @@ export function removeEventParticipant(participant_id: number) {
 
 export function getEventParticipants(
   event_id: number,
-  id?: number,
+  id?: any,
   populateRelations = true
 ): any {
   let find: any = {
@@ -66,6 +66,7 @@ export function getEventParticipants(
 
 export function getEventParticipantsByUser(
   user: string,
+  event_id?: any,
   populateRelations = true
 ): any {
   let find: any = {
@@ -73,6 +74,9 @@ export function getEventParticipantsByUser(
       user: user
     }
   };
+  if (event_id) {
+    find.where.event = event_id;
+  }
   if (populateRelations) {
     find.relations = populate;
   }
