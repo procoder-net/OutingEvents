@@ -65,8 +65,8 @@ exports.resolvers = {
     },
 
     /* getSurveyQuestionsByEventId: (root: any, args: any) => {
-                             return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
-                         }, */
+                                 return surveyQuestionService.getSurveyQuestionsByEventId(args.event_id);
+                             }, */
     getAllEventParticipants: (root: any, args: any) => {
       return eventParticipantService.getEventParticipants(args.event_id);
     },
@@ -78,8 +78,8 @@ exports.resolvers = {
     },
     getSurveyResponsesByQuestionId: (root: any, args: any) => {
       /*return surveyQuestionService.getSurveyResultByQuestionId(
-                                        args.survey_question_id
-                                    ); */
+                                              args.survey_question_id
+                                          ); */
     },
     getAllUserProfiles: (root: any, args: any) => {
       return userService.getAllUserProfiles();
@@ -135,7 +135,7 @@ exports.resolvers = {
     }
   },
   Mutation: {
-    addEvent: async (root: any, args: any) => {
+    addEvent: async (root: any, args: any, context: any) => {
       const event = args.event;
       const eventDate: Date = new Date(
         event.eventDateTime.year,
@@ -146,7 +146,7 @@ exports.resolvers = {
       );
       const deadlineDate: Date = new Date(
         event.deadlineDatetime.year,
-        event.deadlineDatetime.month,
+        event.deadlineDatetime.month - 1,
         event.deadlineDatetime.day,
         event.deadlineDatetime.hour,
         event.deadlineDatetime.minute
@@ -155,13 +155,14 @@ exports.resolvers = {
         event.type,
         event.name,
         event.location,
-        "Draft",
+        "Survey",
         event.survey,
         event.description,
         eventDate,
         deadlineDate,
         event.invited,
-        event.image
+        event.image,
+        context.req.headers.host
       );
     },
     addSurvey: async (root: any, args: any) => {
@@ -186,15 +187,15 @@ exports.resolvers = {
       return response;
     },
     /*  updateEventNameByEventId: (root: any, args: any) => {
-                                                  return eventService.updateEventNameByEventId(
-                                                      {
-                                                          id: args.id,
-                                                          name: args.name
-                                                      },
-                                                      { id: args.id, name: args.name }
-                                                  );
-                                                  console.log(args);
-                                              }, */
+                                                      return eventService.updateEventNameByEventId(
+                                                          {
+                                                              id: args.id,
+                                                              name: args.name
+                                                          },
+                                                          { id: args.id, name: args.name }
+                                                      );
+                                                      console.log(args);
+                                                  }, */
 
     deleteEventById: (root: any, args: any) => {
       return eventService.deleteEventById(args.id);
@@ -209,19 +210,19 @@ exports.resolvers = {
         args.question
       );
       /*    return surveyQuestionService.createSurveyQuestion(
-                                                              { name: args.name, questions: args.questions },
-                                                              { event_id: args.event_id }
-                                                          );*/
+                                                                    { name: args.name, questions: args.questions },
+                                                                    { event_id: args.event_id }
+                                                                );*/
     },
     deleteSurveyQuestion: (root: any, args: any) => {
       return surveyQuestionService.deleteSurveyQuestion(args.id);
     },
     addEventParticipant: (root: any, args: any) => {
       /*return eventParticipantService.addEventParticipant(
-                                                                      args.usernemail,
-                                                                      args.event_id,
-                                                                      args.is_organizer
-                                                                  );*/
+                                                                            args.usernemail,
+                                                                            args.event_id,
+                                                                            args.is_organizer
+                                                                        );*/
     },
     updateEventParticipant: (root: any, args: any) => {
       const updatedStatus = {

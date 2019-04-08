@@ -39,7 +39,7 @@ export function removeEventParticipant(participant_id: number) {
 
 export function getEventParticipants(
   event_id: number,
-  id?: number,
+  id?: any,
   populateRelations = true
 ): any {
   let find: any = {

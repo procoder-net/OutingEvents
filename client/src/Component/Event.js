@@ -68,7 +68,7 @@ class Event extends React.Component {
               <CardHeader
                 avatar={
                   <Avatar aria-label="Recipe" className={classes.avatar}>
-                    R
+                    {name.charAt(0).toUpperCase()}
                   </Avatar>
                 }
                 action={

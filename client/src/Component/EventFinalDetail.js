@@ -117,6 +117,7 @@ class EventFinalDetail extends React.Component {
 
   render() {
     const { classes, user, onRSVPChange, event, invitees } = this.state;
+    const surveyResultUrl = "/surveyCounts/" + event.id;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -139,7 +140,7 @@ class EventFinalDetail extends React.Component {
               Complete Event
             </RouterLink>
             <Button
-              href="/surveyCounts"
+              href={surveyResultUrl}
               style={{
                 paddingRight: "15px",
                 border: "2px",

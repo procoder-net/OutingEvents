@@ -31,7 +31,6 @@ export async function getAllEventsByUser(
   populateRelations = true
 ) {
   let relations = populateRelations ? populate : [];
-  console.log(user);
   let participatingEvents = await EventParticipant.getEventParticipantsByUser(
     user,
     null,
@@ -107,7 +106,8 @@ export async function addEvent(
   event_date: Date,
   deadline_date: Date,
   invites: [string],
-  image: string
+  image: string,
+  emailHost: string
 ) {
   const event = new Event();
   event.type = type;
@@ -135,7 +135,13 @@ export async function addEvent(
       false
     );
   });
-  await sendSurveyEmail(createdEvent.id, createdEvent.name, survey_id, invites);
+  await sendSurveyEmail(
+    createdEvent.id,
+    createdEvent.name,
+    survey_id,
+    invites,
+    emailHost
+  );
   return createdEvent;
 }
 

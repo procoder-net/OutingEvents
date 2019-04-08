@@ -33,7 +33,8 @@ class SurveyPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      classes: props.classes
+      classes: props.classes,
+      eventId: props.match.params.id
     };
     this.surveyJson = require("./Component/survey.json");
     this.submitSurvey = this.submitSurvey.bind(this);
@@ -52,7 +53,7 @@ class SurveyPage extends React.Component {
     await mutate({ variables: i });
   };
   render() {
-    let { classes } = this.state;
+    let { classes, eventId } = this.state;
     return (
       <div className={classes.layout}>
         <Typography
@@ -66,16 +67,19 @@ class SurveyPage extends React.Component {
           Survey
         </Typography>
         <Paper className={classes.paper}>
-          <Query query={GET_SURVEY_QUESTION} variables={{ id: 1 }}>
+          <Query
+            query={GET_SURVEY_QUESTION}
+            variables={{ id: parseInt(eventId) }}
+          >
             {({ data, loading, error }) => {
               if (loading) return <div>Loading.....</div>;
               if (error) return <div>Error...</div>;
-              let surveyq = data;
+              let surveyq = data.event.survey[0];
               return (
                 <Mutation mutation={ADD_SURVEY_RESULT}>
                   {(addSurvey, { data }) => (
                     <SurveyDisplay
-                      json={JSON.parse(surveyq.survey.questions)}
+                      json={JSON.parse(surveyq.questions)}
                       submitSurvey={this.submitSurvey}
                       surveyMutation={addSurvey}
                     />

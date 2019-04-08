@@ -60,10 +60,14 @@ export const ADD_EVENT = gql`
 
 export const GET_SURVEY_QUESTION = gql`
   query getSurveyQuestion($id: Int!) {
-    survey(surveyId: $id) {
+    event(eventId: $id) {
       id
-      user
-      questions
+      name
+      survey {
+        id
+        formattedquestions
+        questions
+      }
     }
   }
 `;

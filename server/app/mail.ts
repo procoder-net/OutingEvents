@@ -14,13 +14,15 @@ const sendSurveyEmail = async (
   eventId: String,
   eventName: String,
   surveyId: String,
-  emailList: [String]
+  emailList: [String],
+  host: String
 ) => {
+  const surveyHost = host + "/survey/" + eventId;
   const options = {
     cc: emailList,
     from: "admin@orgo.com",
     subject: `Event Name ${eventName}`,
-    html: surveyEmail(eventName, "Moyeen", "http://localhost:8080/")
+    html: surveyEmail(eventName, "Moyeen", surveyHost)
   };
   await transport
     .sendMail(options)

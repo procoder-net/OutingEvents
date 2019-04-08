@@ -1,63 +1,27 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import red from "@material-ui/core/colors/red";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { Link } from "react-router-dom";
-import { blue } from "@material-ui/core/colors";
-
-import ReactChartkick, { LineChart, BarChart } from "react-chartkick";
-import Chart from "chart.js";
-
-var myBarChart = new Chart(ctx, {
-  type: "horizontalBar",
-  data: {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
-    datasets: [
-      {
-        label: "My First dataset",
-        backgroundColor: "rgb(255, 99, 132)",
-        borderColor: "rgb(255, 99, 132)",
-        data: [0, 10, 5, 2, 20, 30, 45]
-      }
-    ]
-  },
-  options: {}
-});
-
-ReactChartkick.addAdapter(myBarChart);
-
-const descriptionLen = 100;
-const titleLen = 20;
-
-const styles = theme => ({
-  card: {
-    width: "100%",
-    position: "relative",
-    display: "flex",
-    flexDirection: "column"
-  },
-  media: {
-    paddingTop: "56.25%" // 16:9
-  },
-  cardContent: {
-    height: "8%",
-    flexGrow: 1
-  },
-  status: {
-    position: "absolute",
-    bottom: "100px",
-    right: "16px",
-    color: "greenyellow",
-    zIndex: "10"
-  }
-});
+import { HorizontalBar } from "react-chartjs-2";
 
 class QuestionCount extends React.Component {
   constructor(props) {
     super(props);
     this.state = props;
     this.onClick = this.onClick.bind(this);
+    const { question } = this.state;
+    console.log(question);
+    this.chartData = {
+      labels: question.answers.map(ans => ans.answer),
+      datasets: [
+        {
+          label: question.question,
+          backgroundColor: "rgba(150,50,50,0.2)",
+          borderColor: "rgba(150,50,50,1)",
+          borderWidth: 1,
+          hoverBackgroundColor: "rgba(150,50,50,0.4)",
+          hoverBorderColor: "rgba(150,50,50,1)",
+          data: question.answers.map(ans => ans.count)
+        }
+      ]
+    };
   }
   onClick = e => {
     alert("clicked");
@@ -75,16 +39,10 @@ class QuestionCount extends React.Component {
 
     return (
       <div>
-        <Typography component="p">
-          {question.length > descriptionLen
-            ? question.substring(0, descriptionLen - 3) + "..."
-            : question}
-        </Typography>
-
-        <BarChart />
+        <HorizontalBar data={this.chartData} width={100} height={50} />
       </div>
     );
   }
 }
 
-export default withStyles(styles)(QuestionCount);
+export default QuestionCount;

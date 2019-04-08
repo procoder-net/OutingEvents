@@ -9,7 +9,10 @@ class SurveyDisplay extends React.Component {
     super(props);
     this.surveyJson = this.props.json;
     this.sendDataToServer = this.sendDataToServer.bind(this);
-    Survey.StylesManager.applyTheme("bootstrap");
+    Survey.defaultBootstrapMaterialCss.navigationButton = "btn btn-green";
+    Survey.defaultBootstrapMaterialCss.rating.item =
+      "btn btn-default my-rating";
+    Survey.StylesManager.applyTheme("bootstrapmaterial");
   }
   formatSurveyResponse(json, response) {
     let questions = [];
@@ -29,9 +32,9 @@ class SurveyDisplay extends React.Component {
       });
     });
     /*Object.keys(response).forEach(key => {
-                    let choices = questions.filter(q => q.id == key)[0];
-                    response[key] = response[key].map(val => choices.answer[val]);
-                });*/
+                        let choices = questions.filter(q => q.id == key)[0];
+                        response[key] = response[key].map(val => choices.answer[val]);
+                    });*/
     return {
       questions,
       answer: response
